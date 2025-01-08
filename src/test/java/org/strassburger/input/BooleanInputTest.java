@@ -4,7 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.strassburger.input.exceptions.InputValidationException;
+import org.strassburger.tui4j.input.BooleanInput;
+import org.strassburger.tui4j.input.exceptions.InputValidationException;
 
 import java.util.Scanner;
 

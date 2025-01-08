@@ -1,6 +1,8 @@
 package org.strassburger.input.validationrules;
 
 import org.junit.jupiter.api.Test;
+import org.strassburger.tui4j.input.validationrules.TextValidationRules;
+import org.strassburger.tui4j.input.validationrules.ValidationRule;
 
 import static org.junit.jupiter.api.Assertions.*;
 

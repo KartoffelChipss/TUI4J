@@ -2,7 +2,8 @@ package org.strassburger.input;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.strassburger.input.exceptions.InputValidationException;
+import org.strassburger.tui4j.input.SelectInput;
+import org.strassburger.tui4j.input.exceptions.InputValidationException;
 
 import java.util.Scanner;
 

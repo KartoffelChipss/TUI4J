@@ -2,10 +2,9 @@ package org.strassburger.input;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.strassburger.input.exceptions.InputValidationException;
+import org.strassburger.tui4j.input.NumberInput;
+import org.strassburger.tui4j.input.exceptions.InputValidationException;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

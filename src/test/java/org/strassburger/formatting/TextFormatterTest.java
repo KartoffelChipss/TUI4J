@@ -1,6 +1,9 @@
 package org.strassburger.formatting;
 
 import org.junit.jupiter.api.Test;
+import org.strassburger.tui4j.formatting.TextColor;
+import org.strassburger.tui4j.formatting.TextFormatter;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TextFormatterTest {

@@ -2,8 +2,9 @@ package org.strassburger.input;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.strassburger.input.exceptions.InputValidationException;
-import org.strassburger.input.validationrules.ValidationRule;
+import org.strassburger.tui4j.input.MultilineTextInput;
+import org.strassburger.tui4j.input.exceptions.InputValidationException;
+import org.strassburger.tui4j.input.validationrules.ValidationRule;
 
 import java.util.Scanner;
 
