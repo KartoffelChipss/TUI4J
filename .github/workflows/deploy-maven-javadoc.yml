@@ -30,9 +30,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # Step 4: Build Javadocs using Maven
+      # Step 4: Build Javadocs using Maven Wrapper
       - name: Build Javadocs
-        run: mvn clean javadoc:javadoc
+        run: ./mvnw clean javadoc:javadoc
 
       # Step 5: Add the CNAME file
       - name: Add CNAME file
