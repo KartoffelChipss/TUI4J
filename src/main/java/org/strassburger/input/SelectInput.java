@@ -1,5 +1,6 @@
 package org.strassburger.input;
 
+import org.strassburger.formatting.Printer;
 import org.strassburger.formatting.TextFormatter;
 import org.strassburger.input.exceptions.InputValidationException;
 
@@ -51,19 +52,19 @@ public class SelectInput extends Input<String> {
             for (int i = 0; i < options.size(); i++) {
                 switch (optionsStyle) {
                     case NONE:
-                        System.out.println(" " + (i + 1) + " " + options.get(i));
+                        Printer.println(" &7" + (i + 1) + " &r" + options.get(i));
                         break;
                     case DOTS:
-                        System.out.println(" " + (i + 1) + ". " + options.get(i));
+                        Printer.println(" &7" + (i + 1) + ". &r" + options.get(i));
                         break;
                     case HYPHENS:
-                        System.out.println(" " + (i + 1) + " - " + options.get(i));
+                        Printer.println(" &7" + (i + 1) + " - &r" + options.get(i));
                         break;
                     case BRACKETS:
-                        System.out.println(" (" + (i + 1) + ") " + options.get(i));
+                        Printer.println(" &7(" + (i + 1) + ") &r" + options.get(i));
                         break;
                     case SINGLE_BRACKETS:
-                        System.out.println(" " + (i + 1) + ") " + options.get(i));
+                        Printer.println(" &7" + (i + 1) + ") &r" + options.get(i));
                         break;
                 }
             }
