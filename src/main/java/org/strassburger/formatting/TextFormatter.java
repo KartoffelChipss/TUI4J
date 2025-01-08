@@ -3,6 +3,9 @@ package org.strassburger.formatting;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Format text with color codes and position text in the terminal
+ */
 public class TextFormatter {
     private static final Map<String, TextColor> colorMap = new HashMap<>();
 

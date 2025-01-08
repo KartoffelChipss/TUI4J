@@ -1,6 +1,10 @@
 package org.strassburger.input.validationrules;
 
 public class TextValidationRules {
+    /**
+     * Returns a validation rule that checks if the input contains spaces.
+     * @return A validation rule that checks if the input contains spaces.
+     */
     public static ValidationRule<String> noSpaces() {
         return new ValidationRule<>() {
             @Override
@@ -15,6 +19,11 @@ public class TextValidationRules {
         };
     }
 
+    /**
+     * Returns a validation rule that checks if the input is at least a certain length.
+     * @param length The minimum length of the input.
+     * @return A validation rule that checks if the input is at least a certain length.
+     */
     public static ValidationRule<String> minLength(int length) {
         return new ValidationRule<>() {
             @Override
@@ -29,6 +38,11 @@ public class TextValidationRules {
         };
     }
 
+    /**
+     * Returns a validation rule that checks if the input is at most a certain length.
+     * @param length The maximum length of the input.
+     * @return A validation rule that checks if the input is at most a certain length.
+     */
     public static ValidationRule<String> maxLength(int length) {
         return new ValidationRule<>() {
             @Override
@@ -43,6 +57,10 @@ public class TextValidationRules {
         };
     }
 
+    /**
+     * Returns a validation rule that checks if the input is between a certain length.
+     * @return A validation rule that checks if the input is between a certain length.
+     */
     public static ValidationRule<String> disallowEmpty() {
         return new ValidationRule<>() {
             @Override
@@ -57,6 +75,11 @@ public class TextValidationRules {
         };
     }
 
+    /**
+     * Returns a validation rule that checks if the input matches a certain regex.
+     * @param regex The regex to match.
+     * @return A validation rule that checks if the input matches a certain regex.
+     */
     public static ValidationRule<String> regex(String regex) {
         return new ValidationRule<>() {
             @Override
@@ -71,6 +94,10 @@ public class TextValidationRules {
         };
     }
 
+    /**
+     * Returns a validation rule that checks if the input does not contain numbers.
+     * @return A validation rule that checks if the input does not contain numbers.
+     */
     public static ValidationRule<String> noNumbers() {
         return new ValidationRule<>() {
             @Override
@@ -85,6 +112,10 @@ public class TextValidationRules {
         };
     }
 
+    /**
+     * Returns a validation rule that checks if the input is alphanumeric.
+     * @return A validation rule that checks if the input is alphanumeric.
+     */
     public static ValidationRule<String> alphanumeric() {
         return new ValidationRule<>() {
             @Override

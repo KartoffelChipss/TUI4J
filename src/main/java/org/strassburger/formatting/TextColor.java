@@ -1,5 +1,8 @@
 package org.strassburger.formatting;
 
+/**
+ * This enum provides ANSI escape codes for text colors, background colors, and text styles.
+ */
 public enum TextColor {
     // Text Colors
     RESET("\033[0m"),

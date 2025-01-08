@@ -10,6 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Abstract class for input
+ * @param <T> the type of the input value
+ */
 public abstract class Input<T> {
     protected String label = "";
     protected boolean retryOnInvalid = true;
@@ -30,6 +34,7 @@ public abstract class Input<T> {
     /**
      * Set the label for the input
      * @param label the label to set (formatted with TextFormatter)
+     * @return the input object
      */
     public Input<T> setLabel(String label) {
         this.label = TextFormatter.format(label);
@@ -39,6 +44,7 @@ public abstract class Input<T> {
     /**
      * Set whether to retry on invalid input
      * @param retryOnInvalid whether to retry on invalid input
+     * @return the input object
      */
     public Input<T> setRetryOnInvalid(boolean retryOnInvalid) {
         this.retryOnInvalid = retryOnInvalid;
@@ -48,6 +54,7 @@ public abstract class Input<T> {
     /**
      * Add validation rules to the input
      * @param rule the validation rules to add
+     * @return the input object
      */
     public Input<T> addValidationRules(ValidationRule<T>... rule) {
         validationRules.addAll(Arrays.asList(rule));
