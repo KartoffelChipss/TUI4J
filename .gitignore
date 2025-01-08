@@ -1,6 +1,5 @@
 .idea/
 TUI4J/
-.mvn/
 bin/
 
 # Created by https://www.toptal.com/developers/gitignore/api/intellij+all,maven,java,visualstudiocode
