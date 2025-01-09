@@ -6,6 +6,12 @@
 
 TUI4J is a Java-based library for creating text-based user interfaces (TUIs).
 
+## Demo
+
+![Demo](https://f.j4n.net/tui_demo.gif)
+
+*You can find the code for this demo [here](#example-usage).*
+
 ## Features
 
 - Flexible Inputs
