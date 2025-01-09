@@ -1,6 +1,7 @@
 package org.strassburger.tui4j.input;
 
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
+import org.strassburger.tui4j.input.validationrules.ValidationRule;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,6 +60,15 @@ public class NumberInput<U extends Number> extends Input<U> {
                 throw new InputValidationException("Invalid input: " + input);
             }
         }
+    }
+
+    @SafeVarargs
+    @Override
+    public final NumberInput<U> addValidationRules(ValidationRule<U>... rules) {
+        for (ValidationRule<U> rule : rules) {
+            super.addValidationRules(rule);
+        }
+        return this;
     }
 
     private Class<U> getTypeClass() {

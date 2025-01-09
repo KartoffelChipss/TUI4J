@@ -25,7 +25,7 @@ TUI4J is a Java-based library for creating text-based user interfaces (TUIs).
 
 ## Installation
 
-Make sure to replace `1.0.0` with the version you want to use.
+Make sure to replace `0.0.0` with the version you want to use.
 
 ### Maven
 
@@ -34,7 +34,7 @@ Make sure to replace `1.0.0` with the version you want to use.
     <dependency>
         <groupId>com.github.KartoffelChipss</groupId>
         <artifactId>TUI4J</artifactId>
-        <version>1.0.0</version>
+        <version>0.0.0</version>
     </dependency>
 </dependencies>
 
@@ -50,7 +50,7 @@ Make sure to replace `1.0.0` with the version you want to use.
 
 ```groovy
 dependencies {
-    implementation 'com.github.KartoffelChipss:TUI4J:1.0.0'
+    implementation 'com.github.KartoffelChipss:TUI4J:0.0.0'
 }
 
 repositories {
