@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"org.strassburger.formatting"},{"l":"org.strassburger.input"},{"l":"org.strassburger.input.exceptions"},{"l":"org.strassburger.input.validationrules"}];updateSearchResults();
