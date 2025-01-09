@@ -68,7 +68,7 @@ public class SelectInput extends Input<String> {
                         break;
                 }
             }
-            System.out.print(TextFormatter.format("&7> "));
+            System.out.print(TextFormatter.format("&8> "));
             String input = getScanner().nextLine().trim();
 
             if (input.contains(".")) {

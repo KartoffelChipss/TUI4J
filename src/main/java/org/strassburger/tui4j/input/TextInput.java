@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.input;
 
+import org.strassburger.tui4j.formatting.TextColor;
 import org.strassburger.tui4j.formatting.TextFormatter;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
@@ -33,7 +34,7 @@ public class TextInput extends Input<String> {
         if (inline) System.out.print("");
         else {
             System.out.println();
-            System.out.print(TextFormatter.format("&7> "));
+            System.out.print(TextFormatter.format("&8> "));
         }
 
         String value = getScanner().nextLine();
