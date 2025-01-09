@@ -62,7 +62,7 @@ repositories {
 
 The API documentation can be found [here](https://TUI4J.j4n.net).
 
-## Usage
+## Example Usage
 
 ```java
 package org.example;
