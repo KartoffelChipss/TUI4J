@@ -1,9 +1,11 @@
 package org.strassburger.tui4j.input;
 
+import org.strassburger.tui4j.formatting.Printer;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -26,6 +28,29 @@ public class NumberInput<U extends Number> extends Input<U> {
     }
 
     @Override
+    public U read() throws InputValidationException {
+        System.out.print(getLabel());
+        String input = getScanner().nextLine();
+
+        Function<String, ? extends Number> parser = PARSERS.get(getTypeClass());
+
+        if (parser == null) {
+            throw new UnsupportedOperationException("Unsupported number type: " + getTypeClass().getName());
+        }
+
+        try {
+            return (U) parser.apply(input);
+        } catch (NumberFormatException e) {
+            if (isRetryOnInvalid()) {
+                Printer.println(getErrorMessage());
+                return read();
+            } else {
+                throw new InputValidationException("Invalid input: " + input);
+            }
+        }
+    }
+
+    @Override
     public NumberInput<U> setLabel(String label) {
         super.setLabel(label);
         return this;
@@ -37,31 +62,6 @@ public class NumberInput<U extends Number> extends Input<U> {
         return this;
     }
 
-    @Override
-    public U read() throws InputValidationException {
-        System.out.print(label);
-        String input = getScanner().nextLine();
-
-        System.out.println("getTypeClass(): " + getTypeClass());
-
-        Function<String, ? extends Number> parser = PARSERS.get(getTypeClass());
-
-        if (parser == null) {
-            throw new UnsupportedOperationException("Unsupported number type: " + getTypeClass().getName());
-        }
-
-        try {
-            return (U) parser.apply(input);
-        } catch (NumberFormatException e) {
-            if (retryOnInvalid) {
-                System.out.println("Invalid input. Please try again.");
-                return read();
-            } else {
-                throw new InputValidationException("Invalid input: " + input);
-            }
-        }
-    }
-
     @SafeVarargs
     @Override
     public final NumberInput<U> addValidationRules(ValidationRule<U>... rules) {
@@ -71,7 +71,19 @@ public class NumberInput<U extends Number> extends Input<U> {
         return this;
     }
 
+    @Override
+    public NumberInput<U> addValidationRules(List<ValidationRule<U>> rules) {
+        super.addValidationRules(rules);
+        return this;
+    }
+
     private Class<U> getTypeClass() {
         return type;
+    }
+
+    @Override
+    public NumberInput<U> setErrorMessage(String errorMessage) {
+        super.setErrorMessage(errorMessage);
+        return this;
     }
 }

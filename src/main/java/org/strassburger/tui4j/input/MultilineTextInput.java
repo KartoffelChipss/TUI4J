@@ -4,6 +4,8 @@ import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
 
+import java.util.List;
+
 public class MultilineTextInput extends Input<String> {
     private boolean inline;
 
@@ -15,7 +17,7 @@ public class MultilineTextInput extends Input<String> {
     public String read() throws InputValidationException {
         StringBuilder input = new StringBuilder();
         String line;
-        System.out.print(label);
+        System.out.print(getLabel());
 
         if (inline) System.out.print(" ");
         else System.out.println();
@@ -57,8 +59,20 @@ public class MultilineTextInput extends Input<String> {
         return this;
     }
 
+    @Override
+    public MultilineTextInput addValidationRules(List<ValidationRule<String>> rules) {
+        super.addValidationRules(rules);
+        return this;
+    }
+
     public MultilineTextInput setInline(boolean inline) {
         this.inline = inline;
+        return this;
+    }
+
+    @Override
+    public MultilineTextInput setErrorMessage(String errorMessage) {
+        super.setErrorMessage(errorMessage);
         return this;
     }
 }

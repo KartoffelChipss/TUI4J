@@ -6,6 +6,8 @@ import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
 
+import java.util.List;
+
 public class TextInput extends Input<String> {
     private boolean inline;
 
@@ -29,7 +31,7 @@ public class TextInput extends Input<String> {
 
     @Override
     public String read() throws InputValidationException {
-        System.out.print(label);
+        System.out.print(getLabel());
 
         if (inline) System.out.print("");
         else {
@@ -67,6 +69,18 @@ public class TextInput extends Input<String> {
     @Override
     public final TextInput addValidationRules(ValidationRule<String>... rules) {
         super.addValidationRules(rules);
+        return this;
+    }
+
+    @Override
+    public TextInput addValidationRules(List<ValidationRule<String>> rules) {
+        super.addValidationRules(rules);
+        return this;
+    }
+
+    @Override
+    public TextInput setErrorMessage(String errorMessage) {
+        super.setErrorMessage(errorMessage);
         return this;
     }
 

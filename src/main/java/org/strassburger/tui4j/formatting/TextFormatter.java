@@ -141,4 +141,13 @@ public class TextFormatter {
                 spaceChar.repeat(Math.max(0, spaces)) +
                 text2;
     }
+
+    /**
+     * Clear formatting from text
+     * @param text Text with color codes
+     * @return Text without color codes
+     */
+    public static String clearFormatting(String text) {
+        return text.replaceAll("\u001B\\[[;\\d]*m", "");
+    }
 }

@@ -1,8 +1,7 @@
 package org.strassburger.tui4j.input.validationrules;
 
 import org.junit.jupiter.api.Test;
-import org.strassburger.tui4j.input.validationrules.NumberValidationRules;
-import org.strassburger.tui4j.input.validationrules.ValidationRule;
+import org.strassburger.tui4j.formatting.TextFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +14,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(5));
         assertFalse(rule.validate(15));
 
-        assertEquals("This field must be less than 10.", rule.getErrorMessage());
+        assertEquals("This field must be less than 10.", TextFormatter.clearFormatting(rule.getErrorMessage()));
     }
 
     @Test
@@ -25,7 +24,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(15));
         assertFalse(rule.validate(5));
 
-        assertEquals("This field must be greater than 10.", rule.getErrorMessage());
+        assertEquals("This field must be greater than 10.", TextFormatter.clearFormatting(rule.getErrorMessage()));
     }
 
     @Test
@@ -36,7 +35,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(10));
         assertFalse(rule.validate(15));
 
-        assertEquals("This field must be less than or equal to 10.", rule.getErrorMessage());
+        assertEquals("This field must be less than or equal to 10.", TextFormatter.clearFormatting(rule.getErrorMessage()));
     }
 
     @Test
@@ -47,7 +46,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(10));
         assertFalse(rule.validate(5));
 
-        assertEquals("This field must be greater than or equal to 10.", rule.getErrorMessage());
+        assertEquals("This field must be greater than or equal to 10.", TextFormatter.clearFormatting(rule.getErrorMessage()));
     }
 
     // Test with Double type
@@ -58,7 +57,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(5.0));
         assertFalse(rule.validate(15.0));
 
-        assertEquals("This field must be less than 10.5.", rule.getErrorMessage());
+        assertEquals("This field must be less than 10.5.", TextFormatter.clearFormatting(rule.getErrorMessage()));
     }
 
     @Test
@@ -68,7 +67,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(15.0));
         assertFalse(rule.validate(5.0));
 
-        assertEquals("This field must be greater than 10.5.", rule.getErrorMessage());
+        assertEquals("This field must be greater than 10.5.", TextFormatter.clearFormatting(rule.getErrorMessage()));
     }
 
     @Test
@@ -79,7 +78,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(10.5));
         assertFalse(rule.validate(15.0));
 
-        assertEquals("This field must be less than or equal to 10.5.", rule.getErrorMessage());
+        assertEquals("This field must be less than or equal to 10.5.", TextFormatter.clearFormatting(rule.getErrorMessage()));
     }
 
     @Test
@@ -90,6 +89,6 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(10.5));
         assertFalse(rule.validate(5.0));
 
-        assertEquals("This field must be greater than or equal to 10.5.", rule.getErrorMessage());
+        assertEquals("This field must be greater than or equal to 10.5.", TextFormatter.clearFormatting(rule.getErrorMessage()));
     }
 }

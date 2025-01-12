@@ -26,29 +26,9 @@ public class SelectInput extends Input<String> {
         this.options = List.of(options);
     }
 
-    public SelectInput addOptions(String... options) {
-        this.options.addAll(List.of(options));
-        return this;
-    }
-
-    public SelectInput setLabel(String label) {
-        super.setLabel(label);
-        return this;
-    }
-
-    public SelectInput setRetryOnInvalid(boolean retryOnInvalid) {
-        super.setRetryOnInvalid(retryOnInvalid);
-        return this;
-    }
-
-    public SelectInput setOptionsStyle(OptionsStyle optionsStyle) {
-        this.optionsStyle = optionsStyle;
-        return this;
-    }
-
     public String read() throws InputValidationException {
         try {
-            System.out.print(label + "\n");
+            System.out.print(getLabel() + "\n");
             for (int i = 0; i < options.size(); i++) {
                 switch (optionsStyle) {
                     case NONE:
@@ -78,8 +58,8 @@ public class SelectInput extends Input<String> {
             int selectedIndex = Integer.parseInt(input) - 1;
 
             if (selectedIndex < 0 || selectedIndex >= options.size()) {
-                if (retryOnInvalid) {
-                    System.out.println("Invalid input. Please try again.");
+                if (isRetryOnInvalid()) {
+                    Printer.println(getErrorMessage());
                     return read();
                 } else {
                     throw new InputValidationException("Invalid input.");
@@ -88,13 +68,44 @@ public class SelectInput extends Input<String> {
 
             return options.get(selectedIndex);
         } catch (NumberFormatException e) {
-            if (retryOnInvalid) {
-                System.out.println("Invalid input. Please try again.");
+            if (isRetryOnInvalid()) {
+                Printer.println(getErrorMessage());
                 return read();
             } else {
                 throw new InputValidationException("Invalid input.");
             }
         }
+    }
+
+    public SelectInput addOptions(String... options) {
+        this.options.addAll(List.of(options));
+        return this;
+    }
+
+    public SelectInput addOptions(List<String> options) {
+        this.options.addAll(options);
+        return this;
+    }
+
+    public SelectInput setLabel(String label) {
+        super.setLabel(label);
+        return this;
+    }
+
+    public SelectInput setRetryOnInvalid(boolean retryOnInvalid) {
+        super.setRetryOnInvalid(retryOnInvalid);
+        return this;
+    }
+
+    public SelectInput setOptionsStyle(OptionsStyle optionsStyle) {
+        this.optionsStyle = optionsStyle;
+        return this;
+    }
+
+    @Override
+    public SelectInput setErrorMessage(String errorMessage) {
+        super.setErrorMessage(errorMessage);
+        return this;
     }
 
     public enum OptionsStyle {

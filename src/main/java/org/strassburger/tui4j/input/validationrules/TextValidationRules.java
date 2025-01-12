@@ -1,11 +1,22 @@
 package org.strassburger.tui4j.input.validationrules;
 
+import static org.strassburger.tui4j.formatting.TextFormatter.*;
+
 public class TextValidationRules {
     /**
      * Returns a validation rule that checks if the input contains spaces.
      * @return A validation rule that checks if the input contains spaces.
      */
     public static ValidationRule<String> noSpaces() {
+        return noSpaces("&cThis field cannot contain spaces.");
+    }
+
+    /**
+     * Returns a validation rule that checks if the input contains spaces with a custom error message.
+     * @param errorMessage The custom error message.
+     * @return A validation rule that checks if the input contains spaces.
+     */
+    public static ValidationRule<String> noSpaces(String errorMessage) {
         return new ValidationRule<>() {
             @Override
             public boolean validate(String input) {
@@ -14,7 +25,7 @@ public class TextValidationRules {
 
             @Override
             public String getErrorMessage() {
-                return "This field cannot contain spaces.";
+                return format(errorMessage);
             }
         };
     }
@@ -25,6 +36,16 @@ public class TextValidationRules {
      * @return A validation rule that checks if the input is at least a certain length.
      */
     public static ValidationRule<String> minLength(int length) {
+        return minLength(length, "&cThis field must be at least " + length + " characters long.");
+    }
+
+    /**
+     * Returns a validation rule that checks if the input is at least a certain length with a custom error message.
+     * @param length The minimum length of the input.
+     * @param errorMessage The custom error message.
+     * @return A validation rule that checks if the input is at least a certain length.
+     */
+    public static ValidationRule<String> minLength(int length, String errorMessage) {
         return new ValidationRule<>() {
             @Override
             public boolean validate(String input) {
@@ -33,7 +54,7 @@ public class TextValidationRules {
 
             @Override
             public String getErrorMessage() {
-                return "This field must be at least " + length + " characters long.";
+                return format(errorMessage);
             }
         };
     }
@@ -44,6 +65,16 @@ public class TextValidationRules {
      * @return A validation rule that checks if the input is at most a certain length.
      */
     public static ValidationRule<String> maxLength(int length) {
+        return maxLength(length, "&cThis field must be at most " + length + " characters long.");
+    }
+
+    /**
+     * Returns a validation rule that checks if the input is at most a certain length with a custom error message.
+     * @param length The maximum length of the input.
+     * @param errorMessage The custom error message.
+     * @return A validation rule that checks if the input is at most a certain length.
+     */
+    public static ValidationRule<String> maxLength(int length, String errorMessage) {
         return new ValidationRule<>() {
             @Override
             public boolean validate(String input) {
@@ -52,16 +83,25 @@ public class TextValidationRules {
 
             @Override
             public String getErrorMessage() {
-                return "This field must be at most " + length + " characters long.";
+                return format(errorMessage);
             }
         };
     }
 
     /**
-     * Returns a validation rule that checks if the input is between a certain length.
-     * @return A validation rule that checks if the input is between a certain length.
+     * Returns a validation rule that checks if the input is not empty.
+     * @return A validation rule that checks if the input is not empty.
      */
     public static ValidationRule<String> disallowEmpty() {
+        return disallowEmpty("&cThis field cannot be empty.");
+    }
+
+    /**
+     * Returns a validation rule that checks if the input is not empty with a custom error message.
+     * @param errorMessage The custom error message.
+     * @return A validation rule that checks if the input is not empty.
+     */
+    public static ValidationRule<String> disallowEmpty(String errorMessage) {
         return new ValidationRule<>() {
             @Override
             public boolean validate(String input) {
@@ -70,7 +110,7 @@ public class TextValidationRules {
 
             @Override
             public String getErrorMessage() {
-                return "This field cannot be empty.";
+                return format(errorMessage);
             }
         };
     }
@@ -81,6 +121,16 @@ public class TextValidationRules {
      * @return A validation rule that checks if the input matches a certain regex.
      */
     public static ValidationRule<String> regex(String regex) {
+        return regex(regex, "&cThis field must match the regex: " + regex);
+    }
+
+    /**
+     * Returns a validation rule that checks if the input matches a certain regex with a custom error message.
+     * @param regex The regex to match.
+     * @param errorMessage The custom error message.
+     * @return A validation rule that checks if the input matches a certain regex.
+     */
+    public static ValidationRule<String> regex(String regex, String errorMessage) {
         return new ValidationRule<>() {
             @Override
             public boolean validate(String input) {
@@ -89,7 +139,7 @@ public class TextValidationRules {
 
             @Override
             public String getErrorMessage() {
-                return "This field must match the following regex: " + regex;
+                return format(errorMessage);
             }
         };
     }
@@ -99,6 +149,15 @@ public class TextValidationRules {
      * @return A validation rule that checks if the input does not contain numbers.
      */
     public static ValidationRule<String> noNumbers() {
+        return noNumbers("&cThis field cannot contain numbers.");
+    }
+
+    /**
+     * Returns a validation rule that checks if the input does not contain numbers with a custom error message.
+     * @param errorMessage The custom error message.
+     * @return A validation rule that checks if the input does not contain numbers.
+     */
+    public static ValidationRule<String> noNumbers(String errorMessage) {
         return new ValidationRule<>() {
             @Override
             public boolean validate(String input) {
@@ -107,7 +166,7 @@ public class TextValidationRules {
 
             @Override
             public String getErrorMessage() {
-                return "This field cannot contain numbers.";
+                return format(errorMessage);
             }
         };
     }
@@ -117,6 +176,15 @@ public class TextValidationRules {
      * @return A validation rule that checks if the input is alphanumeric.
      */
     public static ValidationRule<String> alphanumeric() {
+        return alphanumeric("&cThis field must be alphanumeric.");
+    }
+
+    /**
+     * Returns a validation rule that checks if the input is alphanumeric with a custom error message.
+     * @param errorMessage The custom error message.
+     * @return A validation rule that checks if the input is alphanumeric.
+     */
+    public static ValidationRule<String> alphanumeric(String errorMessage) {
         return new ValidationRule<>() {
             @Override
             public boolean validate(String input) {
@@ -125,7 +193,7 @@ public class TextValidationRules {
 
             @Override
             public String getErrorMessage() {
-                return "This field must be alphanumeric.";
+                return format(errorMessage);
             }
         };
     }

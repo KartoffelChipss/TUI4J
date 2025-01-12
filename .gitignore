@@ -1,5 +1,6 @@
 .idea/
 bin/
+src/test/java/org/strassburger/tui4j/TestMain.java
 
 # Created by https://www.toptal.com/developers/gitignore/api/intellij+all,maven,java,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij+all,maven,java,visualstudiocode
@@ -155,5 +156,3 @@ buildNumber.properties
 # Ignore all local history of files
 .history
 .ionide
-
-# End of https://www.toptal.com/developers/gitignore/api/intellij+all,maven,java,visualstudiocode

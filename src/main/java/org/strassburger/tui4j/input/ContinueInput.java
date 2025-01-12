@@ -6,15 +6,15 @@ public class ContinueInput extends Input<Void> {
     }
 
     @Override
-    public ContinueInput setLabel(String label) {
-        super.setLabel(label);
-        return this;
+    public Void read() {
+        System.out.print(getLabel());
+        getScanner().nextLine();
+        return null;
     }
 
     @Override
-    public Void read() {
-        System.out.print(label);
-        getScanner().nextLine();
-        return null;
+    public ContinueInput setLabel(String label) {
+        super.setLabel(label);
+        return this;
     }
 }
