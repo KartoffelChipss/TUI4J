@@ -7,8 +7,8 @@ import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectInput extends Input<String> {
-    private final List<String> options;
+public class SelectInput<T> extends Input<T> {
+    private final List<Option<T>> options;
     private OptionsStyle optionsStyle = OptionsStyle.DOTS;
 
     public SelectInput() {
@@ -16,35 +16,30 @@ public class SelectInput extends Input<String> {
         options = new ArrayList<>();
     }
 
-    public SelectInput(List<String> options) {
+    public SelectInput(List<Option<T>> options) {
         super();
         this.options = options;
     }
 
-    public SelectInput(String... options) {
-        super();
-        this.options = List.of(options);
-    }
-
-    public String read() throws InputValidationException {
+    public T read() throws InputValidationException {
         try {
             System.out.print(getLabel() + "\n");
             for (int i = 0; i < options.size(); i++) {
                 switch (optionsStyle) {
                     case NONE:
-                        Printer.println(" &7" + (i + 1) + " &r" + options.get(i));
+                        Printer.println(" &7" + (i + 1) + " &r" + options.get(i).getLabel());
                         break;
                     case DOTS:
-                        Printer.println(" &7" + (i + 1) + ". &r" + options.get(i));
+                        Printer.println(" &7" + (i + 1) + ". &r" + options.get(i).getLabel());
                         break;
                     case HYPHENS:
-                        Printer.println(" &7" + (i + 1) + " - &r" + options.get(i));
+                        Printer.println(" &7" + (i + 1) + " - &r" + options.get(i).getLabel());
                         break;
                     case BRACKETS:
-                        Printer.println(" &7(" + (i + 1) + ") &r" + options.get(i));
+                        Printer.println(" &7(" + (i + 1) + ") &r" + options.get(i).getLabel());
                         break;
                     case SINGLE_BRACKETS:
-                        Printer.println(" &7" + (i + 1) + ") &r" + options.get(i));
+                        Printer.println(" &7" + (i + 1) + ") &r" + options.get(i).getLabel());
                         break;
                 }
             }
@@ -66,7 +61,7 @@ public class SelectInput extends Input<String> {
                 }
             }
 
-            return options.get(selectedIndex);
+            return options.get(selectedIndex).getValue();
         } catch (NumberFormatException e) {
             if (isRetryOnInvalid()) {
                 Printer.println(getErrorMessage());
@@ -77,33 +72,44 @@ public class SelectInput extends Input<String> {
         }
     }
 
-    public SelectInput addOptions(String... options) {
-        this.options.addAll(List.of(options));
+    /**
+     * Adds an option to the select input
+     * @param label The label that will be displayed to the user
+     * @param value The value that will be returned when the user selects this option
+     * @return The select input object
+     */
+    public SelectInput<T> addOption(String label, T value) {
+        this.options.add(new Option<>(label, value));
         return this;
     }
 
-    public SelectInput addOptions(List<String> options) {
+    /**
+     * Adds multiple options to the select input
+     * @param options The options to add
+     * @return The select input object
+     */
+    public SelectInput<T> addOptions(List<Option<T>> options) {
         this.options.addAll(options);
         return this;
     }
 
-    public SelectInput setLabel(String label) {
+    public SelectInput<T> setLabel(String label) {
         super.setLabel(label);
         return this;
     }
 
-    public SelectInput setRetryOnInvalid(boolean retryOnInvalid) {
+    public SelectInput<T> setRetryOnInvalid(boolean retryOnInvalid) {
         super.setRetryOnInvalid(retryOnInvalid);
         return this;
     }
 
-    public SelectInput setOptionsStyle(OptionsStyle optionsStyle) {
+    public SelectInput<T> setOptionsStyle(OptionsStyle optionsStyle) {
         this.optionsStyle = optionsStyle;
         return this;
     }
 
     @Override
-    public SelectInput setErrorMessage(String errorMessage) {
+    public SelectInput<T> setErrorMessage(String errorMessage) {
         super.setErrorMessage(errorMessage);
         return this;
     }
@@ -133,5 +139,28 @@ public class SelectInput extends Input<String> {
          * e.g. " 1) Option Alpha"
          */
         SINGLE_BRACKETS
+    }
+
+    public static class Option<T> {
+        private final String label;
+        private final T value;
+
+        /**
+         * Creates a new select option
+         * @param label The label that will be displayed to the user
+         * @param value The value that will be returned when the user selects this option
+         */
+        public Option(String label, T value) {
+            this.label = label;
+            this.value = value;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public T getValue() {
+            return value;
+        }
     }
 }
