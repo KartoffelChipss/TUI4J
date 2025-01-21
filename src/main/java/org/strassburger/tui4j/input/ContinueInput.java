@@ -1,5 +1,7 @@
 package org.strassburger.tui4j.input;
 
+import org.strassburger.tui4j.formatting.Printer;
+
 public class ContinueInput extends Input<Void> {
     public ContinueInput() {
         super();
@@ -7,7 +9,7 @@ public class ContinueInput extends Input<Void> {
 
     @Override
     public Void read() {
-        System.out.print(getLabel());
+        Printer.println(getLabel());
         getScanner().nextLine();
         return null;
     }

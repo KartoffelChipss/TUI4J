@@ -13,7 +13,7 @@ public class DoubleInput extends Input<Double> {
     }
 
     public Double read() throws InputValidationException {
-        System.out.print(getLabel());
+        Printer.println(getLabel());
         String input = getScanner().nextLine();
 
         try {

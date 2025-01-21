@@ -29,7 +29,7 @@ public class NumberInput<U extends Number> extends Input<U> {
 
     @Override
     public U read() throws InputValidationException {
-        System.out.print(getLabel());
+        Printer.println(getLabel());
         String input = getScanner().nextLine();
 
         Function<String, ? extends Number> parser = PARSERS.get(getTypeClass());

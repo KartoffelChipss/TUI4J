@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.input;
 
+import org.strassburger.tui4j.formatting.Printer;
 import org.strassburger.tui4j.formatting.TextFormatter;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
@@ -81,7 +82,7 @@ public abstract class Input<T> {
         for (ValidationRule<T> rule : validationRules) {
             if (!rule.validate(value)) {
                 if (retryOnInvalid) {
-                    System.out.println(rule.getErrorMessage());
+                    Printer.println(rule.getErrorMessage());
                     throw new RetryInputException(rule.getErrorMessage());
                 } else {
                     throw new InputValidationException(rule.getErrorMessage());

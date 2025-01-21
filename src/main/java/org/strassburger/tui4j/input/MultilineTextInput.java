@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.input;
 
+import org.strassburger.tui4j.formatting.Printer;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
@@ -17,7 +18,7 @@ public class MultilineTextInput extends Input<String> {
     public String read() throws InputValidationException {
         StringBuilder input = new StringBuilder();
         String line;
-        System.out.print(getLabel());
+        Printer.println(getLabel());
 
         if (inline) System.out.print(" ");
         else System.out.println();

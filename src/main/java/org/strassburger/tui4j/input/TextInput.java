@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.input;
 
+import org.strassburger.tui4j.formatting.Printer;
 import org.strassburger.tui4j.formatting.TextColor;
 import org.strassburger.tui4j.formatting.TextFormatter;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
@@ -31,12 +32,12 @@ public class TextInput extends Input<String> {
 
     @Override
     public String read() throws InputValidationException {
-        System.out.print(getLabel());
+        Printer.println(getLabel());
 
         if (inline) System.out.print("");
         else {
             System.out.println();
-            System.out.print(TextFormatter.format("&8> "));
+            Printer.println("&8> ");
         }
 
         String value = getScanner().nextLine();
