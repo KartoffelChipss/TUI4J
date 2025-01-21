@@ -76,4 +76,16 @@ public class DoubleInputTest {
         assertThrows(InputValidationException.class, () -> input.read());
         verify(mockScanner, times(1)).nextLine();
     }
+
+    @Test
+    void testAllowComma() {
+        when(mockScanner.nextLine()).thenReturn("90,15");
+
+        input.setLabel("What is your weight?");
+        input.setAllowComma(false);
+        input.setRetryOnInvalid(false);
+
+        assertThrows(InputValidationException.class, () -> input.read());
+        verify(mockScanner, times(1)).nextLine();
+    }
 }

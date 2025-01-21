@@ -12,6 +12,7 @@ import java.util.function.Function;
 public class NumberInput<U extends Number> extends Input<U> {
     private static final Map<Class<? extends Number>, Function<String, ? extends Number>> PARSERS = new HashMap<>();
     private final Class<U> type;
+    private boolean allowComma = true;
 
     static {
         PARSERS.put(Double.class, Double::valueOf);
@@ -31,6 +32,7 @@ public class NumberInput<U extends Number> extends Input<U> {
     public U read() throws InputValidationException {
         Printer.println(getLabel());
         String input = getScanner().nextLine();
+        if (!allowComma) input = input.replace(",", "");
 
         Function<String, ? extends Number> parser = PARSERS.get(getTypeClass());
 

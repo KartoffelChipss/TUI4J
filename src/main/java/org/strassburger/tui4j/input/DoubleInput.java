@@ -8,6 +8,8 @@ import org.strassburger.tui4j.input.validationrules.ValidationRule;
 import java.util.List;
 
 public class DoubleInput extends Input<Double> {
+    private boolean allowComma = true;
+
     public DoubleInput() {
         super();
     }
@@ -15,6 +17,7 @@ public class DoubleInput extends Input<Double> {
     public Double read() throws InputValidationException {
         Printer.println(getLabel());
         String input = getScanner().nextLine();
+        if (allowComma) input = input.replace(",", ".");
 
         try {
             double value = Double.parseDouble(input);
@@ -34,6 +37,16 @@ public class DoubleInput extends Input<Double> {
 
     public DoubleInput setLabel(String label) {
         super.setLabel(label);
+        return this;
+    }
+
+    /**
+     * Set whether the input should allow commas as decimal separators.
+     * @param allowComma Whether to allow commas as decimal separators.
+     * @return The DoubleInput object.
+     */
+    public DoubleInput setAllowComma(boolean allowComma) {
+        this.allowComma = allowComma;
         return this;
     }
 
