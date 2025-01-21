@@ -106,7 +106,7 @@ public class SelectInputTest {
                 .addOption("Option B", "B")
                 .addOption("Option C", "C");
         input.setLabel("Choose an option:");
-        input.setOptionsStyle(SelectInput.OptionsStyle.BRACKETS);
+        input.setOptionsStyle(" &8(%num%) &7%label%");
 
         String result = input.read();
 

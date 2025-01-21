@@ -1,7 +1,6 @@
 package org.strassburger.tui4j.input;
 
 import org.strassburger.tui4j.formatting.Printer;
-import org.strassburger.tui4j.formatting.TextFormatter;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ import java.util.List;
 
 public class SelectInput<T> extends Input<T> {
     private final List<Option<T>> options;
-    private OptionsStyle optionsStyle = OptionsStyle.DOTS;
+    private String optionsStyle = " &7%num%. &r%label%";
 
     public SelectInput() {
         super();
@@ -25,25 +24,12 @@ public class SelectInput<T> extends Input<T> {
         try {
             System.out.print(getLabel() + "\n");
             for (int i = 0; i < options.size(); i++) {
-                switch (optionsStyle) {
-                    case NONE:
-                        Printer.println(" &7" + (i + 1) + " &r" + options.get(i).getLabel());
-                        break;
-                    case DOTS:
-                        Printer.println(" &7" + (i + 1) + ". &r" + options.get(i).getLabel());
-                        break;
-                    case HYPHENS:
-                        Printer.println(" &7" + (i + 1) + " - &r" + options.get(i).getLabel());
-                        break;
-                    case BRACKETS:
-                        Printer.println(" &7(" + (i + 1) + ") &r" + options.get(i).getLabel());
-                        break;
-                    case SINGLE_BRACKETS:
-                        Printer.println(" &7" + (i + 1) + ") &r" + options.get(i).getLabel());
-                        break;
-                }
+                String message = optionsStyle
+                        .replace("%num%", String.valueOf(i + 1))
+                        .replace("%label%", options.get(i).getLabel());
+                Printer.println(message);
             }
-            System.out.print(TextFormatter.format("&8> "));
+            Printer.print("&8> ");
             String input = getScanner().nextLine().trim();
 
             if (input.contains(".")) {
@@ -103,7 +89,13 @@ public class SelectInput<T> extends Input<T> {
         return this;
     }
 
-    public SelectInput<T> setOptionsStyle(OptionsStyle optionsStyle) {
+    /**
+     * Sets the style of the options
+     * @param optionsStyle The style of the options (%num% will be replaced with the number of the option, %label% will be replaced with the label of the option)
+     * @default optionsStyle " &7%num%. &r%label%"
+     * @return The select input object
+     */
+    public SelectInput<T> setOptionsStyle(String optionsStyle) {
         this.optionsStyle = optionsStyle;
         return this;
     }
@@ -114,33 +106,9 @@ public class SelectInput<T> extends Input<T> {
         return this;
     }
 
-    public enum OptionsStyle {
-        /**
-         * No style
-         */
-        NONE,
-        /**
-         * Dots style
-         * e.g. " 1. Option Alpha"
-         */
-        DOTS,
-        /**
-         * Hyphens style
-         * e.g. " 1 - Option Alpha"
-         */
-        HYPHENS,
-        /**
-         * Brackets style
-         * e.g. " (1) Option Alpha"
-         */
-        BRACKETS,
-        /**
-         * Single brackets style
-         * e.g. " 1) Option Alpha"
-         */
-        SINGLE_BRACKETS
-    }
-
+    /**
+     * Represents a select option that can be selected by the user
+     */
     public static class Option<T> {
         private final String label;
         private final T value;
