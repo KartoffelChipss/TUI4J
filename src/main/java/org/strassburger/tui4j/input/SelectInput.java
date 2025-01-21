@@ -92,7 +92,6 @@ public class SelectInput<T> extends Input<T> {
     /**
      * Sets the style of the options
      * @param optionsStyle The style of the options (%num% will be replaced with the number of the option, %label% will be replaced with the label of the option)
-     * @default optionsStyle " &7%num%. &r%label%"
      * @return The select input object
      */
     public SelectInput<T> setOptionsStyle(String optionsStyle) {
