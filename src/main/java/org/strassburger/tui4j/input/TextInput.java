@@ -32,12 +32,12 @@ public class TextInput extends Input<String> {
 
     @Override
     public String read() throws InputValidationException {
-        Printer.println(getLabel());
+        Printer.print(getLabel());
 
         if (inline) System.out.print("");
         else {
             System.out.println();
-            Printer.println("&8> ");
+            Printer.print("&8> ");
         }
 
         String value = getScanner().nextLine();
