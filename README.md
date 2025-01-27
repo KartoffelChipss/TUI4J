@@ -38,7 +38,7 @@ Make sure to replace `0.0.0` with the version you want to use. (You can find the
 ```xml
 <dependencies>
     <dependency>
-        <groupId>com.github.KartoffelChipss</groupId>
+        <groupId>org.strassburger</groupId>
         <artifactId>TUI4J</artifactId>
         <version>0.0.0</version>
     </dependency>
@@ -56,7 +56,7 @@ Make sure to replace `0.0.0` with the version you want to use. (You can find the
 
 ```groovy
 dependencies {
-    implementation 'com.github.KartoffelChipss:TUI4J:0.0.0'
+    implementation 'org.strassburger:TUI4J:0.0.0'
 }
 
 repositories {
