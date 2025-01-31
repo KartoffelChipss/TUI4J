@@ -8,12 +8,21 @@ import org.strassburger.tui4j.input.validationrules.ValidationRule;
 import java.util.List;
 
 public class IntegerInput extends Input<Integer> {
+    private boolean inline = true;
+
     public IntegerInput() {
         super();
     }
 
     public Integer read() throws InputValidationException {
-        Printer.println(getLabel());
+        Printer.print(getLabel());
+
+        if (inline) System.out.print("");
+        else {
+            System.out.println();
+            Printer.print("&8> ");
+        }
+
         String input = getScanner().nextLine();
 
         try {
@@ -30,6 +39,11 @@ public class IntegerInput extends Input<Integer> {
         } catch (RetryInputException e) {
             return read();
         }
+    }
+
+    public IntegerInput setInline(boolean inline) {
+        this.inline = inline;
+        return this;
     }
 
     @Override

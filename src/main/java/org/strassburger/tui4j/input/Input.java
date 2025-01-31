@@ -73,11 +73,21 @@ public abstract class Input<T> {
         return this;
     }
 
+    /**
+     * Add validation rules to the input
+     * @param rules the validation rules to add
+     * @return the input object
+     */
     public Input<T> addValidationRules(List<ValidationRule<T>> rules) {
         validationRules.addAll(rules);
         return this;
     }
 
+    /**
+     * Validate the input value
+     * @param value the input value to validate
+     * @throws InputValidationException if the input is invalid
+     */
     protected void validate(T value) throws InputValidationException {
         for (ValidationRule<T> rule : validationRules) {
             if (!rule.validate(value)) {

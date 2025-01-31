@@ -13,6 +13,7 @@ public class NumberInput<U extends Number> extends Input<U> {
     private static final Map<Class<? extends Number>, Function<String, ? extends Number>> PARSERS = new HashMap<>();
     private final Class<U> type;
     private boolean allowComma = true;
+    private boolean inline = true;
 
     static {
         PARSERS.put(Double.class, Double::valueOf);
@@ -30,7 +31,14 @@ public class NumberInput<U extends Number> extends Input<U> {
 
     @Override
     public U read() throws InputValidationException {
-        Printer.println(getLabel());
+        Printer.print(getLabel());
+
+        if (inline) System.out.print("");
+        else {
+            System.out.println();
+            Printer.print("&8> ");
+        }
+
         String input = getScanner().nextLine();
         if (!allowComma) input = input.replace(",", "");
 
@@ -50,6 +58,26 @@ public class NumberInput<U extends Number> extends Input<U> {
                 throw new InputValidationException("Invalid input: " + input);
             }
         }
+    }
+
+    /**
+     * Set whether to allow commas as decimal separators.
+     * @param allowComma Whether to allow commas as decimal separators.
+     * @return The current NumberInput object.
+     */
+    public NumberInput<U> setAllowComma(boolean allowComma) {
+        this.allowComma = allowComma;
+        return this;
+    }
+
+    /**
+     * Set whether to display the input prompt inline.
+     * @param inline Whether to display the input prompt inline.
+     * @return The current NumberInput object.
+     */
+    public NumberInput<U> setInline(boolean inline) {
+        this.inline = inline;
+        return this;
     }
 
     @Override

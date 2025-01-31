@@ -8,6 +8,7 @@ import org.strassburger.tui4j.input.validationrules.ValidationRule;
 import java.util.List;
 
 public class DoubleInput extends Input<Double> {
+    private boolean inline = true;
     private boolean allowComma = true;
 
     public DoubleInput() {
@@ -15,7 +16,14 @@ public class DoubleInput extends Input<Double> {
     }
 
     public Double read() throws InputValidationException {
-        Printer.println(getLabel());
+        Printer.print(getLabel());
+
+        if (inline) System.out.print("");
+        else {
+            System.out.println();
+            Printer.print("&8> ");
+        }
+
         String input = getScanner().nextLine();
         if (allowComma) input = input.replace(",", ".");
 
@@ -33,6 +41,11 @@ public class DoubleInput extends Input<Double> {
         } catch (RetryInputException e) {
             return read();
         }
+    }
+
+    public DoubleInput setInline(boolean inline) {
+        this.inline = inline;
+        return this;
     }
 
     public DoubleInput setLabel(String label) {
