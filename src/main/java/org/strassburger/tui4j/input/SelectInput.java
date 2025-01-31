@@ -6,6 +6,9 @@ import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @param <T> The type of the value that will be returned when the user selects an option
+ */
 public class SelectInput<T> extends Input<T> {
     private final List<Option<T>> options;
     private String optionsStyle = " &7%num%. &r%label%";

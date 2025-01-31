@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * A generic class for handling numeric user input with validation.
+ *
+ * @param <U> the type of number (Integer, Double, etc.)
+ */
 public class NumberInput<U extends Number> extends Input<U> {
     private static final Map<Class<? extends Number>, Function<String, ? extends Number>> PARSERS = new HashMap<>();
     private final Class<U> type;
@@ -24,6 +29,22 @@ public class NumberInput<U extends Number> extends Input<U> {
         PARSERS.put(Byte.class, Byte::valueOf);
     }
 
+    /**
+     * Create a new NumberInput object.
+     * @param type The type of number to read (Integer, Double, etc.)
+     *
+     * <p>Example usage:</p>
+     * <pre>
+     * {@code
+     * NumberInput<Integer> input = new NumberInput<>(Integer.class)
+     *     .setLabel("Enter an integer:")
+     *     .setRetryOnInvalid(true);
+     *
+     * int value = input.read();
+     * System.out.println("You entered: " + value);
+     * }
+     * </pre>
+     */
     public NumberInput(Class<U> type) {
         super();
         this.type = type;
