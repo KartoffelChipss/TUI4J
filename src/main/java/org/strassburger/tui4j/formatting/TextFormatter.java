@@ -1,54 +1,19 @@
 package org.strassburger.tui4j.formatting;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.strassburger.colorlab4j.color.Color;
+import org.strassburger.colorlab4j.color.spaces.HSLColor;
+import org.strassburger.colorlab4j.gradients.Gradient;
+import org.strassburger.colorlab4j.gradients.spaces.HSLGradient;
+import org.strassburger.tui4j.formatting.util.ColorCodeReplacer;
+import org.strassburger.tui4j.formatting.util.GradientFormatter;
+import org.strassburger.tui4j.formatting.util.TextCleaner;
 
 /**
  * Format text with color codes and position text in the terminal
  */
 public class TextFormatter {
-    private static final Map<String, TextColor> colorMap = new HashMap<>();
-
-    static {
-        colorMap.put("&0", TextColor.BLACK);
-        colorMap.put("&1", TextColor.BLUE);
-        colorMap.put("&2", TextColor.GREEN);
-        colorMap.put("&3", TextColor.CYAN);
-        colorMap.put("&4", TextColor.RED);
-        colorMap.put("&5", TextColor.MAGENTA);
-        colorMap.put("&6", TextColor.YELLOW);
-        colorMap.put("&7", TextColor.WHITE);
-
-        colorMap.put("&8", TextColor.BRIGHT_BLACK);
-        colorMap.put("&9", TextColor.BRIGHT_BLUE);
-        colorMap.put("&a", TextColor.BRIGHT_GREEN);
-        colorMap.put("&b", TextColor.BRIGHT_CYAN);
-        colorMap.put("&c", TextColor.BRIGHT_RED);
-        colorMap.put("&d", TextColor.BRIGHT_MAGENTA);
-        colorMap.put("&e", TextColor.BRIGHT_YELLOW);
-        colorMap.put("&f", TextColor.BRIGHT_WHITE);
-
-        colorMap.put("&l", TextColor.BOLD);
-        colorMap.put("&n", TextColor.UNDERLINE);
-        colorMap.put("&r", TextColor.RESET);
-
-        colorMap.put("&x0", TextColor.BG_BLACK);
-        colorMap.put("&x1", TextColor.BG_BLUE);
-        colorMap.put("&x2", TextColor.BG_GREEN);
-        colorMap.put("&x3", TextColor.BG_CYAN);
-        colorMap.put("&x4", TextColor.BG_RED);
-        colorMap.put("&x5", TextColor.BG_MAGENTA);
-        colorMap.put("&x6", TextColor.BG_YELLOW);
-        colorMap.put("&x7", TextColor.BG_WHITE);
-
-        colorMap.put("&x8", TextColor.BG_BRIGHT_BLACK);
-        colorMap.put("&x9", TextColor.BG_BRIGHT_BLUE);
-        colorMap.put("&xa", TextColor.BG_BRIGHT_GREEN);
-        colorMap.put("&xb", TextColor.BG_BRIGHT_CYAN);
-        colorMap.put("&xc", TextColor.BG_BRIGHT_RED);
-        colorMap.put("&xd", TextColor.BG_BRIGHT_MAGENTA);
-        colorMap.put("&xe", TextColor.BG_BRIGHT_YELLOW);
-        colorMap.put("&xf", TextColor.BG_BRIGHT_WHITE);
+    private static int getTerminalWidth() {
+        return 80;
     }
 
     /**
@@ -57,19 +22,10 @@ public class TextFormatter {
      * @return Formatted text
      */
     public static String format(String text) {
-        for (Map.Entry<String, TextColor> entry : colorMap.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue().toString();
-
-            text = text.replaceAll("(?<!\\\\)" + key, value);// Replace non-escaped key
-            text = text.replace("\\" + key, key);// Remove escape character
-        }
-        text += TextColor.RESET;
+        text = ColorCodeReplacer.replacePrefabColorCodes(text);
+        text = ColorCodeReplacer.replaceHexCodes(text);
+        text = ColorCodeReplacer.replaceBgHexCodes(text);
         return text;
-    }
-
-    private static int getTerminalWidth() {
-        return 80;
     }
 
     /**
@@ -94,8 +50,7 @@ public class TextFormatter {
 
         int spaces = (terminalWidth - textLength) / 2;
 
-        return " ".repeat(Math.max(0, spaces)) +
-                text;
+        return " ".repeat(Math.max(0, spaces)) + text;
     }
 
     /**
@@ -133,13 +88,12 @@ public class TextFormatter {
         text2 = format(text2);
         spaceChar = format(spaceChar);
 
-        int textLength = text1.replaceAll("\u001B\\[[;\\d]*m", "").length() + text2.replaceAll("\u001B\\[[;\\d]*m", "").length();
+        int textLength = text1.replaceAll("\u001B\\[[;\\d]*m", "").length()
+                + text2.replaceAll("\u001B\\[[;\\d]*m", "").length();
 
         int spaces = terminalWidth - textLength;
 
-        return text1 +
-                spaceChar.repeat(Math.max(0, spaces)) +
-                text2;
+        return text1 + spaceChar.repeat(Math.max(0, spaces)) + text2;
     }
 
     /**
@@ -148,6 +102,42 @@ public class TextFormatter {
      * @return Text without color codes
      */
     public static String clearFormatting(String text) {
-        return text.replaceAll("\u001B\\[[;\\d]*m", "");
+        return TextCleaner.stripAnsiCodes(text);
+    }
+
+    /**
+     * Add an HSL gradient to text
+     * @param text Text to add gradient to
+     * @param startColor Start color of the gradient
+     * @param endColor End color of the gradient
+     * @return The text formatted with an HSL gradient
+     */
+    public static String gradient(String text, String startColor, String endColor) {
+        return gradient(text, HSLColor.fromHex(startColor), HSLColor.fromHex(endColor));
+    }
+
+    /**
+     * Add an HSL gradient to text
+     * @param text Text to add gradient to
+     * @param startColor Start color of the gradient
+     * @param endColor End color of the gradient
+     * @return The text formatted with an HSL gradient
+     */
+    public static <T extends Color> String gradient(String text, T startColor, T endColor) {
+        HSLColor startColorHSL = startColor.toHSL();
+        HSLColor endColorHSL = endColor.toHSL();
+
+        HSLGradient gradient = new HSLGradient(startColorHSL, endColorHSL);
+        return gradient(text, gradient);
+    }
+
+    /**
+     * Add a gradient to text
+     * @param text Text to add gradient to
+     * @param gradient Gradient to apply
+     * @return The text formatted with a gradient
+     */
+    public static <T extends Color, U extends Gradient<T>> String gradient(String text, U gradient) {
+        return GradientFormatter.applyGradient(text, gradient);
     }
 }

@@ -38,7 +38,7 @@ Make sure to replace `0.0.0` with the version you want to use. (You can find the
 ```xml
 <dependencies>
     <dependency>
-        <groupId>org.strassburger</groupId>
+        <groupId>com.github.KartoffelChipss</groupId>
         <artifactId>TUI4J</artifactId>
         <version>0.0.0</version>
     </dependency>
@@ -56,7 +56,7 @@ Make sure to replace `0.0.0` with the version you want to use. (You can find the
 
 ```groovy
 dependencies {
-    implementation 'org.strassburger:TUI4J:0.0.0'
+    implementation 'com.github.KartoffelChipss:TUI4J:0.0.0'
 }
 
 repositories {
@@ -146,6 +146,14 @@ public class Main {
 ```
 
 ## Color Codes
+
+TUI4J uses color codes to format text. These color codes are similar to the ones used in Minecraft.
+
+### Custom Hex Colors
+
+You can also use custom hex colors by using the following format: `&#RRGGBB` where `RR`, `GG`, and `BB` are the hexadecimal values for the red, green, and blue color channels.
+
+If you want to set the background color, you can use the following format: `&x#RRGGBB`.
 
 ### Text Colors
 
