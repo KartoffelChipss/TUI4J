@@ -150,6 +150,24 @@ public final class StyledText {
         return new StyledText(newSpans);
     }
 
+    /**
+     * Repeat the entire StyledText a specified number of times
+     * @param count the number of times to repeat
+     * @return a new StyledText instance with the repeated content
+     */
+    public StyledText repeat(int count) {
+        if (count <= 0) {
+            return new StyledText(List.of());
+        }
+
+        List<Span> newSpans = new ArrayList<>(spans.size() * count);
+        for (int i = 0; i < count; i++) {
+            newSpans.addAll(spans);
+        }
+
+        return new StyledText(newSpans);
+    }
+
 
     private StyledText modifyLast(Function<Style, Style> modifier) {
         if (spans.isEmpty()) return this;

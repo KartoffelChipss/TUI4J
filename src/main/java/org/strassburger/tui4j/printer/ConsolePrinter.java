@@ -3,6 +3,7 @@ package org.strassburger.tui4j.printer;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.StyledTextRenderer;
 import org.strassburger.tui4j.formatting.ansi.AnsiRenderer;
+import org.strassburger.tui4j.formatting.layout.Renderable;
 
 /**
  * A Printer implementation that outputs to the console (System.out)
@@ -36,6 +37,11 @@ public class ConsolePrinter implements Printer {
     }
 
     @Override
+    public void print(Renderable renderable) {
+        renderable.render(this, 125, 30);
+    }
+
+    @Override
     public void println() {
         System.out.println();
     }
@@ -48,6 +54,12 @@ public class ConsolePrinter implements Printer {
     @Override
     public void println(StyledText text) {
         System.out.println(textRenderer.render(text));
+    }
+
+    @Override
+    public void println(Renderable renderable) {
+        renderable.render(this, 125, 30);
+        System.out.println();
     }
 
     @Override

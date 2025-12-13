@@ -1,6 +1,7 @@
 package org.strassburger.tui4j.printer;
 
 import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.layout.Renderable;
 
 /**
  * An interface for printing text to various outputs
@@ -19,6 +20,12 @@ public interface Printer {
     void print(StyledText text);
 
     /**
+     * Print a renderable object to the output
+     * @param renderable the renderable object to print
+     */
+    void print(Renderable renderable);
+
+    /**
      * Print a newline to the output
      */
     void println();
@@ -34,6 +41,12 @@ public interface Printer {
      * @param text the styled text to print
      */
     void println(StyledText text);
+
+    /**
+     * Print a renderable object to the output with a newline
+     * @param renderable the renderable object to print
+     */
+    void println(Renderable renderable);
 
     /**
      * Format and print text to the output
