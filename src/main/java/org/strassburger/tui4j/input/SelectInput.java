@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class SelectInput<T> extends Input<T, SelectInput<T>> {
     private final List<Option<T>> options;
-    private String optionsStyle = " &7%num%. &r%label%";
+    private StyledText optionsStyle = StyledText.text(" %num%. ").fg(AnsiColor.BRIGHT_WHITE).append(StyledText.text("%label%"));
 
     public SelectInput() {
         super();
@@ -28,7 +28,7 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
         try {
             getPrinter().println(getLabel());
             for (int i = 0; i < options.size(); i++) {
-                String message = optionsStyle
+                StyledText message = optionsStyle
                         .replace("%num%", String.valueOf(i + 1))
                         .replace("%label%", options.get(i).getLabel());
                 getPrinter().println(message);
@@ -88,8 +88,18 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
      * @param optionsStyle The style of the options (%num% will be replaced with the number of the option, %label% will be replaced with the label of the option)
      * @return The select input object
      */
-    public SelectInput<T> setOptionsStyle(String optionsStyle) {
+    public SelectInput<T> setOptionsStyle(StyledText optionsStyle) {
         this.optionsStyle = optionsStyle;
+        return this;
+    }
+
+    /**
+     * Sets the style of the options
+     * @param optionsStyle The style of the options (%num% will be replaced with the number of the option, %label% will be replaced with the label of the option)
+     * @return The select input object
+     */
+    public SelectInput<T> setOptionsStyle(String optionsStyle) {
+        this.optionsStyle = StyledText.text(optionsStyle);
         return this;
     }
 

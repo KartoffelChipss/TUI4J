@@ -4,6 +4,7 @@ import org.strassburger.colorlab4j.color.Color;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -57,7 +58,6 @@ public final class StyledText {
         return new StyledText(List.of(new Span(text, style != null ? style : new Style())));
     }
 
-    /* === Composition === */
 
     /**
      * Append another StyledText to this one
@@ -129,7 +129,27 @@ public final class StyledText {
         return prepend(text(text));
     }
 
-    /* === Style modifiers === */
+
+    /**
+     * Replace occurrences of a target string with a replacement string in all spans
+     * @param target the string to be replaced
+     * @param replacement the string to replace with
+     * @return a new StyledText instance with the replacements made
+     */
+    public StyledText replace(String target, String replacement) {
+        Objects.requireNonNull(target, "Target cannot be null");
+        Objects.requireNonNull(replacement, "Replacement cannot be null");
+
+        List<Span> newSpans = new ArrayList<>();
+
+        for (Span span : spans) {
+            String modifiedText = span.getText().replace(target, replacement);
+            newSpans.add(new Span(modifiedText, span.getStyle()));
+        }
+
+        return new StyledText(newSpans);
+    }
+
 
     private StyledText modifyLast(Function<Style, Style> modifier) {
         if (spans.isEmpty()) return this;
@@ -187,7 +207,6 @@ public final class StyledText {
         return modifyLast(Style::inverse);
     }
 
-    /* === Span merging === */
 
     private static List<Span> mergeSpans(List<Span> spans) {
         if (spans.isEmpty()) return List.of();
