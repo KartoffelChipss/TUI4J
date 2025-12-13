@@ -9,7 +9,6 @@ import org.strassburger.tui4j.printer.ConsolePrinter;
 import org.strassburger.tui4j.printer.Printer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,6 +21,7 @@ public abstract class Input<T, S extends Input<T, S>> {
     private StyledText label = StyledText.text("");
     private boolean retryOnInvalid = true;
     private StyledText errorMessage = StyledText.text("Invalid input. Please try again.").fg(AnsiColor.RED);
+    private StyledText cursor = StyledText.text(">").fg(AnsiColor.BRIGHT_BLACK).append(" ").fg(AnsiColor.WHITE);
     private final List<ValidationRule<T>> validationRules;
     private Scanner scanner;
     private Printer printer;
@@ -49,7 +49,7 @@ public abstract class Input<T, S extends Input<T, S>> {
      */
     @SuppressWarnings("unchecked")
     public S setLabel(String label) {
-        this.label = StyledText.text(label);
+        this.label = StyledText.text(label).fg(AnsiColor.BRIGHT_WHITE);
         return (S) this;
     }
 
@@ -108,17 +108,6 @@ public abstract class Input<T, S extends Input<T, S>> {
         return (S) this;
     }
 
-//    /**
-//     * Add validation rules to the input
-//     * @param rule the validation rules to add
-//     * @return the input object
-//     */
-//    @SuppressWarnings("unchecked")
-//    public S addValidationRules(ValidationRule<T>... rule) {
-//        validationRules.addAll(Arrays.asList(rule));
-//        return (S) this;
-//    }
-
     /**
      * Add validation rules to the input
      * @param rules the validation rules to add
@@ -142,6 +131,16 @@ public abstract class Input<T, S extends Input<T, S>> {
         return (S) this;
     }
 
+    @SuppressWarnings("unchecked")
+    public S setCursor(StyledText cursor) {
+        this.cursor = cursor;
+        return (S) this;
+    }
+
+    public StyledText getCursor() {
+        return cursor;
+    }
+
     /**
      * Validate the input value
      * @param value the input value to validate
@@ -151,10 +150,12 @@ public abstract class Input<T, S extends Input<T, S>> {
         for (ValidationRule<T> rule : validationRules) {
             if (!rule.validate(value)) {
                 if (retryOnInvalid) {
-                    printer.println(errorMessage);
-                    throw new RetryInputException(rule.getErrorMessage());
+                    StyledText errMessage = rule.getErrorMessage() != null ? rule.getErrorMessage() : errorMessage;
+                    printer.println(errMessage);
+                    throw new RetryInputException(errMessage);
                 } else {
-                    throw new InputValidationException(rule.getErrorMessage());
+                    StyledText errMessage = rule.getErrorMessage() != null ? rule.getErrorMessage() : errorMessage;
+                    throw new InputValidationException(errMessage);
                 }
             }
         }

@@ -19,7 +19,7 @@ public class DoubleInput extends Input<Double, DoubleInput> {
         if (inline) getPrinter().print("");
         else {
             getPrinter().println();
-            getPrinter().print(StyledText.text("> ").fg(AnsiColor.BRIGHT_BLACK));
+            getPrinter().print(getCursor());
         }
 
         String input = getScanner().nextLine();

@@ -1,7 +1,5 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.StyledText;
-import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
 
@@ -33,7 +31,7 @@ public class TextInput extends Input<String, TextInput> {
         if (inline) getPrinter().print("");
         else {
             getPrinter().println();
-            getPrinter().print(StyledText.text("> ").fg(AnsiColor.BRIGHT_BLACK));
+            getPrinter().print(getCursor());
         }
 
         String value = getScanner().nextLine();

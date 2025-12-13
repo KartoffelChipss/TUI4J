@@ -33,7 +33,7 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
                         .replace("%label%", options.get(i).getLabel());
                 getPrinter().println(message);
             }
-            getPrinter().print(StyledText.text("> ").fg(AnsiColor.BRIGHT_BLACK));
+            getPrinter().print(getCursor());
             String input = getScanner().nextLine().trim();
 
             if (input.contains(".")) {

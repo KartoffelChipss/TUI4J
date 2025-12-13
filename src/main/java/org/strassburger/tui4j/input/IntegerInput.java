@@ -18,7 +18,7 @@ public class IntegerInput extends Input<Integer, IntegerInput> {
         if (inline) getPrinter().print("");
         else {
             getPrinter().println();
-            getPrinter().print(StyledText.text("> ").fg(AnsiColor.BRIGHT_BLACK));
+            getPrinter().print(getCursor());
         }
 
         String input = getScanner().nextLine();

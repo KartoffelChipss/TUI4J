@@ -56,7 +56,7 @@ public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
         if (inline) getPrinter().print("");
         else {
             getPrinter().println();
-            getPrinter().print(StyledText.text("> ").fg(AnsiColor.BRIGHT_BLACK));
+            getPrinter().print(getCursor());
         }
 
         String input = getScanner().nextLine();

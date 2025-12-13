@@ -6,7 +6,6 @@ import org.strassburger.tui4j.input.exceptions.RetryInputException;
 import java.util.List;
 
 public class MultilineTextInput extends Input<String, MultilineTextInput> {
-    private boolean inline;
 
     public MultilineTextInput() {
         super();
@@ -17,9 +16,6 @@ public class MultilineTextInput extends Input<String, MultilineTextInput> {
         StringBuilder input = new StringBuilder();
         String line;
         getPrinter().println(getLabel());
-
-        if (inline) getPrinter().print(" ");
-        else getPrinter().println();
 
         // Read input line by line until the user presses Enter (on a blank line, finish)
         while (true) {
@@ -37,10 +33,5 @@ public class MultilineTextInput extends Input<String, MultilineTextInput> {
         }
 
         return input.toString().trim();
-    }
-
-    public MultilineTextInput setInline(boolean inline) {
-        this.inline = inline;
-        return this;
     }
 }
