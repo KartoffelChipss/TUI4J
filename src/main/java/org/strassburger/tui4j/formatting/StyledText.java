@@ -7,7 +7,18 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
+ * <p>
  * Represents styled text composed of multiple spans, each with its own style.
+ * </p>
+ * <p>
+ * Example usage:
+ * </p>
+ * <pre>{@code
+ * StyledText styled = StyledText.text("Hello, ")
+ *     .fg(Color.fromHex("00ff00"))
+ *     .append(StyledText.text("World!").bold())
+ *     .underline();
+ * }</pre>
  */
 public final class StyledText {
 
