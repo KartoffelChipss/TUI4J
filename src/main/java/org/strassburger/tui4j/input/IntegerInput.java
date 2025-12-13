@@ -1,13 +1,11 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.Printer;
+import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
-import org.strassburger.tui4j.input.validationrules.ValidationRule;
 
-import java.util.List;
-
-public class IntegerInput extends Input<Integer> {
+public class IntegerInput extends Input<Integer, IntegerInput> {
     private boolean inline = true;
 
     public IntegerInput() {
@@ -15,12 +13,12 @@ public class IntegerInput extends Input<Integer> {
     }
 
     public Integer read() throws InputValidationException {
-        Printer.print(getLabel());
+        getPrinter().print(getLabel());
 
-        if (inline) System.out.print("");
+        if (inline) getPrinter().print("");
         else {
-            System.out.println();
-            Printer.print("&8> ");
+            getPrinter().println();
+            getPrinter().print(StyledText.text("> ").fg(AnsiColor.BRIGHT_BLACK));
         }
 
         String input = getScanner().nextLine();
@@ -31,10 +29,10 @@ public class IntegerInput extends Input<Integer> {
             return value;
         } catch (NumberFormatException e) {
             if (isRetryOnInvalid()) {
-                Printer.println(getErrorMessage());
+                getPrinter().println(getErrorMessage());
                 return read();
             } else {
-                throw new InputValidationException("Invalid input: " + input);
+                throw new InputValidationException(StyledText.text("Invalid input: " + input).fg(AnsiColor.RED));
             }
         } catch (RetryInputException e) {
             return read();
@@ -43,37 +41,6 @@ public class IntegerInput extends Input<Integer> {
 
     public IntegerInput setInline(boolean inline) {
         this.inline = inline;
-        return this;
-    }
-
-    @Override
-    public IntegerInput setLabel(String label) {
-        super.setLabel(label);
-        return this;
-    }
-
-    @Override
-    public IntegerInput setRetryOnInvalid(boolean retryOnInvalid) {
-        super.setRetryOnInvalid(retryOnInvalid);
-        return this;
-    }
-
-    @SafeVarargs
-    @Override
-    public final IntegerInput addValidationRules(ValidationRule<Integer>... rules) {
-        super.addValidationRules(rules);
-        return this;
-    }
-
-    @Override
-    public IntegerInput addValidationRules(List<ValidationRule<Integer>> rules) {
-        super.addValidationRules(rules);
-        return this;
-    }
-
-    @Override
-    public IntegerInput setErrorMessage(String errorMessage) {
-        super.setErrorMessage(errorMessage);
         return this;
     }
 }

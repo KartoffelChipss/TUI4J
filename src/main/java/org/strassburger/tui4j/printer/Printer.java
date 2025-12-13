@@ -19,6 +19,11 @@ public interface Printer {
     void print(StyledText text);
 
     /**
+     * Print a newline to the output
+     */
+    void println();
+
+    /**
      * Print raw text to the output with a newline
      * @param text the text to print
      */

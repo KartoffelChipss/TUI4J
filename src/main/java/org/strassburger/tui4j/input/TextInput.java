@@ -1,15 +1,11 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.Printer;
-import org.strassburger.tui4j.formatting.TextColor;
-import org.strassburger.tui4j.formatting.TextFormatter;
+import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
-import org.strassburger.tui4j.input.validationrules.ValidationRule;
 
-import java.util.List;
-
-public class TextInput extends Input<String> {
+public class TextInput extends Input<String, TextInput> {
     private boolean inline;
 
     /**
@@ -32,12 +28,12 @@ public class TextInput extends Input<String> {
 
     @Override
     public String read() throws InputValidationException {
-        Printer.print(getLabel());
+        getPrinter().print(getLabel());
 
-        if (inline) System.out.print("");
+        if (inline) getPrinter().print("");
         else {
-            System.out.println();
-            Printer.print("&8> ");
+            getPrinter().println();
+            getPrinter().print(StyledText.text("> ").fg(AnsiColor.BRIGHT_BLACK));
         }
 
         String value = getScanner().nextLine();
@@ -52,37 +48,6 @@ public class TextInput extends Input<String> {
         }
 
         return value;
-    }
-
-    @Override
-    public TextInput setLabel(String label) {
-        super.setLabel(label);
-        return this;
-    }
-
-    @Override
-    public TextInput setRetryOnInvalid(boolean retryOnInvalid) {
-        super.setRetryOnInvalid(retryOnInvalid);
-        return this;
-    }
-
-    @SafeVarargs
-    @Override
-    public final TextInput addValidationRules(ValidationRule<String>... rules) {
-        super.addValidationRules(rules);
-        return this;
-    }
-
-    @Override
-    public TextInput addValidationRules(List<ValidationRule<String>> rules) {
-        super.addValidationRules(rules);
-        return this;
-    }
-
-    @Override
-    public TextInput setErrorMessage(String errorMessage) {
-        super.setErrorMessage(errorMessage);
-        return this;
     }
 
     /**

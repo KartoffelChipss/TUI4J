@@ -2,6 +2,8 @@ package org.strassburger.tui4j.input;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
 
@@ -91,8 +93,8 @@ class DateInputTest {
             }
 
             @Override
-            public String getErrorMessage() {
-                return "Date must be after 2023-06-01.";
+            public StyledText getErrorMessage() {
+                return StyledText.text("Date must be after 2023-06-01.").fg(AnsiColor.RED);
             }
         });
 

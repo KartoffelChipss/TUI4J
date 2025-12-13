@@ -1,19 +1,18 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.Printer;
+import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
-import org.strassburger.tui4j.input.validationrules.ValidationRule;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * A class for handling date input
  */
-public class DateInput extends Input<Date> {
+public class DateInput extends Input<Date, DateInput> {
     private String dateFormat = "yyyy-MM-dd";
     private boolean inline;
 
@@ -21,12 +20,12 @@ public class DateInput extends Input<Date> {
     public Date read() throws InputValidationException {
         while (true) {
             try {
-                Printer.print(getLabel());
+                getPrinter().print(getLabel());
 
-                if (inline) System.out.print("");
+                if (inline) getPrinter().print("");
                 else {
-                    System.out.println();
-                    Printer.print("&8> ");
+                    getPrinter().println();
+                    getPrinter().print(StyledText.text("> ").fg(AnsiColor.BRIGHT_BLACK));
                 }
 
                 String input = getScanner().nextLine().trim();
@@ -44,12 +43,12 @@ public class DateInput extends Input<Date> {
                 if (!isRetryOnInvalid()) {
                     throw new InputValidationException(getErrorMessage());
                 }
-                Printer.println(getErrorMessage());
+                getPrinter().println(getErrorMessage());
             } catch (InputValidationException e) {
                 if (!isRetryOnInvalid()) {
                     throw e;
                 }
-                Printer.println(e.getMessage());
+                getPrinter().println(e.getMessage());
             }
         }
     }
@@ -72,36 +71,8 @@ public class DateInput extends Input<Date> {
         return dateFormat;
     }
 
-    public DateInput setRetryOnInvalid(boolean retryOnInvalid) {
-        super.setRetryOnInvalid(retryOnInvalid);
-        return this;
-    }
-
-    public DateInput setLabel(String label) {
-        super.setLabel(label);
-        return this;
-    }
-
-    public DateInput setErrorMessage(String errorMessage) {
-        super.setErrorMessage(errorMessage);
-        return this;
-    }
-
     public DateInput setInline(boolean inline) {
         this.inline = inline;
-        return this;
-    }
-
-    @SafeVarargs
-    @Override
-    public final DateInput addValidationRules(ValidationRule<Date>... rules) {
-        super.addValidationRules(rules);
-        return this;
-    }
-
-    @Override
-    public DateInput addValidationRules(List<ValidationRule<Date>> rules) {
-        super.addValidationRules(rules);
         return this;
     }
 

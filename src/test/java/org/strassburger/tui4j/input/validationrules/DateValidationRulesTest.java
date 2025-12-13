@@ -1,12 +1,14 @@
 package org.strassburger.tui4j.input.validationrules;
 
 import org.junit.jupiter.api.Test;
+import org.strassburger.tui4j.formatting.PlainTextRenderer;
 
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DateValidationRulesTest {
+    private final PlainTextRenderer renderer = new PlainTextRenderer();
 
     @Test
     void testFutureDate() {
@@ -17,7 +19,7 @@ class DateValidationRulesTest {
 
         assertTrue(rule.validate(futureDate));
         assertFalse(rule.validate(pastDate));
-        assertEquals("The date must be in the future.", rule.getErrorMessage().replace("&c", ""));
+        assertEquals("The date must be in the future.", renderer.render(rule.getErrorMessage()));
     }
 
     @Test
@@ -29,7 +31,7 @@ class DateValidationRulesTest {
 
         assertTrue(rule.validate(pastDate));
         assertFalse(rule.validate(futureDate));
-        assertEquals("The date must be in the past.", rule.getErrorMessage().replace("&c", ""));
+        assertEquals("The date must be in the past.", renderer.render(rule.getErrorMessage()));
     }
 
     @Test
@@ -42,7 +44,7 @@ class DateValidationRulesTest {
 
         assertTrue(rule.validate(futureDate));
         assertFalse(rule.validate(pastDate));
-        assertEquals("The date must be after " + comparisonDate + ".", rule.getErrorMessage().replace("&c", ""));
+        assertEquals("The date must be after " + comparisonDate + ".", renderer.render(rule.getErrorMessage()));
     }
 
     @Test
@@ -55,6 +57,6 @@ class DateValidationRulesTest {
 
         assertTrue(rule.validate(pastDate));
         assertFalse(rule.validate(futureDate));
-        assertEquals("The date must be before " + comparisonDate + ".", rule.getErrorMessage().replace("&c", ""));
+        assertEquals("The date must be before " + comparisonDate + ".", renderer.render(rule.getErrorMessage()));
     }
 }

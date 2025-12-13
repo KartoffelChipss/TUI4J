@@ -4,6 +4,9 @@ import org.strassburger.tui4j.formatting.Span;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.StyledTextRenderer;
 
+/**
+ * A StyledTextRenderer implementation that renders text with ANSI escape codes
+ */
 public class AnsiRenderer implements StyledTextRenderer {
     /**
      * Render the given StyledText to a string with ANSI escape codes

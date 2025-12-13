@@ -1,6 +1,7 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.Printer;
+import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * @param <T> The type of the value that will be returned when the user selects an option
  */
-public class SelectInput<T> extends Input<T> {
+public class SelectInput<T> extends Input<T, SelectInput<T>> {
     private final List<Option<T>> options;
     private String optionsStyle = " &7%num%. &r%label%";
 
@@ -25,14 +26,14 @@ public class SelectInput<T> extends Input<T> {
 
     public T read() throws InputValidationException {
         try {
-            System.out.print(getLabel() + "\n");
+            getPrinter().println(getLabel());
             for (int i = 0; i < options.size(); i++) {
                 String message = optionsStyle
                         .replace("%num%", String.valueOf(i + 1))
                         .replace("%label%", options.get(i).getLabel());
-                Printer.println(message);
+                getPrinter().println(message);
             }
-            Printer.print("&8> ");
+            getPrinter().print(StyledText.text("> ").fg(AnsiColor.BRIGHT_BLACK));
             String input = getScanner().nextLine().trim();
 
             if (input.contains(".")) {
@@ -43,20 +44,20 @@ public class SelectInput<T> extends Input<T> {
 
             if (selectedIndex < 0 || selectedIndex >= options.size()) {
                 if (isRetryOnInvalid()) {
-                    Printer.println(getErrorMessage());
+                    getPrinter().println(getErrorMessage());
                     return read();
                 } else {
-                    throw new InputValidationException("Invalid input.");
+                    throw new InputValidationException(StyledText.text("Invalid input.").fg(AnsiColor.RED));
                 }
             }
 
             return options.get(selectedIndex).getValue();
         } catch (NumberFormatException e) {
             if (isRetryOnInvalid()) {
-                Printer.println(getErrorMessage());
+                getPrinter().println(getErrorMessage());
                 return read();
             } else {
-                throw new InputValidationException("Invalid input.");
+                throw new InputValidationException(StyledText.text("Invalid input.").fg(AnsiColor.RED));
             }
         }
     }
@@ -82,16 +83,6 @@ public class SelectInput<T> extends Input<T> {
         return this;
     }
 
-    public SelectInput<T> setLabel(String label) {
-        super.setLabel(label);
-        return this;
-    }
-
-    public SelectInput<T> setRetryOnInvalid(boolean retryOnInvalid) {
-        super.setRetryOnInvalid(retryOnInvalid);
-        return this;
-    }
-
     /**
      * Sets the style of the options
      * @param optionsStyle The style of the options (%num% will be replaced with the number of the option, %label% will be replaced with the label of the option)
@@ -99,12 +90,6 @@ public class SelectInput<T> extends Input<T> {
      */
     public SelectInput<T> setOptionsStyle(String optionsStyle) {
         this.optionsStyle = optionsStyle;
-        return this;
-    }
-
-    @Override
-    public SelectInput<T> setErrorMessage(String errorMessage) {
-        super.setErrorMessage(errorMessage);
         return this;
     }
 

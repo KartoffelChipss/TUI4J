@@ -1,15 +1,16 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.Printer;
+import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 
-public class BooleanInput extends Input<Boolean> {
+public class BooleanInput extends Input<Boolean, BooleanInput> {
     public BooleanInput() {
         super();
     }
 
     public Boolean read() throws InputValidationException {
-        Printer.println(getLabel());
+        getPrinter().println(getLabel());
         String input = getScanner().nextLine();
 
         if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")) {
@@ -21,26 +22,10 @@ public class BooleanInput extends Input<Boolean> {
         }
 
         if (isRetryOnInvalid()) {
-            Printer.println(getErrorMessage());
+            getPrinter().println(getErrorMessage());
             return read();
         } else {
-            throw new InputValidationException("Invalid input.");
+            throw new InputValidationException(StyledText.text("Invalid input.").fg(AnsiColor.RED));
         }
-    }
-
-    public BooleanInput setLabel(String label) {
-        super.setLabel(label);
-        return this;
-    }
-
-    public BooleanInput setRetryOnInvalid(boolean retryOnInvalid) {
-        super.setRetryOnInvalid(retryOnInvalid);
-        return this;
-    }
-
-    @Override
-    public BooleanInput setErrorMessage(String errorMessage) {
-        super.setErrorMessage(errorMessage);
-        return this;
     }
 }

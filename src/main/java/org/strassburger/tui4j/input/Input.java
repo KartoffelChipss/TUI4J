@@ -1,10 +1,12 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.Printer;
-import org.strassburger.tui4j.formatting.TextFormatter;
+import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
+import org.strassburger.tui4j.printer.ConsolePrinter;
+import org.strassburger.tui4j.printer.Printer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,16 +16,23 @@ import java.util.Scanner;
 /**
  * Abstract class for input
  * @param <T> the type of the input value
+ * @param <S> the type of the input subclass
  */
-public abstract class Input<T> {
-    private String label = "";
+public abstract class Input<T, S extends Input<T, S>> {
+    private StyledText label = StyledText.text("");
     private boolean retryOnInvalid = true;
-    private String errorMessage = TextFormatter.format("&cInvalid input. Please try again.");
+    private StyledText errorMessage = StyledText.text("Invalid input. Please try again.").fg(AnsiColor.RED);
     private final List<ValidationRule<T>> validationRules;
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner;
+    private final Printer printer;
 
+    /**
+     * Constructor with default scanner and printer
+     */
     public Input() {
         validationRules = new ArrayList<>();
+        scanner = new Scanner(System.in);
+        printer = new ConsolePrinter();
     }
 
     /**
@@ -35,12 +44,24 @@ public abstract class Input<T> {
 
     /**
      * Set the label for the input
-     * @param label the label to set (formatted with TextFormatter)
+     * @param label the label to set
      * @return the input object
      */
-    public Input<T> setLabel(String label) {
-        this.label = TextFormatter.format(label);
-        return this;
+    @SuppressWarnings("unchecked")
+    public S setLabel(String label) {
+        this.label = StyledText.text(label);
+        return (S) this;
+    }
+
+    /**
+     * Set the label for the input
+     * @param label the label to set
+     * @return the input object
+     */
+    @SuppressWarnings("unchecked")
+    public S setLabel(StyledText label) {
+        this.label = label;
+        return (S) this;
     }
 
     /**
@@ -48,19 +69,32 @@ public abstract class Input<T> {
      * @param retryOnInvalid whether to retry on invalid input
      * @return the input object
      */
-    public Input<T> setRetryOnInvalid(boolean retryOnInvalid) {
+    @SuppressWarnings("unchecked")
+    public S setRetryOnInvalid(boolean retryOnInvalid) {
         this.retryOnInvalid = retryOnInvalid;
-        return this;
+        return (S) this;
     }
 
     /**
      * Set the error message for invalid input
-     * @param errorMessage the error message to set (formatted with TextFormatter)
+     * @param errorMessage the error message to set (as plain text)
      * @return the input object
      */
-    public Input<T> setErrorMessage(String errorMessage) {
-        this.errorMessage = TextFormatter.format(errorMessage);
-        return this;
+    @SuppressWarnings("unchecked")
+    public S setErrorMessage(String errorMessage) {
+        this.errorMessage = StyledText.text(errorMessage).fg(AnsiColor.RED);
+        return (S) this;
+    }
+
+    /**
+     * Set the error message for invalid input
+     * @param errorMessage the error message to set
+     * @return the input object
+     */
+    @SuppressWarnings("unchecked")
+    public S setErrorMessage(StyledText errorMessage) {
+        this.errorMessage = errorMessage;
+        return (S) this;
     }
 
     /**
@@ -68,9 +102,10 @@ public abstract class Input<T> {
      * @param rule the validation rules to add
      * @return the input object
      */
-    public Input<T> addValidationRules(ValidationRule<T>... rule) {
+    @SuppressWarnings("unchecked")
+    public S addValidationRules(ValidationRule<T>... rule) {
         validationRules.addAll(Arrays.asList(rule));
-        return this;
+        return (S) this;
     }
 
     /**
@@ -78,9 +113,10 @@ public abstract class Input<T> {
      * @param rules the validation rules to add
      * @return the input object
      */
-    public Input<T> addValidationRules(List<ValidationRule<T>> rules) {
+    @SuppressWarnings("unchecked")
+    public S addValidationRules(List<ValidationRule<T>> rules) {
         validationRules.addAll(rules);
-        return this;
+        return (S) this;
     }
 
     /**
@@ -92,7 +128,7 @@ public abstract class Input<T> {
         for (ValidationRule<T> rule : validationRules) {
             if (!rule.validate(value)) {
                 if (retryOnInvalid) {
-                    Printer.println(rule.getErrorMessage());
+                    printer.println(errorMessage);
                     throw new RetryInputException(rule.getErrorMessage());
                 } else {
                     throw new InputValidationException(rule.getErrorMessage());
@@ -101,7 +137,7 @@ public abstract class Input<T> {
         }
     }
 
-    public String getLabel() {
+    public StyledText getLabel() {
         return label;
     }
 
@@ -109,11 +145,15 @@ public abstract class Input<T> {
         return retryOnInvalid;
     }
 
-    public String getErrorMessage() {
+    public StyledText getErrorMessage() {
         return errorMessage;
     }
 
     protected Scanner getScanner() {
         return scanner;
+    }
+
+    protected Printer getPrinter() {
+        return printer;
     }
 }
