@@ -2,6 +2,7 @@ package org.strassburger.tui4j.formatting.layout;
 
 import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.printer.Printer;
 
 import java.util.ArrayList;
@@ -21,6 +22,15 @@ public class FlexText implements Renderable {
         this.parts = new ArrayList<>();
         this.justify = FlexJustify.CENTER;
         this.gap = 3;
+    }
+
+    /**
+     * Creates a FlexText with a single part
+     * @param part the StyledText part to add
+     */
+    public FlexText(StyledText... part) {
+        this();
+        this.parts.addAll(List.of(part));
     }
 
     public List<StyledText> getParts() {
@@ -187,5 +197,29 @@ public class FlexText implements Renderable {
                 }
                 break;
         }
+    }
+
+    /**
+     * Creates a FlexText representing a key-value pair with a clear line separation
+     * @param key the key string
+     * @param value the value string
+     * @return the constructed FlexText
+     */
+    public static FlexText keyValue(String key, String value) {
+        return keyValue(StyledText.text(key).fg(AnsiColor.BRIGHT_WHITE), StyledText.text(value).fg(AnsiColor.BRIGHT_WHITE));
+    }
+
+    /**
+     * Creates a FlexText representing a key-value pair with a clear line separation
+     * @param key the key StyledText
+     * @param value the value StyledText
+     * @return the constructed FlexText
+     */
+    public static FlexText keyValue(StyledText key, StyledText value) {
+        return new FlexText()
+                .addPart(key)
+                .addPart(value)
+                .setJustify(FlexJustify.SPACE_BETWEEN)
+                .setSeparatorChar(StyledText.text("⋅").fg(AnsiColor.BRIGHT_BLACK));
     }
 }
