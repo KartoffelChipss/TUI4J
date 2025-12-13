@@ -6,6 +6,9 @@ import org.strassburger.tui4j.formatting.TextColor;
 
 import java.util.List;
 
+/**
+ * @deprecated
+ */
 public class GradientFormatter {
     public static <T extends Color, U extends Gradient<T>> String applyGradient(String text, U gradient) {
         List<T> colors = gradient.getColors(text.length());

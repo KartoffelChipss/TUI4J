@@ -10,6 +10,7 @@ import org.strassburger.tui4j.formatting.util.TextCleaner;
 
 /**
  * Format text with color codes and position text in the terminal
+ * @deprecated Use {@link org.strassburger.tui4j.formatting.StyledText} and {@link org.strassburger.tui4j.printer.Printer} instead
  */
 public class TextFormatter {
     private static int getTerminalWidth() {

@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @deprecated Use {@link org.strassburger.tui4j.formatting.ansi.AnsiRenderer} and {@link org.strassburger.tui4j.formatting.StyledText} instead.
+ */
 public class ColorCodeReplacer {
     private static final Map<String, TextColor> colorMap = new HashMap<>();
 

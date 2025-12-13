@@ -2,6 +2,7 @@ package org.strassburger.tui4j.formatting;
 
 /**
  * This enum provides ANSI escape codes for text colors, background colors, and text styles.
+ * @deprecated Use the {@link org.strassburger.tui4j.formatting.ansi.AnsiCode} class instead.
  */
 public enum TextColor {
     // Text Colors
