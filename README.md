@@ -20,6 +20,7 @@ TUI4J is a Java-based library for creating text-based user interfaces (TUIs).
   - Number Input
   - Boolean Input
   - Selection Input
+  - Date Input
   - Enter-To-Continue Input
 - Easy text formatting
   - Colors
@@ -38,7 +39,7 @@ Make sure to replace `0.0.0` with the version you want to use. (You can find the
 ```xml
 <dependencies>
     <dependency>
-        <groupId>com.github.KartoffelChipss</groupId>
+        <groupId>org.strassburger</groupId>
         <artifactId>TUI4J</artifactId>
         <version>0.0.0</version>
     </dependency>
@@ -56,7 +57,7 @@ Make sure to replace `0.0.0` with the version you want to use. (You can find the
 
 ```groovy
 dependencies {
-    implementation 'com.github.KartoffelChipss:TUI4J:0.0.0'
+    implementation 'org.strassburger:TUI4J:0.0.0'
 }
 
 repositories {
@@ -73,132 +74,98 @@ The API documentation can be found [here](https://TUI4J.j4n.net).
 ```java
 package org.example;
 
-import org.strassburger.tui4j.formatting.Printer;
+import org.strassburger.tui4j.formatting.ansi.AnsiColor;
+import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.layout.FlexJustify;
+import org.strassburger.tui4j.formatting.layout.FlexText;
 import org.strassburger.tui4j.input.*;
 import org.strassburger.tui4j.input.validationrules.NumberValidationRules;
 import org.strassburger.tui4j.input.validationrules.TextValidationRules;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
+import org.strassburger.tui4j.printer.ConsolePrinter;
+import org.strassburger.tui4j.printer.Printer;
 
 public class Main {
     public static void main(String[] args) {
-        Printer.println(" ");
-        Printer.printCentered("&9&lWelcome to the TUI4J example application!");
-        Printer.println(" ");
-
+        Printer printer = new ConsolePrinter();
+    
+        printer.println(" ");
+        printer.println(new FlexText(StyledText.text("Welcome to the TUI4J example application!").fg(AnsiColor.BLUE).bold()));
+        printer.println(" ");
+    
         String name = new TextInput()
                 .setLabel("What is your name? ")
                 .setInline(true)
                 .read();
-
+    
+        String gender = new SelectInput<String>()
+                .setLabel("Select your gender: ")
+                .addOption("Male", "Male")
+                .addOption("Female", "Female")
+                .addOption("Other", "Other")
+                .setOptionsStyle(StyledText.text(" (%num%) ").fg(AnsiColor.CYAN).append("%label%"))
+                .read();
+    
         String email = new TextInput()
                 .setLabel("What is your email address?")
-                .addValidationRules(
+                .addValidationRule(
                         new ValidationRule<String>() {
                             @Override
                             public boolean validate(String s) {
                                 return s.contains("@") && s.contains(".");
                             }
-
+      
                             @Override
-                            public String getErrorMessage() {
-                                return "Email address must contain '@' and '.'";
+                            public StyledText getErrorMessage() {
+                                return StyledText.text("Email address must contain '@' and '.'").fg(AnsiColor.RED);
                             }
                         }
                 )
                 .read();
-
+    
         String about = new MultilineTextInput()
                 .setLabel("Tell me about yourself: ")
-                .addValidationRules(
-                        TextValidationRules.minLength(30)
-                )
+                .addValidationRule(TextValidationRules.minLength(30))
                 .read();
-
+    
         int age = new IntegerInput()
                 .setLabel("How old are you? ")
-                .addValidationRules(
-                        NumberValidationRules.greaterThan(0),
-                        NumberValidationRules.lessThan(150)
-                )
+                .addValidationRule(NumberValidationRules.greaterThan(0))
+                .addValidationRule(NumberValidationRules.lessThan(150))
                 .read();
-
+    
         double height = new DoubleInput()
                 .setLabel("How tall are you? ")
-                .addValidationRules(
-                        NumberValidationRules.greaterThan(0.0),
-                        NumberValidationRules.lessThan(3.0)
-                )
+                .addValidationRule(NumberValidationRules.greaterThan(0.0))
+                .addValidationRule(NumberValidationRules.lessThan(3.0))
                 .read();
-
-        Printer.println(" ");
-        Printer.println("&f&lYour Inputs:");
-        Printer.printSpaceBetween("&fName", "&f" + name, "&7.");
-        Printer.printSpaceBetween("&fEmail", "&f" + email, "&7.");
-        Printer.printSpaceBetween("&fAge", "&f" + age, "&7.");
-        Printer.printSpaceBetween("&fHeight", "&f" + height, "&7.");
-        Printer.println(" ");
-
+    
+        printer.println(" ");
+        printer.println(StyledText.text("Your Inputs:").fg(AnsiColor.BRIGHT_WHITE).bold());
+        printer.println(new FlexText()
+                .addPart(StyledText.text("Name ").fg(AnsiColor.BRIGHT_WHITE))
+                .addPart(StyledText.text(" " + name).fg(AnsiColor.BRIGHT_WHITE))
+                .setJustify(FlexJustify.SPACE_BETWEEN)
+                .setSeparatorChar(StyledText.text(".").fg(AnsiColor.BRIGHT_BLACK))
+        );
+        printer.println(FlexText.keyValue("Email ", " " + email));
+        printer.println(FlexText.keyValue("Age ", " " + age));
+        printer.println(FlexText.keyValue("Height (m) ", " " + height));
+        printer.println(FlexText.keyValue("Gender ", " " + gender));
+        printer.println(" ");
+    
         boolean shouldContinue = new BooleanInput()
-                .setLabel("Do you want to continue? ")
+                .setLabel("Do you want to continue? (y/n)")
                 .read();
+    
+        if (shouldContinue) {
+            printer.println("Continuing...");
+        } else {
+            printer.println("Exiting...");
+        }
     }
 }
 ```
-
-## Color Codes
-
-TUI4J uses color codes to format text. These color codes are similar to the ones used in Minecraft.
-
-### Custom Hex Colors
-
-You can also use custom hex colors by using the following format: `&#RRGGBB` where `RR`, `GG`, and `BB` are the hexadecimal values for the red, green, and blue color channels.
-
-If you want to set the background color, you can use the following format: `&x#RRGGBB`.
-
-### Text Colors
-
-| Code  | Color  | Preview  |
-|-------|--------|----------|
-| &0    | Black  | <span style="color:black;">&0 Black</span> |
-| &1    | Blue   | <span style="color:blue;">&1 Blue</span> |
-| &2    | Green  | <span style="color:green;">&2 Green</span> |
-| &3    | Cyan   | <span style="color:cyan;">&3 Cyan</span> |
-| &4    | Red    | <span style="color:red;">&4 Red</span> |
-| &5    | Magenta| <span style="color:magenta;">&5 Magenta</span> |
-| &6    | Yellow | <span style="color:yellow;">&6 Yellow</span> |
-| &7    | White  | <span style="color:white;">&7 White</span> |
-| &8    | Dark Gray | <span style="color:#808080;">&8 Dark Gray</span> |
-| &9    | Blue   | <span style="color:#0000FF;">&9 Bright Blue</span> |
-| &a    | Green  | <span style="color:#00FF00;">&a Bright Green</span> |
-| &b    | Cyan   | <span style="color:#00FFFF;">&b Bright Cyan</span> |
-| &c    | Red    | <span style="color:#FF0000;">&c Bright Red</span> |
-| &d    | Magenta| <span style="color:#FF00FF;">&d Bright Magenta</span> |
-| &e    | Yellow | <span style="color:#FFFF00;">&e Bright Yellow</span> |
-| &f    | White  | <span style="color:#FFFFFF;">&f Bright White</span> |
-| &l    | Bold   | <strong>&l Bold</strong> |
-| &n    | Underline | <span style="text-decoration:underline;">&n Underline</span> |
-| &r    | Reset  | &r Reset |
-
-### Background Colors
-
-| Code  | Color  | Preview  |
-|-------|--------|----------|
-| &x0   | Black  | <span style="background-color:black; color:white;">&x0 Black</span> |
-| &x1   | Blue   | <span style="background-color:blue; color:white;">&x1 Blue</span> |
-| &x2   | Green  | <span style="background-color:green; color:white;">&x2 Green</span> |
-| &x3   | Cyan   | <span style="background-color:cyan; color:black;">&x3 Cyan</span> |
-| &x4   | Red    | <span style="background-color:red; color:white;">&x4 Red</span> |
-| &x5   | Magenta| <span style="background-color:magenta; color:white;">&x5 Magenta</span> |
-| &x6   | Yellow | <span style="background-color:yellow; color:black;">&x6 Yellow</span> |
-| &x7   | White  | <span style="background-color:white; color:black;">&x7 White</span> |
-| &x8   | Dark Gray | <span style="background-color:#808080; color:white;">&x8 Dark Gray</span> |
-| &x9   | Blue   | <span style="background-color:#0000FF; color:white;">&x9 Bright Blue</span> |
-| &xa   | Green  | <span style="background-color:#00FF00; color:black;">&xa Bright Green</span> |
-| &xb   | Cyan   | <span style="background-color:#00FFFF; color:black;">&xb Bright Cyan</span> |
-| &xc   | Red    | <span style="background-color:#FF0000; color:white;">&xc Bright Red</span> |
-| &xd   | Magenta| <span style="background-color:#FF00FF; color:white;">&xd Bright Magenta</span> |
-| &xe   | Yellow | <span style="background-color:#FFFF00; color:black;">&xe Bright Yellow</span> |
-| &xf   | White  | <span style="background-color:#FFFFFF; color:black;">&xf Bright White</span> |
 
 ## License
 
