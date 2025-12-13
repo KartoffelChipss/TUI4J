@@ -72,7 +72,7 @@ class TextInputTest {
 
         textInput.setLabel("What is your name?");
         textInput.setRetryOnInvalid(false);
-        textInput.addValidationRules(minFifeCharsRule);
+        textInput.addValidationRule(minFifeCharsRule);
 
         InputValidationException exception = assertThrows(InputValidationException.class, textInput::read);
         assertEquals("Name must be longer than 5 characters.", exception.getMessage());
@@ -85,7 +85,7 @@ class TextInputTest {
 
         textInput.setLabel("What is your name?");
         textInput.setRetryOnInvalid(true);
-        textInput.addValidationRules(minFifeCharsRule);
+        textInput.addValidationRule(minFifeCharsRule);
 
         String result = textInput.read();
 

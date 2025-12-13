@@ -85,7 +85,7 @@ class DateInputTest {
 
         dateInput.setLabel("Enter a date (yyyy-MM-dd):");
         dateInput.setRetryOnInvalid(false);
-        dateInput.addValidationRules(new ValidationRule<Date>() {
+        dateInput.addValidationRule(new ValidationRule<Date>() {
             @Override
             public boolean validate(Date input) {
                 // Example validation: date must be after 2023-06-01

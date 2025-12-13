@@ -23,8 +23,8 @@ public abstract class Input<T, S extends Input<T, S>> {
     private boolean retryOnInvalid = true;
     private StyledText errorMessage = StyledText.text("Invalid input. Please try again.").fg(AnsiColor.RED);
     private final List<ValidationRule<T>> validationRules;
-    private final Scanner scanner;
-    private final Printer printer;
+    private Scanner scanner;
+    private Printer printer;
 
     /**
      * Constructor with default scanner and printer
@@ -98,15 +98,26 @@ public abstract class Input<T, S extends Input<T, S>> {
     }
 
     /**
-     * Add validation rules to the input
-     * @param rule the validation rules to add
+     * Add a validation rule to the input
+     * @param rule the validation rule to add
      * @return the input object
      */
     @SuppressWarnings("unchecked")
-    public S addValidationRules(ValidationRule<T>... rule) {
-        validationRules.addAll(Arrays.asList(rule));
+    public S addValidationRule(ValidationRule<T> rule) {
+        this.validationRules.add(rule);
         return (S) this;
     }
+
+//    /**
+//     * Add validation rules to the input
+//     * @param rule the validation rules to add
+//     * @return the input object
+//     */
+//    @SuppressWarnings("unchecked")
+//    public S addValidationRules(ValidationRule<T>... rule) {
+//        validationRules.addAll(Arrays.asList(rule));
+//        return (S) this;
+//    }
 
     /**
      * Add validation rules to the input
@@ -116,6 +127,18 @@ public abstract class Input<T, S extends Input<T, S>> {
     @SuppressWarnings("unchecked")
     public S addValidationRules(List<ValidationRule<T>> rules) {
         validationRules.addAll(rules);
+        return (S) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public S setPrinter(Printer printer) {
+        this.printer = printer;
+        return (S) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public S setScanner(Scanner scanner) {
+        this.scanner = scanner;
         return (S) this;
     }
 

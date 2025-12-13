@@ -69,9 +69,7 @@ public class DoubleInputTest {
 
         input.setLabel("What is your weight?");
         input.setRetryOnInvalid(false);
-        input.addValidationRules(
-                NumberValidationRules.greaterThan(0.0)
-        );
+        input.addValidationRule(NumberValidationRules.greaterThan(0.0));
 
         assertThrows(InputValidationException.class, () -> input.read());
         verify(mockScanner, times(1)).nextLine();

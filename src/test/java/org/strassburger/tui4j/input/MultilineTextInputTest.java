@@ -59,7 +59,7 @@ class MultilineTextInputTest {
 
         multilineTextInput.setLabel("Tell us about yourself");
         multilineTextInput.setRetryOnInvalid(false);
-        multilineTextInput.addValidationRules(minThirtyharsRule);
+        multilineTextInput.addValidationRule(minThirtyharsRule);
 
         InputValidationException exception = assertThrows(InputValidationException.class, multilineTextInput::read);
         assertEquals("Name must be longer than 30 characters.", exception.getMessage());
@@ -72,7 +72,7 @@ class MultilineTextInputTest {
 
         multilineTextInput.setLabel("Tell us about yourself");
         multilineTextInput.setRetryOnInvalid(true);
-        multilineTextInput.addValidationRules(minThirtyharsRule);
+        multilineTextInput.addValidationRule(minThirtyharsRule);
 
         String result = multilineTextInput.read();
 

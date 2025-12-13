@@ -68,7 +68,7 @@ public class IntegerInputTest {
         when(mockScanner.nextLine()).thenReturn("0").thenReturn("100");
 
         input.setLabel("What is your age?");
-        input.addValidationRules(NumberValidationRules.greaterThan(0));
+        input.addValidationRule(NumberValidationRules.greaterThan(0));
 
         int result = input.read();
 
