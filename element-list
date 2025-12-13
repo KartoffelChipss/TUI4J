@@ -1,5 +1,6 @@
 org.strassburger.tui4j.formatting
 org.strassburger.tui4j.formatting.ansi
+org.strassburger.tui4j.formatting.layout
 org.strassburger.tui4j.formatting.util
 org.strassburger.tui4j.input
 org.strassburger.tui4j.input.exceptions
