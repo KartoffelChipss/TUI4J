@@ -18,7 +18,7 @@ import java.util.Scanner;
  * @param <S> the type of the input subclass
  */
 public abstract class Input<T, S extends Input<T, S>> {
-    private StyledText label = StyledText.text("");
+    private StyledText label = null;
     private boolean retryOnInvalid = true;
     private StyledText errorMessage = StyledText.text("Invalid input. Please try again.").fg(AnsiColor.RED);
     private StyledText cursor = StyledText.text(">").fg(AnsiColor.BRIGHT_BLACK).append(" ").fg(AnsiColor.WHITE);
@@ -179,5 +179,15 @@ public abstract class Input<T, S extends Input<T, S>> {
 
     protected Printer getPrinter() {
         return printer;
+    }
+
+    protected void printLabelAndCursor(boolean inline) {
+        if (getLabel() != null) getPrinter().print(getLabel());
+
+        if (inline) getPrinter().print("");
+        else {
+            if (getLabel() != null) getPrinter().println();
+            getPrinter().print(getCursor());
+        }
     }
 }

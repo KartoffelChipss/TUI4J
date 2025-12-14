@@ -26,11 +26,11 @@ public class TextInput extends Input<String, TextInput> {
 
     @Override
     public String read() throws InputValidationException {
-        getPrinter().print(getLabel());
+        if (getLabel() != null) getPrinter().print(getLabel());
 
         if (inline) getPrinter().print("");
         else {
-            getPrinter().println();
+            if (getLabel() != null) getPrinter().println();
             getPrinter().print(getCursor());
         }
 

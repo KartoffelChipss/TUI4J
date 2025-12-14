@@ -51,13 +51,7 @@ public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
 
     @Override
     public U read() throws InputValidationException {
-        getPrinter().print(getLabel());
-
-        if (inline) getPrinter().print("");
-        else {
-            getPrinter().println();
-            getPrinter().print(getCursor());
-        }
+        printLabelAndCursor(inline);
 
         String input = getScanner().nextLine();
         if (!allowComma) input = input.replace(",", "");

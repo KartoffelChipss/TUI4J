@@ -20,13 +20,7 @@ public class DateInput extends Input<Date, DateInput> {
     public Date read() throws InputValidationException {
         while (true) {
             try {
-                getPrinter().print(getLabel());
-
-                if (inline) getPrinter().print("");
-                else {
-                    getPrinter().println();
-                    getPrinter().print(getCursor());
-                }
+                printLabelAndCursor(inline);
 
                 String input = getScanner().nextLine().trim();
 

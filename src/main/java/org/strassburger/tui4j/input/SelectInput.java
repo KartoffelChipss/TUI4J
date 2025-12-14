@@ -26,7 +26,7 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
 
     public T read() throws InputValidationException {
         try {
-            getPrinter().println(getLabel());
+            if (getLabel() != null) getPrinter().println(getLabel());
             for (int i = 0; i < options.size(); i++) {
                 StyledText message = optionsStyle
                         .replace("%num%", String.valueOf(i + 1))

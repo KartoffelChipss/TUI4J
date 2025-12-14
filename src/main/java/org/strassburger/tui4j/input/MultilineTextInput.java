@@ -15,14 +15,12 @@ public class MultilineTextInput extends Input<String, MultilineTextInput> {
     public String read() throws InputValidationException {
         StringBuilder input = new StringBuilder();
         String line;
-        getPrinter().println(getLabel());
+        if (getLabel() != null) getPrinter().println(getLabel());
 
         // Read input line by line until the user presses Enter (on a blank line, finish)
         while (true) {
             line = getScanner().nextLine();
-            if (line.isEmpty()) {
-                break;
-            }
+            if (line.isEmpty()) break;
             input.append(line).append("\n");
         }
 
