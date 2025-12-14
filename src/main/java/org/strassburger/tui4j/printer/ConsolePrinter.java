@@ -3,6 +3,7 @@ package org.strassburger.tui4j.printer;
 import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.StyledTextRenderer;
+import org.strassburger.tui4j.formatting.ansi.AnsiCode;
 import org.strassburger.tui4j.formatting.ansi.AnsiRenderer;
 import org.strassburger.tui4j.formatting.layout.Renderable;
 import org.strassburger.tui4j.terminal.Terminal;
@@ -98,6 +99,17 @@ public class ConsolePrinter implements Printer {
     @Override
     public void printfln(StyledText format, Object... args) {
         System.out.printf(textRenderer.render(format) + "%n", args);
+    }
+
+    @Override
+    public void clear() {
+        if (terminal.isAnsiSupported()) {
+            System.out.println(AnsiCode.ERASE_DISPLAY_ENTIRE + AnsiCode.CURSOR_HOME.toString());
+        } else {
+            for (int i = 0; i < 50; i++) {
+                System.out.println();
+            }
+        }
     }
 
     public Terminal getTerminal() {

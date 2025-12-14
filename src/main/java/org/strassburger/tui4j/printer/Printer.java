@@ -75,4 +75,9 @@ public interface Printer {
      * @param args the arguments to format
      */
     void printfln(StyledText format, Object... args);
+
+    /**
+     * Clear the output
+     */
+    void clear();
 }
