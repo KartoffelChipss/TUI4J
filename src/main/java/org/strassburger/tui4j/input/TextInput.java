@@ -26,13 +26,7 @@ public class TextInput extends Input<String, TextInput> {
 
     @Override
     public String read() throws InputValidationException {
-        if (getLabel() != null) getPrinter().print(getLabel());
-
-        if (inline) getPrinter().print("");
-        else {
-            if (getLabel() != null) getPrinter().println();
-            getPrinter().print(getCursor());
-        }
+        printPromptAndCursor(inline);
 
         String value = getScanner().nextLine();
         while (value.isEmpty()) {

@@ -1,7 +1,5 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.StyledText;
-import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
 
@@ -20,7 +18,7 @@ public class DateInput extends Input<Date, DateInput> {
     public Date read() throws InputValidationException {
         while (true) {
             try {
-                printLabelAndCursor(inline);
+                printPromptAndCursor(inline);
 
                 String input = getScanner().nextLine().trim();
 

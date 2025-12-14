@@ -7,7 +7,7 @@ public class ContinueInput extends Input<Void, ContinueInput> {
 
     @Override
     public Void read() {
-        if (getLabel() != null) getPrinter().println(getLabel());
+        if (getPrompt() != null) getPrinter().println(getPrompt());
         getScanner().nextLine();
         return null;
     }

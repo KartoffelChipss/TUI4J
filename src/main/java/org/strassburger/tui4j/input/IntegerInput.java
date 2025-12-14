@@ -13,7 +13,7 @@ public class IntegerInput extends Input<Integer, IntegerInput> {
     }
 
     public Integer read() throws InputValidationException {
-        printLabelAndCursor(inline);
+        printPromptAndCursor(inline);
 
         String input = getScanner().nextLine();
 

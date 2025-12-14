@@ -15,7 +15,7 @@ public class MultilineTextInput extends Input<String, MultilineTextInput> {
     public String read() throws InputValidationException {
         StringBuilder input = new StringBuilder();
         String line;
-        if (getLabel() != null) getPrinter().println(getLabel());
+        if (getPrompt() != null) getPrinter().println(getPrompt());
 
         // Read input line by line until the user presses Enter (on a blank line, finish)
         while (true) {

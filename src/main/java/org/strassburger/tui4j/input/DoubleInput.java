@@ -14,7 +14,7 @@ public class DoubleInput extends Input<Double, DoubleInput> {
     }
 
     public Double read() throws InputValidationException {
-        printLabelAndCursor(inline);
+        printPromptAndCursor(inline);
 
         String input = getScanner().nextLine();
         if (allowComma) input = input.replace(",", ".");

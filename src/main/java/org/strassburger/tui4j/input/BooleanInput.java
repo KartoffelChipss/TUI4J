@@ -10,7 +10,7 @@ public class BooleanInput extends Input<Boolean, BooleanInput> {
     }
 
     public Boolean read() throws InputValidationException {
-        if (getLabel() != null) getPrinter().print(getLabel());
+        if (getPrompt() != null) getPrinter().print(getPrompt());
         String input = getScanner().nextLine();
 
         if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")) {

@@ -18,7 +18,7 @@ import java.util.Scanner;
  * @param <S> the type of the input subclass
  */
 public abstract class Input<T, S extends Input<T, S>> {
-    private StyledText label = null;
+    private StyledText prompt = null;
     private boolean retryOnInvalid = true;
     private StyledText errorMessage = StyledText.text("Invalid input. Please try again.").fg(AnsiColor.RED);
     private StyledText cursor = StyledText.text(">").fg(AnsiColor.BRIGHT_BLACK).append(" ").fg(AnsiColor.WHITE);
@@ -44,12 +44,12 @@ public abstract class Input<T, S extends Input<T, S>> {
 
     /**
      * Set the label for the input
-     * @param label the label to set
+     * @param prompt the label to set
      * @return the input object
      */
     @SuppressWarnings("unchecked")
-    public S setLabel(String label) {
-        this.label = StyledText.text(label).fg(AnsiColor.BRIGHT_WHITE);
+    public S setPrompt(String prompt) {
+        this.prompt = StyledText.text(prompt).fg(AnsiColor.BRIGHT_WHITE);
         return (S) this;
     }
 
@@ -57,10 +57,34 @@ public abstract class Input<T, S extends Input<T, S>> {
      * Set the label for the input
      * @param label the label to set
      * @return the input object
+     * @deprecated Use {@link #setPrompt(String)} instead
+     */
+    @SuppressWarnings("unchecked")
+    public S setLabel(String label) {
+        this.prompt = StyledText.text(label).fg(AnsiColor.BRIGHT_WHITE);
+        return (S) this;
+    }
+
+    /**
+     * Set the label for the input
+     * @param prompt the label to set
+     * @return the input object
+     */
+    @SuppressWarnings("unchecked")
+    public S setPrompt(StyledText prompt) {
+        this.prompt = prompt;
+        return (S) this;
+    }
+
+    /**
+     * Set the label for the input
+     * @param label the label to set
+     * @return the input object
+     * @deprecated Use {@link #setPrompt(StyledText)} instead
      */
     @SuppressWarnings("unchecked")
     public S setLabel(StyledText label) {
-        this.label = label;
+        this.prompt = label;
         return (S) this;
     }
 
@@ -161,8 +185,15 @@ public abstract class Input<T, S extends Input<T, S>> {
         }
     }
 
+    /**
+     * @deprecated Use {@link #getPrompt()} instead
+     */
     public StyledText getLabel() {
-        return label;
+        return prompt;
+    }
+
+    public StyledText getPrompt() {
+        return prompt;
     }
 
     public boolean isRetryOnInvalid() {
@@ -181,12 +212,12 @@ public abstract class Input<T, S extends Input<T, S>> {
         return printer;
     }
 
-    protected void printLabelAndCursor(boolean inline) {
-        if (getLabel() != null) getPrinter().print(getLabel());
+    protected void printPromptAndCursor(boolean inline) {
+        if (getPrompt() != null) getPrinter().print(getPrompt());
 
         if (inline) getPrinter().print("");
         else {
-            if (getLabel() != null) getPrinter().println();
+            if (getPrompt() != null) getPrinter().println();
             getPrinter().print(getCursor());
         }
     }
