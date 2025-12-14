@@ -1,6 +1,7 @@
 package org.strassburger.tui4j.formatting;
 
 import org.junit.jupiter.api.Test;
+import org.strassburger.colorlab4j.color.Color;
 import org.strassburger.colorlab4j.color.spaces.RGBColor;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -90,5 +91,41 @@ class StyledTextTest {
         assertNull(t1.getSpans().get(0).getStyle().getForeground());
         // New StyledText has foreground applied
         assertEquals(RGBColor.fromHex("ff0000"), t2.getSpans().get(0).getStyle().getForeground());
+    }
+
+    @Test
+    void testReplace() {
+        StyledText text = StyledText.text("Hello World");
+        StyledText replaced = text.replace("World", "Java");
+
+        assertEquals("Hello World", text.getSpans().get(0).getText());
+
+        assertEquals("Hello Java", replaced.getSpans().get(0).getText());
+
+        StyledText unchanged = text.replace("Python", "Java");
+        assertEquals("Hello World", unchanged.getSpans().get(0).getText());
+    }
+
+    @Test
+    void testSubstring() {
+        StyledText text = StyledText.text("Hello World");
+
+        StyledText sub = text.substring(0, 5);
+        assertEquals("Hello", sub.getSpans().get(0).getText());
+
+        StyledText sub2 = text.substring(6, 11);
+        assertEquals("World", sub2.getSpans().get(0).getText());
+
+        StyledText fullSub = text.substring(0, text.getSpans().get(0).getText().length());
+        assertEquals("Hello World", fullSub.getSpans().get(0).getText());
+    }
+
+    @Test
+    void testLength() {
+        StyledText text = StyledText.text("Hello").fg(Color.fromHex("ff0000"));
+        assertEquals(5, text.length());
+
+        StyledText text2 = StyledText.text("Hello").fg(Color.fromHex("ff0000")).append(" World");
+        assertEquals(11, text2.length());
     }
 }

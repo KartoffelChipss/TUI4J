@@ -151,6 +151,33 @@ public final class StyledText {
     }
 
     /**
+     * Get the total length of the entire StyledText
+     * @return the length of the text
+     */
+    public int length() {
+        int len = 0;
+        for (Span span : spans) {
+            len += span.getText().length();
+        }
+        return len;
+    }
+
+    /**
+     * Get a substring of the entire StyledText
+     * @param beginIndex the beginning index, inclusive
+     * @param endIndex the ending index, exclusive
+     * @return a new StyledText instance representing the substring
+     */
+    public StyledText substring(int beginIndex, int endIndex) {
+        StringBuilder fullText = new StringBuilder();
+        for (Span span : spans) {
+            fullText.append(span.getText());
+        }
+        String substring = fullText.substring(beginIndex, endIndex);
+        return StyledText.text(substring);
+    }
+
+    /**
      * Repeat the entire StyledText a specified number of times
      * @param count the number of times to repeat
      * @return a new StyledText instance with the repeated content

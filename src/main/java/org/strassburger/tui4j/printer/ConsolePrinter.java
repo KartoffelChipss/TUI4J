@@ -56,7 +56,7 @@ public class ConsolePrinter implements Printer {
     @Override
     public void print(Renderable renderable) {
         TerminalSize.Size size = terminal.getSize();
-        renderable.render(this, size.height(), size.width());
+        renderable.render(this, size.width(), size.height());
     }
 
     @Override
