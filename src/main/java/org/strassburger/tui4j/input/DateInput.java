@@ -2,6 +2,7 @@ package org.strassburger.tui4j.input;
 
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
+import org.strassburger.tui4j.printer.Printer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,17 @@ import java.util.Date;
 public class DateInput extends Input<Date, DateInput> {
     private String dateFormat = "yyyy-MM-dd";
     private boolean inline;
+
+    /**
+     * @deprecated Use {@link #DateInput(Printer)} instead
+     */
+    public DateInput() {
+        super();
+    }
+
+    public DateInput(Printer printer) {
+        super(printer);
+    }
 
     @Override
     public Date read() throws InputValidationException {

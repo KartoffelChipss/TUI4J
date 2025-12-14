@@ -1,21 +1,27 @@
 package org.strassburger.tui4j.printer;
 
+import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.StyledTextRenderer;
 import org.strassburger.tui4j.formatting.ansi.AnsiRenderer;
 import org.strassburger.tui4j.formatting.layout.Renderable;
+import org.strassburger.tui4j.terminal.Terminal;
+import org.strassburger.tui4j.terminal.TerminalSize;
 
 /**
  * A Printer implementation that outputs to the console (System.out)
  */
 public class ConsolePrinter implements Printer {
+    private final Terminal terminal;
     private final StyledTextRenderer textRenderer;
 
     /**
      * Creates a ConsolePrinter with the default AnsiRenderer
      */
     public ConsolePrinter() {
-        this.textRenderer = new AnsiRenderer();
+        this.terminal = new Terminal();
+        if (terminal.isAnsiSupported()) this.textRenderer = new AnsiRenderer();
+        else this.textRenderer = new PlainTextRenderer();
     }
 
     /**
@@ -23,6 +29,16 @@ public class ConsolePrinter implements Printer {
      * @param renderer the StyledTextRenderer to use for rendering styled text
      */
     public ConsolePrinter(StyledTextRenderer renderer) {
+        this.terminal = new Terminal();
+        this.textRenderer = renderer;
+    }
+
+    /**
+     * Creates a ConsolePrinter with a custom StyledTextRenderer
+     * @param renderer the StyledTextRenderer to use for rendering styled text
+     */
+    public ConsolePrinter(Terminal terminal, StyledTextRenderer renderer) {
+        this.terminal = terminal;
         this.textRenderer = renderer;
     }
 
@@ -38,7 +54,8 @@ public class ConsolePrinter implements Printer {
 
     @Override
     public void print(Renderable renderable) {
-        renderable.render(this, 125, 30);
+        TerminalSize.Size size = terminal.getSize();
+        renderable.render(this, size.height(), size.width());
     }
 
     @Override
@@ -58,7 +75,8 @@ public class ConsolePrinter implements Printer {
 
     @Override
     public void println(Renderable renderable) {
-        renderable.render(this, 125, 30);
+        TerminalSize.Size size = terminal.getSize();
+        renderable.render(this, size.width(), size.height());
         System.out.println();
     }
 
@@ -80,5 +98,13 @@ public class ConsolePrinter implements Printer {
     @Override
     public void printfln(StyledText format, Object... args) {
         System.out.printf(textRenderer.render(format) + "%n", args);
+    }
+
+    public Terminal getTerminal() {
+        return terminal;
+    }
+
+    public StyledTextRenderer getTextRenderer() {
+        return textRenderer;
     }
 }

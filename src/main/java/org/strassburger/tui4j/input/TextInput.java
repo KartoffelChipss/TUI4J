@@ -2,6 +2,7 @@ package org.strassburger.tui4j.input;
 
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
+import org.strassburger.tui4j.printer.Printer;
 
 public class TextInput extends Input<String, TextInput> {
     private boolean inline;
@@ -19,9 +20,28 @@ public class TextInput extends Input<String, TextInput> {
      *        .setRetryOnInvalid(true)
      *        .read();
      * }</pre>
+     * @deprecated Use {@link #TextInput(Printer)} instead
      */
     public TextInput() {
         super();
+    }
+
+    /**
+     * <p>
+     * Reads a single line of text from the console.
+     * </p>
+     * <p>
+     * Example usage:
+     * </p>
+     * <pre>{@code
+     * String name = new TextInput()
+     *        .setLabel("What is your name?")
+     *        .setRetryOnInvalid(true)
+     *        .read();
+     * }</pre>
+     */
+    public TextInput(Printer printer) {
+        super(printer);
     }
 
     @Override

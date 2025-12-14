@@ -2,13 +2,21 @@ package org.strassburger.tui4j.input;
 
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
+import org.strassburger.tui4j.printer.Printer;
 
 import java.util.List;
 
 public class MultilineTextInput extends Input<String, MultilineTextInput> {
 
+    /**
+     * @deprecated Use {@link #MultilineTextInput(Printer)} instead
+     */
     public MultilineTextInput() {
         super();
+    }
+
+    public MultilineTextInput(Printer printer) {
+        super(printer);
     }
 
     @Override

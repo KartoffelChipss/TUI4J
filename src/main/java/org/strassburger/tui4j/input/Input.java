@@ -28,11 +28,23 @@ public abstract class Input<T, S extends Input<T, S>> {
 
     /**
      * Constructor with default scanner and printer
+     * @deprecated Use {@link #Input(Printer)} instead
      */
     public Input() {
         validationRules = new ArrayList<>();
         scanner = new Scanner(System.in);
         printer = new ConsolePrinter();
+    }
+
+    /**
+     * Constructor with default scanner
+     * @param printer the printer to use
+     */
+    public Input(Printer printer) {
+        if (printer == null) throw new IllegalArgumentException("Printer cannot be null");
+        validationRules = new ArrayList<>();
+        scanner = new Scanner(System.in);
+        this.printer = printer;
     }
 
     /**

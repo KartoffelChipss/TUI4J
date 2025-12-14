@@ -4,13 +4,21 @@ import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
+import org.strassburger.tui4j.printer.Printer;
 
 public class DoubleInput extends Input<Double, DoubleInput> {
     private boolean inline = true;
     private boolean allowComma = true;
 
+    /**
+     * @deprecated Use {@link #DoubleInput(Printer)} instead
+     */
     public DoubleInput() {
         super();
+    }
+
+    public DoubleInput(Printer printer) {
+        super(printer);
     }
 
     public Double read() throws InputValidationException {

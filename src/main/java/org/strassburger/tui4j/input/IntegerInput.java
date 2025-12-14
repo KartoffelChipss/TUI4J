@@ -4,12 +4,20 @@ import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
+import org.strassburger.tui4j.printer.Printer;
 
 public class IntegerInput extends Input<Integer, IntegerInput> {
     private boolean inline = true;
 
+    /**
+     * @deprecated Use {@link #IntegerInput(Printer)} instead
+     */
     public IntegerInput() {
         super();
+    }
+
+    public IntegerInput(Printer printer) {
+        super(printer);
     }
 
     public Integer read() throws InputValidationException {

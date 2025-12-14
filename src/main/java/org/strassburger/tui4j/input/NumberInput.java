@@ -3,6 +3,7 @@ package org.strassburger.tui4j.input;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
+import org.strassburger.tui4j.printer.Printer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,9 +44,31 @@ public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
      * System.out.println("You entered: " + value);
      * }
      * </pre>
+     * @deprecated Use {@link #NumberInput(Class, Printer)} instead
      */
     public NumberInput(Class<U> type) {
         super();
+        this.type = type;
+    }
+
+    /**
+     * Create a new NumberInput object.
+     * @param type The type of number to read (Integer, Double, etc.)
+     *
+     * <p>Example usage:</p>
+     * <pre>
+     * {@code
+     * NumberInput<Integer> input = new NumberInput<>(Integer.class)
+     *     .setLabel("Enter an integer:")
+     *     .setRetryOnInvalid(true);
+     *
+     * int value = input.read();
+     * System.out.println("You entered: " + value);
+     * }
+     * </pre>
+     */
+    public NumberInput(Class<U> type, Printer printer) {
+        super(printer);
         this.type = type;
     }
 
