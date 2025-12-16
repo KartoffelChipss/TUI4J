@@ -63,7 +63,7 @@ public class NumberInputTest {
         };
     }
 
-    // Helper method to run the tests on different types
+    // Helper method to execute the tests on different types
     private <T extends Number> void testValidInput(NumberInput<T> input, T expectedValue) {
         when(mockScanner.nextLine()).thenReturn(expectedValue.toString());
         input.setLabel("What is your value?");
