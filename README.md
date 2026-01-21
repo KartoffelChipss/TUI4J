@@ -69,7 +69,9 @@ repositories {
 
 The API documentation can be found [here](https://TUI4J.j4n.net).
 
-## Example Usage
+## Examples
+
+### Formatting and Inputs
 
 ```java
 package org.example;
@@ -162,6 +164,49 @@ public class Main {
             printer.println("Continuing...");
         } else {
             printer.println("Exiting...");
+        }
+    }
+}
+```
+
+### Commands
+
+```java
+import org.strassburger.tui4j.command.Argument;
+import org.strassburger.tui4j.command.Command;
+import org.strassburger.tui4j.command.Option;
+import org.strassburger.tui4j.command.exceptions.CommandException;
+import org.strassburger.tui4j.formatting.layout.*;
+import org.strassburger.tui4j.input.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String[] testArgs = "farewell franky".split(" ");
+        System.out.println("Executing with args: " + String.join(" ", testArgs));
+    
+        Option<String> nameOption = Option.str("name", "n", "World");
+        Argument<String> nameArgument = Argument.str("name", true);
+    
+        Command command = Command.root()
+                .addSubCommand(
+                        Command.named("greet")
+                                .addOption(nameOption)
+                                .setHandler(context -> {
+                                  String name = context.getOptionValue(nameOption);
+                                  System.out.println("Hello, " + name + "!");
+                                }),
+                        Command.named("farewell")
+                                .addArgument(nameArgument)
+                                .setHandler(context -> {
+                                  String name = context.getArgumentValue(nameArgument);
+                                  System.out.println("Goodbye, " + name + "!");
+                                })
+                );
+    
+        try {
+            command.execute(testArgs);
+        } catch (CommandException e) {
+            System.err.println("Error: " + e.getMessage());
         }
     }
 }
