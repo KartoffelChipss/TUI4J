@@ -72,7 +72,7 @@ repositories {
 
 ## API Documentation
 
-The API documentation can be found [here](https://TUI4J.j4n.net).
+The API documentation can be found [here](https://tui4j.strassburger.org).
 
 ## Examples
 
