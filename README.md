@@ -80,6 +80,8 @@ import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.layout.FlexJustify;
 import org.strassburger.tui4j.formatting.layout.FlexText;
+import org.strassburger.tui4j.formatting.layout.Spinner;
+import org.strassburger.tui4j.formatting.layout.SpinnerFrames;
 import org.strassburger.tui4j.input.*;
 import org.strassburger.tui4j.input.validationrules.NumberValidationRules;
 import org.strassburger.tui4j.input.validationrules.TextValidationRules;
@@ -162,6 +164,21 @@ public class Main {
     
         if (shouldContinue) {
             printer.println("Continuing...");
+
+          Spinner spinner = new Spinner()
+                  .setMessage(StyledText.text("Loading some stuff..."))
+                  .setSpinnerColor(AnsiColor.CYAN)
+                  .setSpinnerFrames(SpinnerFrames.SYNTHWAVE)
+                  .setSpeedMs(100);
+          printer.print(spinner);
+
+          for (int i = 0; i < 50; i++) {
+            Thread.sleep(100);
+            spinner.setMessage(StyledText.text("Loading some stuff... " + (i + 1) * 2 + "%"));
+          }
+
+          spinner.stop(StyledText.text("✔ Loading complete!").fg(AnsiColor.GREEN).bold());
+            
         } else {
             printer.println("Exiting...");
         }
