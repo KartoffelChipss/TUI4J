@@ -24,8 +24,13 @@ TUI4J is a Java-based library for creating text-based user interfaces (TUIs).
   - Enter-To-Continue Input
 - Easy text formatting
   - Colors
-  - Centering
-  - Spacing
+  - Flex Layouts (Centering, Justifying, Spacing)
+  - Tables
+  - Spinners and Loaders
+- Command Line Parsing
+  - Subcommands
+  - Options
+  - Arguments
 - Customizable
   - Custom Input Prompts
   - Custom Input Validators
