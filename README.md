@@ -95,21 +95,21 @@ public class Main {
         printer.println(new FlexText(StyledText.text("Welcome to the TUI4J example application!").fg(AnsiColor.BLUE).bold()));
         printer.println(" ");
     
-        String name = new TextInput()
-                .setLabel("What is your name? ")
+        String name = new TextInput(printer)
+                .setPrompt("What is your name? ")
                 .setInline(true)
                 .read();
     
-        String gender = new SelectInput<String>()
-                .setLabel("Select your gender: ")
+        String gender = new SelectInput<String>(printer)
+                .setPrompt("Select your gender: ")
                 .addOption("Male", "Male")
                 .addOption("Female", "Female")
                 .addOption("Other", "Other")
                 .setOptionsStyle(StyledText.text(" (%num%) ").fg(AnsiColor.CYAN).append("%label%"))
                 .read();
     
-        String email = new TextInput()
-                .setLabel("What is your email address?")
+        String email = new TextInput(printer)
+                .setPrompt("What is your email address?")
                 .addValidationRule(
                         new ValidationRule<String>() {
                             @Override
@@ -125,19 +125,19 @@ public class Main {
                 )
                 .read();
     
-        String about = new MultilineTextInput()
-                .setLabel("Tell me about yourself: ")
+        String about = new MultilineTextInput(printer)
+                .setPrompt("Tell me about yourself: ")
                 .addValidationRule(TextValidationRules.minLength(30))
                 .read();
     
-        int age = new IntegerInput()
-                .setLabel("How old are you? ")
+        int age = new IntegerInput(printer)
+                .setPrompt("How old are you? ")
                 .addValidationRule(NumberValidationRules.greaterThan(0))
                 .addValidationRule(NumberValidationRules.lessThan(150))
                 .read();
     
-        double height = new DoubleInput()
-                .setLabel("How tall are you? ")
+        double height = new DoubleInput(printer)
+                .setPrompt("How tall are you? ")
                 .addValidationRule(NumberValidationRules.greaterThan(0.0))
                 .addValidationRule(NumberValidationRules.lessThan(3.0))
                 .read();
@@ -156,8 +156,8 @@ public class Main {
         printer.println(FlexText.keyValue("Gender ", " " + gender));
         printer.println(" ");
     
-        boolean shouldContinue = new BooleanInput()
-                .setLabel("Do you want to continue? (y/n)")
+        boolean shouldContinue = new BooleanInput(printer)
+                .setPrompt("Do you want to continue? (y/n)")
                 .read();
     
         if (shouldContinue) {
