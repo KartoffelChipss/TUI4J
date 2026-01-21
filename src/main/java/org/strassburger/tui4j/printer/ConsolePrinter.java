@@ -44,6 +44,11 @@ public class ConsolePrinter implements Printer {
     }
 
     @Override
+    public void print(char c) {
+        System.out.print(c);
+    }
+
+    @Override
     public void print(String text) {
         System.out.print(text);
     }
@@ -62,6 +67,11 @@ public class ConsolePrinter implements Printer {
     @Override
     public void println() {
         System.out.println();
+    }
+
+    @Override
+    public void println(char c) {
+        System.out.println(c);
     }
 
     @Override

@@ -8,6 +8,12 @@ import org.strassburger.tui4j.formatting.layout.Renderable;
  */
 public interface Printer {
     /**
+     * Print a single character to the output
+     * @param c the character to print
+     */
+    void print(char c);
+
+    /**
      * Print raw text to the output
      * @param text the text to print
      */
@@ -29,6 +35,12 @@ public interface Printer {
      * Print a newline to the output
      */
     void println();
+
+    /**
+     * Print a single character to the output with a newline
+     * @param c the character to print
+     */
+    void println(char c);
 
     /**
      * Print raw text to the output with a newline

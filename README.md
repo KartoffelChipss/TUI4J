@@ -212,6 +212,64 @@ public class Main {
 }
 ```
 
+### Table
+
+```java
+import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.ansi.AnsiColor;
+import org.strassburger.tui4j.formatting.layout.table.Table;
+import org.strassburger.tui4j.formatting.layout.table.styles.ColumnAlign;
+import org.strassburger.tui4j.formatting.layout.table.styles.TableStyles;
+import org.strassburger.tui4j.printer.ConsolePrinter;
+import org.strassburger.tui4j.printer.Printer;
+
+import java.util.List;
+
+public class Main {
+  public static void main(String[] args) {
+      Printer printer = new ConsolePrinter();
+    
+      List<StyledText> headers = List.of(
+              StyledText.text("Name").fg(AnsiColor.BRIGHT_WHITE).bold(),
+              StyledText.text("Age").fg(AnsiColor.BRIGHT_WHITE).bold(),
+              StyledText.text("City").fg(AnsiColor.BRIGHT_WHITE).bold()
+      );
+    
+      List<StyledText> row1 = List.of(
+              StyledText.text("Alice").fg(AnsiColor.CYAN),
+              StyledText.text("30").fg(AnsiColor.GREEN),
+              StyledText.text("New York").fg(AnsiColor.MAGENTA)
+      );
+    
+      List<StyledText> row2 = List.of(
+              StyledText.text("Bob").fg(AnsiColor.CYAN),
+              StyledText.text("25").fg(AnsiColor.GREEN),
+              StyledText.text("Los Angeles").fg(AnsiColor.MAGENTA)
+      );
+    
+      List<StyledText> row3 = List.of(
+              StyledText.text("Charlie").fg(AnsiColor.CYAN),
+              StyledText.text("35").fg(AnsiColor.GREEN),
+              StyledText.text("Chicago").fg(AnsiColor.MAGENTA)
+      );
+    
+      Table table = new Table()
+              .setStyle(TableStyles.UNICODE_BOX.withBorderColor(AnsiColor.BRIGHT_BLACK))
+              .setHasHeader(true)
+              .setColumnGrow(0, 1)
+              .setColumnAlignment(0, ColumnAlign.START)
+              .setColumnAlignment(1, ColumnAlign.CENTER)
+              .setColumnAlignment(2, ColumnAlign.END)
+              .addRow(headers)
+              .addRow(row1)
+              .addRow(row2)
+              .addRow(row3);
+    
+      printer.println(table);
+  }
+}
+```
+
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](https://github.com/KartoffelChipss/TUI4J/blob/main/LICENSE) file for details.

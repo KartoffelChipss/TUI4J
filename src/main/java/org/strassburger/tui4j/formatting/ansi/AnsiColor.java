@@ -10,6 +10,7 @@ public final class AnsiColor extends Color {
     private final int fgCode;
     private final int bgCode;
 
+    public static final AnsiColor DEFAULT = new AnsiColor(39, 49);
     public static final AnsiColor BLACK = new AnsiColor(30, 40);
     public static final AnsiColor RED = new AnsiColor(31, 41);
     public static final AnsiColor GREEN = new AnsiColor(32, 42);
