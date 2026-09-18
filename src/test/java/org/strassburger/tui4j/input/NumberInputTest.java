@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.strassburger.tui4j.input.NumberInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
+import org.strassburger.tui4j.printer.TestPrinter;
 
 import java.util.Scanner;
 
@@ -12,6 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class NumberInputTest {
+
+    private final TestPrinter printer = new TestPrinter();
+
     private NumberInput<Byte> byteInput;
     private NumberInput<Short> shortInput;
     private NumberInput<Integer> integerInput;
@@ -25,37 +29,37 @@ public class NumberInputTest {
         mockScanner = mock(Scanner.class);
 
         // Initialize all NumberInput types
-        byteInput = new NumberInput<>(Byte.class) {
+        byteInput = new NumberInput<>(Byte.class, printer) {
             @Override
             protected Scanner getScanner() {
                 return mockScanner;
             }
         };
-        shortInput = new NumberInput<>(Short.class) {
+        shortInput = new NumberInput<>(Short.class, printer) {
             @Override
             protected Scanner getScanner() {
                 return mockScanner;
             }
         };
-        integerInput = new NumberInput<>(Integer.class) {
+        integerInput = new NumberInput<>(Integer.class, printer) {
             @Override
             protected Scanner getScanner() {
                 return mockScanner;
             }
         };
-        longInput = new NumberInput<>(Long.class) {
+        longInput = new NumberInput<>(Long.class, printer) {
             @Override
             protected Scanner getScanner() {
                 return mockScanner;
             }
         };
-        floatInput = new NumberInput<>(Float.class) {
+        floatInput = new NumberInput<>(Float.class, printer) {
             @Override
             protected Scanner getScanner() {
                 return mockScanner;
             }
         };
-        doubleInput = new NumberInput<>(Double.class) {
+        doubleInput = new NumberInput<>(Double.class, printer) {
             @Override
             protected Scanner getScanner() {
                 return mockScanner;
@@ -66,7 +70,7 @@ public class NumberInputTest {
     // Helper method to execute the tests on different types
     private <T extends Number> void testValidInput(NumberInput<T> input, T expectedValue) {
         when(mockScanner.nextLine()).thenReturn(expectedValue.toString());
-        input.setLabel("What is your value?");
+        input.setPrompt("What is your value?");
 
         T result = input.read();
 
@@ -77,7 +81,7 @@ public class NumberInputTest {
     private <T extends Number> void testInvalidInput(NumberInput<T> input) {
         when(mockScanner.nextLine()).thenReturn("abc");
         input.setRetryOnInvalid(false);
-        input.setLabel("What is your value?");
+        input.setPrompt("What is your value?");
 
         assertThrows(InputValidationException.class, input::read);
     }
@@ -87,7 +91,7 @@ public class NumberInputTest {
         when(mockScanner.nextLine()).thenReturn("abc").thenReturn(validValue.toString());
 
         input.setRetryOnInvalid(true);
-        input.setLabel("What is your value?");
+        input.setPrompt("What is your value?");
 
         T result = input.read();
 

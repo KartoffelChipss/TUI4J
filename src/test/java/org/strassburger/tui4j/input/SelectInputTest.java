@@ -3,6 +3,7 @@ package org.strassburger.tui4j.input;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
+import org.strassburger.tui4j.printer.TestPrinter;
 
 import java.util.List;
 import java.util.Scanner;
@@ -11,13 +12,16 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SelectInputTest {
+
+    private final TestPrinter printer = new TestPrinter();
+
     private SelectInput<String> input;
     private Scanner mockScanner;
 
     @BeforeEach
     void setUp() {
         mockScanner = mock(Scanner.class);
-        input = new SelectInput<>() {
+        input = new SelectInput<>(printer) {
             @Override
             protected Scanner getScanner() {
                 return mockScanner;
@@ -32,7 +36,7 @@ public class SelectInputTest {
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
                 .addOption("Option C", "C");
-        input.setLabel("Choose an option:");
+        input.setPrompt("Choose an option:");
 
         String result = input.read();
 
@@ -47,7 +51,7 @@ public class SelectInputTest {
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
                 .addOption("Option C", "C");
-        input.setLabel("Choose an option:");
+        input.setPrompt("Choose an option:");
         input.setRetryOnInvalid(false);
 
         assertThrows(InputValidationException.class, input::read);
@@ -61,7 +65,7 @@ public class SelectInputTest {
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
                 .addOption("Option C", "C");
-        input.setLabel("Choose an option:");
+        input.setPrompt("Choose an option:");
         input.setRetryOnInvalid(true);
 
         String result = input.read();
@@ -77,7 +81,7 @@ public class SelectInputTest {
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
                 .addOption("Option C", "C");
-        input.setLabel("Choose an option:");
+        input.setPrompt("Choose an option:");
         input.setRetryOnInvalid(false);
 
         assertThrows(InputValidationException.class, input::read);
@@ -91,7 +95,7 @@ public class SelectInputTest {
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
                 .addOption("Option C", "C");
-        input.setLabel("Choose an option:");
+        input.setPrompt("Choose an option:");
         input.setRetryOnInvalid(false);
 
         assertThrows(InputValidationException.class, input::read);
@@ -105,7 +109,7 @@ public class SelectInputTest {
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
                 .addOption("Option C", "C");
-        input.setLabel("Choose an option:");
+        input.setPrompt("Choose an option:");
         input.setOptionsStyle(" &8(%num%) &7%label%");
 
         String result = input.read();
@@ -124,7 +128,7 @@ public class SelectInputTest {
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
                 .addOption("Option C", "C");
-        input.setLabel("Choose an option:");
+        input.setPrompt("Choose an option:");
         input.setRetryOnInvalid(true);
 
         String result = input.read();

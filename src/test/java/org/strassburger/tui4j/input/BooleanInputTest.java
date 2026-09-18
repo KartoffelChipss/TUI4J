@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.strassburger.tui4j.input.BooleanInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
+import org.strassburger.tui4j.printer.TestPrinter;
 
 import java.util.Scanner;
 
@@ -14,13 +15,16 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
 public class BooleanInputTest {
+
+    private final TestPrinter printer = new TestPrinter();
+
     private BooleanInput input;
     private Scanner mockScanner;
 
     @BeforeEach
     void setUp() {
         mockScanner = mock(Scanner.class);
-        input = new BooleanInput() {
+        input = new BooleanInput(printer) {
             @Override
             protected Scanner getScanner() {
                 return mockScanner;
@@ -32,7 +36,7 @@ public class BooleanInputTest {
     void testValidInput() throws InputValidationException {
         when(mockScanner.nextLine()).thenReturn("yes");
 
-        input.setLabel("Do you like ice cream?");
+        input.setPrompt("Do you like ice cream?");
 
         boolean result = input.read();
 
@@ -45,7 +49,7 @@ public class BooleanInputTest {
         when(mockScanner.nextLine()).thenReturn("maybe");
 
         input.setRetryOnInvalid(false);
-        input.setLabel("Do you like ice cream?");
+        input.setPrompt("Do you like ice cream?");
 
         assertThrows(InputValidationException.class, input::read);
         verify(mockScanner, times(1)).nextLine();
@@ -53,7 +57,7 @@ public class BooleanInputTest {
 
     private void testBooleanInput(String inputValue, boolean expectedResult) throws InputValidationException {
         when(mockScanner.nextLine()).thenReturn(inputValue);
-        input.setLabel("Do you like ice cream?");
+        input.setPrompt("Do you like ice cream?");
 
         boolean result = input.read();
 

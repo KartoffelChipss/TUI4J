@@ -7,6 +7,7 @@ import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.MultilineTextInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
+import org.strassburger.tui4j.printer.TestPrinter;
 
 import java.util.Scanner;
 
@@ -15,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MultilineTextInputTest {
 
+    private final TestPrinter printer = new TestPrinter();
+
     private MultilineTextInput multilineTextInput;
     private Scanner mockScanner;
     private ValidationRule<String> minThirtyharsRule;
@@ -22,7 +25,7 @@ class MultilineTextInputTest {
     @BeforeEach
     void setUp() {
         mockScanner = mock(Scanner.class);
-        multilineTextInput = new MultilineTextInput() {
+        multilineTextInput = new MultilineTextInput(printer) {
             @Override
             protected Scanner getScanner() {
                 return mockScanner;
@@ -45,7 +48,7 @@ class MultilineTextInputTest {
     void testValidInput() throws InputValidationException {
         when(mockScanner.nextLine()).thenReturn("Das ist die erste zeile", "und das die zweite", "und das die dritte", "");
 
-        multilineTextInput.setLabel("Tell us about yourself");
+        multilineTextInput.setPrompt("Tell us about yourself");
 
         String result = multilineTextInput.read();
 
@@ -57,7 +60,7 @@ class MultilineTextInputTest {
     void testInputWithValidationRule() {
         when(mockScanner.nextLine()).thenReturn("I", "am", "god", "");
 
-        multilineTextInput.setLabel("Tell us about yourself");
+        multilineTextInput.setPrompt("Tell us about yourself");
         multilineTextInput.setRetryOnInvalid(false);
         multilineTextInput.addValidationRule(minThirtyharsRule);
 
@@ -70,7 +73,7 @@ class MultilineTextInputTest {
     void testInputWithRetryOnInvalid() throws InputValidationException {
         when(mockScanner.nextLine()).thenReturn("I", "am", "god", "", "Das ist die erste zeile", "und das die zweite", "und das die dritte", "");
 
-        multilineTextInput.setLabel("Tell us about yourself");
+        multilineTextInput.setPrompt("Tell us about yourself");
         multilineTextInput.setRetryOnInvalid(true);
         multilineTextInput.addValidationRule(minThirtyharsRule);
 

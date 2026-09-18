@@ -7,6 +7,7 @@ import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.TextInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
+import org.strassburger.tui4j.printer.TestPrinter;
 
 import java.util.Scanner;
 
@@ -16,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TextInputTest {
 
+    private final TestPrinter printer = new TestPrinter();
+
     private TextInput textInput;
     private Scanner mockScanner;
     private ValidationRule<String> minFifeCharsRule;
@@ -23,13 +26,13 @@ class TextInputTest {
     @BeforeEach
     void setUp() {
         mockScanner = mock(Scanner.class);
-        textInput = new TextInput() {
+        textInput = new TextInput(printer) {
             @Override
             protected Scanner getScanner() {
                 return mockScanner;
             }
         };
-        minFifeCharsRule = new ValidationRule<String>() {
+        minFifeCharsRule = new ValidationRule<>() {
             @Override
             public boolean validate(String input) {
                 return input.length() > 5;
@@ -46,7 +49,7 @@ class TextInputTest {
     void testValidInput() throws InputValidationException {
         when(mockScanner.nextLine()).thenReturn("John Doe");
 
-        textInput.setLabel("What is your name?");
+        textInput.setPrompt("What is your name?");
 
         String result = textInput.read();
 
@@ -58,7 +61,7 @@ class TextInputTest {
     void testEmptyInput() throws InputValidationException {
         when(mockScanner.nextLine()).thenReturn("").thenReturn("John Doe");
 
-        textInput.setLabel("What is your name?");
+        textInput.setPrompt("What is your name?");
 
         String result = textInput.read();
 
@@ -70,7 +73,7 @@ class TextInputTest {
     void testInputWithValidationRule() {
         when(mockScanner.nextLine()).thenReturn("John");
 
-        textInput.setLabel("What is your name?");
+        textInput.setPrompt("What is your name?");
         textInput.setRetryOnInvalid(false);
         textInput.addValidationRule(minFifeCharsRule);
 
@@ -83,7 +86,7 @@ class TextInputTest {
     void testInputWithRetryOnInvalid() throws InputValidationException {
         when(mockScanner.nextLine()).thenReturn("John", "John", "John Doe");
 
-        textInput.setLabel("What is your name?");
+        textInput.setPrompt("What is your name?");
         textInput.setRetryOnInvalid(true);
         textInput.addValidationRule(minFifeCharsRule);
 
