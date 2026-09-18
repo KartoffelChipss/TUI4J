@@ -13,6 +13,7 @@ import java.util.Date;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Deprecated
 class DateInputTest {
 
     private DateInput dateInput;

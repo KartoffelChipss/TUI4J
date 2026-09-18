@@ -10,7 +10,9 @@ import java.util.Date;
 
 /**
  * A class for handling date input
+ * @deprecated Use {@link org.strassburger.tui4j.input.LocalDateInput} instead
  */
+@Deprecated
 public class DateInput extends Input<Date, DateInput> {
     private String dateFormat = "yyyy-MM-dd";
     private boolean inline;
