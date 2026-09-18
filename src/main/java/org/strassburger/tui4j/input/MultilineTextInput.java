@@ -11,6 +11,7 @@ public class MultilineTextInput extends Input<String, MultilineTextInput> {
     /**
      * @deprecated Use {@link #MultilineTextInput(Printer)} instead
      */
+    @Deprecated
     public MultilineTextInput() {
         super();
     }

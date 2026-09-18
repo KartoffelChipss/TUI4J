@@ -3,8 +3,6 @@ package org.strassburger.tui4j.input.validationrules;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 
-import static org.strassburger.tui4j.formatting.TextFormatter.*;
-
 public class NumberValidationRules {
 
     /**

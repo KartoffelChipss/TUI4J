@@ -18,6 +18,7 @@ public class DateInput extends Input<Date, DateInput> {
     /**
      * @deprecated Use {@link #DateInput(Printer)} instead
      */
+    @Deprecated
     public DateInput() {
         super();
     }

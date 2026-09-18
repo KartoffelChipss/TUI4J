@@ -3,7 +3,7 @@ package org.strassburger.tui4j.input.validationrules;
 import org.junit.jupiter.api.Test;
 import org.strassburger.tui4j.formatting.PlainTextRenderer;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,10 +12,10 @@ class DateValidationRulesTest {
 
     @Test
     void testFutureDate() {
-        ValidationRule<Date> rule = DateValidationRules.futureDate();
+        ValidationRule<LocalDate> rule = DateValidationRules.futureDate();
 
-        Date futureDate = new Date(System.currentTimeMillis() + 100000); // Future date
-        Date pastDate = new Date(System.currentTimeMillis() - 100000); // Past date
+        LocalDate futureDate = LocalDate.now().plusDays(1); // Future date
+        LocalDate pastDate = LocalDate.now().minusDays(1); // Past date
 
         assertTrue(rule.validate(futureDate));
         assertFalse(rule.validate(pastDate));
@@ -24,10 +24,10 @@ class DateValidationRulesTest {
 
     @Test
     void testPastDate() {
-        ValidationRule<Date> rule = DateValidationRules.pastDate();
+        ValidationRule<LocalDate> rule = DateValidationRules.pastDate();
 
-        Date futureDate = new Date(System.currentTimeMillis() + 100000); // Future date
-        Date pastDate = new Date(System.currentTimeMillis() - 100000); // Past date
+        LocalDate futureDate = LocalDate.now().plusDays(1); // Future date
+        LocalDate pastDate = LocalDate.now().minusDays(1); // Past date
 
         assertTrue(rule.validate(pastDate));
         assertFalse(rule.validate(futureDate));
@@ -36,11 +36,11 @@ class DateValidationRulesTest {
 
     @Test
     void testAfter() {
-        Date comparisonDate = new Date(System.currentTimeMillis());
-        ValidationRule<Date> rule = DateValidationRules.after(comparisonDate);
+        LocalDate comparisonDate = LocalDate.now();
+        ValidationRule<LocalDate> rule = DateValidationRules.after(comparisonDate);
 
-        Date futureDate = new Date(comparisonDate.getTime() + 100000); // After comparisonDate
-        Date pastDate = new Date(comparisonDate.getTime() - 100000); // Before comparisonDate
+        LocalDate futureDate = comparisonDate.plusDays(1); // After comparisonDate
+        LocalDate pastDate = comparisonDate.minusDays(1); // Before comparisonDate
 
         assertTrue(rule.validate(futureDate));
         assertFalse(rule.validate(pastDate));
@@ -49,11 +49,11 @@ class DateValidationRulesTest {
 
     @Test
     void testBefore() {
-        Date comparisonDate = new Date(System.currentTimeMillis());
-        ValidationRule<Date> rule = DateValidationRules.before(comparisonDate);
+        LocalDate comparisonDate = LocalDate.now();
+        ValidationRule<LocalDate> rule = DateValidationRules.before(comparisonDate);
 
-        Date futureDate = new Date(comparisonDate.getTime() + 100000); // After comparisonDate
-        Date pastDate = new Date(comparisonDate.getTime() - 100000); // Before comparisonDate
+        LocalDate futureDate = comparisonDate.plusDays(1); // After comparisonDate
+        LocalDate pastDate = comparisonDate.minusDays(1); // Before comparisonDate
 
         assertTrue(rule.validate(pastDate));
         assertFalse(rule.validate(futureDate));

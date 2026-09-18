@@ -6,6 +6,7 @@ public class ContinueInput extends Input<Void, ContinueInput> {
     /**
      * @deprecated Use {@link #ContinueInput(Printer)} instead
      */
+    @Deprecated
     public ContinueInput() {
         super();
     }

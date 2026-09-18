@@ -55,6 +55,7 @@ public final class TerminalSize {
                 }
             }
         } catch (Exception ignored) {
+            // we'll just try the next method anyways
         }
         return null;
     }
@@ -88,6 +89,7 @@ public final class TerminalSize {
                 }
             }
         } catch (Exception ignored) {
+            // we'll just try the next method anyways
         }
         return null;
     }
@@ -102,6 +104,7 @@ public final class TerminalSize {
                 return new Size(Integer.parseInt(cols), Integer.parseInt(rows));
             }
         } catch (Exception ignored) {
+            // we'll just try the next method anyways
         }
         return null;
     }
@@ -115,6 +118,7 @@ public final class TerminalSize {
                 return new Size(cols, rows);
             }
         } catch (Exception ignored) {
+            // we'll just try the next method anyways
         }
         return null;
     }

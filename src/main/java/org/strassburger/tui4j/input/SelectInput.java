@@ -18,6 +18,7 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
     /**
      * @deprecated Use {@link #SelectInput(Printer)} instead
      */
+    @Deprecated
     public SelectInput() {
         super();
         options = new ArrayList<>();
@@ -31,6 +32,7 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
     /**
      * @deprecated Use {@link #SelectInput(Printer, List)} instead
      */
+    @Deprecated
     public SelectInput(List<Option<T>> options) {
         super();
         this.options = options;
@@ -41,6 +43,7 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
         this.options = options;
     }
 
+    @Override
     public T read() throws InputValidationException {
         try {
             if (getPrompt() != null) getPrinter().println(getPrompt());

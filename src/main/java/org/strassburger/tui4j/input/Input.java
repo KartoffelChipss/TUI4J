@@ -30,6 +30,7 @@ public abstract class Input<T, S extends Input<T, S>> {
      * Constructor with default scanner and printer
      * @deprecated Use {@link #Input(Printer)} instead
      */
+    @Deprecated
     public Input() {
         validationRules = new ArrayList<>();
         scanner = new Scanner(System.in);
@@ -71,7 +72,7 @@ public abstract class Input<T, S extends Input<T, S>> {
      * @return the input object
      * @deprecated Use {@link #setPrompt(String)} instead
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked") @Deprecated
     public S setLabel(String label) {
         this.prompt = StyledText.text(label).fg(AnsiColor.BRIGHT_WHITE);
         return (S) this;
@@ -94,7 +95,7 @@ public abstract class Input<T, S extends Input<T, S>> {
      * @return the input object
      * @deprecated Use {@link #setPrompt(StyledText)} instead
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked") @Deprecated
     public S setLabel(StyledText label) {
         this.prompt = label;
         return (S) this;
@@ -200,6 +201,7 @@ public abstract class Input<T, S extends Input<T, S>> {
     /**
      * @deprecated Use {@link #getPrompt()} instead
      */
+    @Deprecated
     public StyledText getLabel() {
         return prompt;
     }

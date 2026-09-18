@@ -22,6 +22,7 @@ public class TextInput extends Input<String, TextInput> {
      * }</pre>
      * @deprecated Use {@link #TextInput(Printer)} instead
      */
+    @Deprecated
     public TextInput() {
         super();
     }

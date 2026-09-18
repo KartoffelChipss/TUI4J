@@ -12,6 +12,7 @@ public class IntegerInput extends Input<Integer, IntegerInput> {
     /**
      * @deprecated Use {@link #IntegerInput(Printer)} instead
      */
+    @Deprecated
     public IntegerInput() {
         super();
     }
@@ -20,6 +21,7 @@ public class IntegerInput extends Input<Integer, IntegerInput> {
         super(printer);
     }
 
+    @Override
     public Integer read() throws InputValidationException {
         printPromptAndCursor(inline);
 

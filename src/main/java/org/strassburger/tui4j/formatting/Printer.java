@@ -4,6 +4,7 @@ package org.strassburger.tui4j.formatting;
  * A class to format and print text to the console
  * @deprecated Use {@link org.strassburger.tui4j.printer.ConsolePrinter} instead
  */
+@Deprecated
 public class Printer {
 
     /**

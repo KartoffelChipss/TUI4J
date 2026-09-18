@@ -1,6 +1,7 @@
 package org.strassburger.tui4j.terminal;
 
 import java.nio.charset.Charset;
+import java.util.Locale;
 
 /**
  * Represents a terminal and its properties.
@@ -52,7 +53,7 @@ public class Terminal {
      */
     private boolean detectAnsiSupport() {
         // Windows 10 and later support ANSI codes natively
-        if (osName.toLowerCase().contains("win")) {
+        if (osName.toLowerCase(Locale.ROOT).contains("win")) {
             String ver = System.getProperty("os.version");
             try {
                 String[] parts = ver.split("\\.");

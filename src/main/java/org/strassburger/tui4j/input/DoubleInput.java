@@ -13,6 +13,7 @@ public class DoubleInput extends Input<Double, DoubleInput> {
     /**
      * @deprecated Use {@link #DoubleInput(Printer)} instead
      */
+    @Deprecated
     public DoubleInput() {
         super();
     }
@@ -21,6 +22,7 @@ public class DoubleInput extends Input<Double, DoubleInput> {
         super(printer);
     }
 
+    @Override
     public Double read() throws InputValidationException {
         printPromptAndCursor(inline);
 

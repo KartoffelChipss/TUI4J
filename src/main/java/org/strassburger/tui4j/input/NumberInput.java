@@ -46,6 +46,7 @@ public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
      * </pre>
      * @deprecated Use {@link #NumberInput(Class, Printer)} instead
      */
+    @Deprecated
     public NumberInput(Class<U> type) {
         super();
         this.type = type;

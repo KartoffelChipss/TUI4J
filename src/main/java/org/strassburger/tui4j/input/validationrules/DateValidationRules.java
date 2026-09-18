@@ -3,7 +3,7 @@ package org.strassburger.tui4j.input.validationrules;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class DateValidationRules {
 
@@ -11,7 +11,7 @@ public class DateValidationRules {
      * Returns a validation rule that checks if the date is in the future.
      * @return A validation rule that checks if the date is in the future.
      */
-    public static ValidationRule<Date> futureDate() {
+    public static ValidationRule<LocalDate> futureDate() {
         return futureDate("The date must be in the future.");
     }
 
@@ -20,7 +20,7 @@ public class DateValidationRules {
      * @param errorMessage The error message to display if the validation fails.
      * @return A validation rule that checks if the date is in the future.
      */
-    public static ValidationRule<Date> futureDate(String errorMessage) {
+    public static ValidationRule<LocalDate> futureDate(String errorMessage) {
         return futureDate(StyledText.text(errorMessage).fg(AnsiColor.RED));
     }
 
@@ -29,11 +29,11 @@ public class DateValidationRules {
      * @param errorMessage The styled error message to display if the validation fails.
      * @return A validation rule that checks if the date is in the future.
      */
-    public static ValidationRule<Date> futureDate(StyledText errorMessage) {
+    public static ValidationRule<LocalDate> futureDate(StyledText errorMessage) {
         return new ValidationRule<>() {
             @Override
-            public boolean validate(Date input) {
-                return input.after(new Date());
+            public boolean validate(LocalDate input) {
+                return input.isAfter(LocalDate.now());
             }
 
             @Override
@@ -48,7 +48,7 @@ public class DateValidationRules {
      * Returns a validation rule that checks if the date is in the past.
      * @return A validation rule that checks if the date is in the past.
      */
-    public static ValidationRule<Date> pastDate() {
+    public static ValidationRule<LocalDate> pastDate() {
         return pastDate("The date must be in the past.");
     }
 
@@ -57,7 +57,7 @@ public class DateValidationRules {
      * @param errorMessage The error message to display if the validation fails.
      * @return A validation rule that checks if the date is in the past.
      */
-    public static ValidationRule<Date> pastDate(String errorMessage) {
+    public static ValidationRule<LocalDate> pastDate(String errorMessage) {
         return pastDate(StyledText.text(errorMessage).fg(AnsiColor.RED));
     }
 
@@ -66,11 +66,11 @@ public class DateValidationRules {
      * @param errorMessage The styled error message to display if the validation fails.
      * @return A validation rule that checks if the date is in the past.
      */
-    public static ValidationRule<Date> pastDate(StyledText errorMessage) {
+    public static ValidationRule<LocalDate> pastDate(StyledText errorMessage) {
         return new ValidationRule<>() {
             @Override
-            public boolean validate(Date input) {
-                return input.before(new Date());
+            public boolean validate(LocalDate input) {
+                return input.isBefore(LocalDate.now());
             }
 
             @Override
@@ -86,7 +86,7 @@ public class DateValidationRules {
      * @param date The date to compare against.
      * @return A validation rule that checks if the date is after the specified date.
      */
-    public static ValidationRule<Date> after(Date date) {
+    public static ValidationRule<LocalDate> after(LocalDate date) {
         return after(date, "The date must be after " + date + ".");
     }
 
@@ -96,7 +96,7 @@ public class DateValidationRules {
      * @param errorMessage The error message to display if the validation fails.
      * @return A validation rule that checks if the date is after the specified date.
      */
-    public static ValidationRule<Date> after(Date date, String errorMessage) {
+    public static ValidationRule<LocalDate> after(LocalDate date, String errorMessage) {
         return after(date, StyledText.text(errorMessage).fg(AnsiColor.RED));
     }
 
@@ -106,11 +106,11 @@ public class DateValidationRules {
      * @param errorMessage The styled error message to display if the validation fails.
      * @return A validation rule that checks if the date is after the specified date.
      */
-    public static ValidationRule<Date> after(Date date, StyledText errorMessage) {
+    public static ValidationRule<LocalDate> after(LocalDate date, StyledText errorMessage) {
         return new ValidationRule<>() {
             @Override
-            public boolean validate(Date input) {
-                return input.after(date);
+            public boolean validate(LocalDate input) {
+                return input.isAfter(date);
             }
 
             @Override
@@ -126,7 +126,7 @@ public class DateValidationRules {
      * @param date The date to compare against.
      * @return A validation rule that checks if the date is before the specified date.
      */
-    public static ValidationRule<Date> before(Date date) {
+    public static ValidationRule<LocalDate> before(LocalDate date) {
         return before(date, "The date must be before " + date + ".");
     }
 
@@ -136,7 +136,7 @@ public class DateValidationRules {
      * @param errorMessage The error message to display if the validation fails.
      * @return A validation rule that checks if the date is before the specified date.
      */
-    public static ValidationRule<Date> before(Date date, String errorMessage) {
+    public static ValidationRule<LocalDate> before(LocalDate date, String errorMessage) {
         return before(date, StyledText.text(errorMessage).fg(AnsiColor.RED));
     }
 
@@ -146,11 +146,11 @@ public class DateValidationRules {
      * @param errorMessage The styled error message to display if the validation fails.
      * @return A validation rule that checks if the date is before the specified date.
      */
-    public static ValidationRule<Date> before(Date date, StyledText errorMessage) {
+    public static ValidationRule<LocalDate> before(LocalDate date, StyledText errorMessage) {
         return new ValidationRule<>() {
             @Override
-            public boolean validate(Date input) {
-                return input.before(date);
+            public boolean validate(LocalDate input) {
+                return input.isBefore(date);
             }
 
             @Override

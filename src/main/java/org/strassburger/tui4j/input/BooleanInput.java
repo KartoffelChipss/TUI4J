@@ -10,6 +10,7 @@ public class BooleanInput extends Input<Boolean, BooleanInput> {
     /**
      * @deprecated Use {@link #BooleanInput(Printer)} instead
      */
+    @Deprecated
     public BooleanInput() {
         super();
     }
@@ -18,6 +19,7 @@ public class BooleanInput extends Input<Boolean, BooleanInput> {
         super(printer);
     }
 
+    @Override
     public Boolean read() throws InputValidationException {
         if (getPrompt() != null) getPrinter().print(getPrompt());
         String input = getScanner().nextLine();
