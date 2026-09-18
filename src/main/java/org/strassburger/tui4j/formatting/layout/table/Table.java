@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.formatting.layout.table;
 
+import org.jspecify.annotations.Nullable;
 import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.layout.Renderable;
@@ -22,7 +23,7 @@ public class Table implements Renderable {
     private final Map<Integer, Integer> columnGrow;
     private boolean hasHeader;
     private TableStyle style;
-    private Integer defaultGrow = null;
+    private @Nullable Integer defaultGrow = null;
 
     public Table() {
         this.rows = new ArrayList<>();
