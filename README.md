@@ -44,7 +44,7 @@ Make sure to replace `0.0.0` with the version you want to use. (You can find the
 <dependencies>
     <dependency>
         <groupId>org.strassburger</groupId>
-        <artifactId>TUI4J</artifactId>
+        <artifactId>tui4j</artifactId>
         <version>0.0.0</version>
     </dependency>
 </dependencies>
@@ -61,7 +61,7 @@ Make sure to replace `0.0.0` with the version you want to use. (You can find the
 
 ```groovy
 dependencies {
-    implementation 'org.strassburger:TUI4J:0.0.0'
+    implementation 'org.strassburger:tui4j:0.0.0'
 }
 
 repositories {
