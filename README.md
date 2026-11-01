@@ -1,8 +1,7 @@
 # TUI4J
 
 ![maven build and test](https://github.com/KartoffelChipss/TUI4J/actions/workflows/maven-build-and-test.yml/badge.svg)
-[![Release](https://jitpack.io/v/KartoffelChipss/TUI4J.svg)](https://jitpack.io/#KartoffelChipss/TUI4J)
-![Monthly download statistics](https://jitpack.io/v/KartoffelChipss/TUI4J/month.svg)
+[![Maven](https://maven.strassburger.org/api/badge/org.strassburger/tui4j)](https://maven.strassburger.org/browse/org/strassburger/tui4j)
 
 TUI4J is a Java-based library for creating text-based user interfaces (TUIs).
 
