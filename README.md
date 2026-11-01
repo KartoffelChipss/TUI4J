@@ -1,8 +1,7 @@
 # TUI4J
 
 ![maven build and test](https://github.com/KartoffelChipss/TUI4J/actions/workflows/maven-build-and-test.yml/badge.svg)
-[![Release](https://jitpack.io/v/KartoffelChipss/TUI4J.svg)](https://jitpack.io/#KartoffelChipss/TUI4J)
-![Monthly download statistics](https://jitpack.io/v/KartoffelChipss/TUI4J/month.svg)
+[![Maven](https://maven.strassburger.org/api/badge/org.strassburger/tui4j)](https://maven.strassburger.org/browse/org/strassburger/tui4j)
 
 TUI4J is a Java-based library for creating text-based user interfaces (TUIs).
 
@@ -45,16 +44,16 @@ Make sure to replace `0.0.0` with the version you want to use. (You can find the
 <dependencies>
     <dependency>
         <groupId>org.strassburger</groupId>
-        <artifactId>TUI4J</artifactId>
+        <artifactId>tui4j</artifactId>
         <version>0.0.0</version>
     </dependency>
 </dependencies>
 
 <repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
+  <repository>
+    <id>strassburger-repo</id>
+    <url>https://maven.strassburger.org/releases</url>
+  </repository>
 </repositories>
 ```
 
@@ -62,11 +61,11 @@ Make sure to replace `0.0.0` with the version you want to use. (You can find the
 
 ```groovy
 dependencies {
-    implementation 'org.strassburger:TUI4J:0.0.0'
+    implementation 'org.strassburger:tui4j:0.0.0'
 }
 
 repositories {
-    maven { url 'https://jitpack.io' }
+    maven { url 'https://maven.strassburger.org/releases' }
 }
 ```
 
