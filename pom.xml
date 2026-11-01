@@ -40,13 +40,6 @@
         <developerConnection>scm:git:ssh://github.com/KartoffelChipss/TUI4j.git</developerConnection>
     </scm>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/KartoffelChipss/TUI4j</url>
-        </repository>
-    </distributionManagement>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>
