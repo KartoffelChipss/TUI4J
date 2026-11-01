@@ -1,0 +1,30 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+          server-id: smr
+          server-username: SMR_USERNAME
+          server-password: SMR_TOKEN
+
+      - name: Publish with Maven Wrapper
+        run: ./mvnw -B javadoc:jar deploy -DaltDeploymentRepository=smr::${{ vars.SMR_URL }}
+        env:
+          SMR_USERNAME: ${{ secrets.SMR_USERNAME }}
+          SMR_TOKEN: ${{ secrets.SMR_TOKEN }}
