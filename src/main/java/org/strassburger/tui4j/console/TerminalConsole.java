@@ -1,46 +1,51 @@
-package org.strassburger.tui4j.printer;
+package org.strassburger.tui4j.console;
 
+import org.strassburger.tui4j.console.terminal.Terminal;
+import org.strassburger.tui4j.console.terminal.TerminalSize;
 import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.StyledTextRenderer;
 import org.strassburger.tui4j.formatting.ansi.AnsiCode;
 import org.strassburger.tui4j.formatting.ansi.AnsiRenderer;
 import org.strassburger.tui4j.formatting.layout.Renderable;
-import org.strassburger.tui4j.terminal.Terminal;
-import org.strassburger.tui4j.terminal.TerminalSize;
 
-/**
- * A Printer implementation that outputs to the console (System.out)
- */
-public class ConsolePrinter implements Printer {
+import java.util.Scanner;
+
+public class TerminalConsole implements Console {
     private final Terminal terminal;
     private final StyledTextRenderer textRenderer;
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
-     * Creates a ConsolePrinter with the default AnsiRenderer
+     * Creates a TerminalConsole with the default AnsiRenderer
      */
-    public ConsolePrinter() {
+    public TerminalConsole() {
         this.terminal = new Terminal();
         if (terminal.isAnsiSupported()) this.textRenderer = new AnsiRenderer();
         else this.textRenderer = new PlainTextRenderer();
     }
 
     /**
-     * Creates a ConsolePrinter with a custom StyledTextRenderer
+     * Creates a TerminalConsole with a custom StyledTextRenderer
      * @param renderer the StyledTextRenderer to use for rendering styled text
      */
-    public ConsolePrinter(StyledTextRenderer renderer) {
+    public TerminalConsole(StyledTextRenderer renderer) {
         this.terminal = new Terminal();
         this.textRenderer = renderer;
     }
 
     /**
-     * Creates a ConsolePrinter with a custom StyledTextRenderer
+     * Creates a TerminalConsole with a custom StyledTextRenderer
      * @param renderer the StyledTextRenderer to use for rendering styled text
      */
-    public ConsolePrinter(Terminal terminal, StyledTextRenderer renderer) {
+    public TerminalConsole(Terminal terminal, StyledTextRenderer renderer) {
         this.terminal = terminal;
         this.textRenderer = renderer;
+    }
+
+    @Override
+    public String readLine() {
+        return scanner.nextLine();
     }
 
     @Override

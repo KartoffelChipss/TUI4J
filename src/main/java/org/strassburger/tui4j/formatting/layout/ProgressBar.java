@@ -3,7 +3,7 @@ package org.strassburger.tui4j.formatting.layout;
 import org.jspecify.annotations.Nullable;
 import org.strassburger.colorlab4j.color.Color;
 import org.strassburger.tui4j.formatting.StyledText;
-import org.strassburger.tui4j.printer.Printer;
+import org.strassburger.tui4j.console.Printer;
 
 /**
  * A terminal progress bar animation

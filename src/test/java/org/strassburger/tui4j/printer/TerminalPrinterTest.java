@@ -2,6 +2,7 @@ package org.strassburger.tui4j.printer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.strassburger.tui4j.console.TerminalConsole;
 import org.strassburger.tui4j.formatting.Span;
 import org.strassburger.tui4j.formatting.StyledText;
 
@@ -10,68 +11,68 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ConsolePrinterTest {
+class TerminalConsoleTest {
     private ByteArrayOutputStream outContent;
-    private ConsolePrinter printer;
+    private TerminalConsole console;
 
     @BeforeEach
     void setUp() {
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        printer = new ConsolePrinter((StyledText text) ->
+        console = new TerminalConsole((StyledText text) ->
                 text.getSpans().stream().map(Span::getText).reduce("", String::concat));
     }
 
     @Test
     void testPrintString() {
-        printer.print("Hello");
+        console.print("Hello");
         assertEquals("Hello", outContent.toString());
     }
 
     @Test
     void testPrintlnString() {
-        printer.println("Hello");
+        console.println("Hello");
         assertEquals("Hello" + System.lineSeparator(), outContent.toString());
     }
 
     @Test
     void testPrintfString() {
-        printer.printf("Hello %s", "World");
+        console.printf("Hello %s", "World");
         assertEquals("Hello World", outContent.toString());
     }
 
     @Test
     void testPrintflnString() {
-        printer.printfln("Hello %s", "World");
+        console.printfln("Hello %s", "World");
         assertEquals("Hello World" + System.lineSeparator(), outContent.toString());
     }
 
     @Test
     void testPrintStyledText() {
         StyledText text = StyledText.text("Hello Styled");
-        printer.print(text);
+        console.print(text);
         assertEquals("Hello Styled", outContent.toString());
     }
 
     @Test
     void testPrintlnStyledText() {
         StyledText text = StyledText.text("Hello Styled");
-        printer.println(text);
+        console.println(text);
         assertEquals("Hello Styled" + System.lineSeparator(), outContent.toString());
     }
 
     @Test
     void testPrintfStyledText() {
         StyledText text = StyledText.text("Hello %s");
-        printer.printf(text, "World");
+        console.printf(text, "World");
         assertEquals("Hello World", outContent.toString());
     }
 
     @Test
     void testPrintflnStyledText() {
         StyledText text = StyledText.text("Hello %s");
-        printer.printfln(text, "World");
+        console.printfln(text, "World");
         assertEquals("Hello World" + System.lineSeparator(), outContent.toString());
     }
 }

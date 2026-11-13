@@ -7,30 +7,21 @@ import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.MultilineTextInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
-import org.strassburger.tui4j.printer.TestPrinter;
-
-import java.util.Scanner;
+import org.strassburger.tui4j.console.Console;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MultilineTextInputTest {
 
-    private final TestPrinter printer = new TestPrinter();
-
     private MultilineTextInput multilineTextInput;
-    private Scanner mockScanner;
+    private Console console;
     private ValidationRule<String> minThirtyharsRule;
 
     @BeforeEach
     void setUp() {
-        mockScanner = mock(Scanner.class);
-        multilineTextInput = new MultilineTextInput(printer) {
-            @Override
-            protected Scanner getScanner() {
-                return mockScanner;
-            }
-        };
+        console = mock(Console.class);
+        multilineTextInput = new MultilineTextInput();
         minThirtyharsRule = new ValidationRule<String>() {
             @Override
             public boolean validate(String input) {
@@ -46,40 +37,40 @@ class MultilineTextInputTest {
 
     @Test
     void testValidInput() throws InputValidationException {
-        when(mockScanner.nextLine()).thenReturn("Das ist die erste zeile", "und das die zweite", "und das die dritte", "");
+        when(console.readLine()).thenReturn("Das ist die erste zeile", "und das die zweite", "und das die dritte", "");
 
         multilineTextInput.setPrompt("Tell us about yourself");
 
-        String result = multilineTextInput.read();
+        String result = multilineTextInput.read(console);
 
         assertEquals("Das ist die erste zeile\nund das die zweite\nund das die dritte", result);
-        verify(mockScanner, times(4)).nextLine();
+        verify(console, times(4)).readLine();
     }
 
     @Test
     void testInputWithValidationRule() {
-        when(mockScanner.nextLine()).thenReturn("I", "am", "god", "");
+        when(console.readLine()).thenReturn("I", "am", "god", "");
 
         multilineTextInput.setPrompt("Tell us about yourself");
         multilineTextInput.setRetryOnInvalid(false);
         multilineTextInput.addValidationRule(minThirtyharsRule);
 
-        InputValidationException exception = assertThrows(InputValidationException.class, multilineTextInput::read);
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> multilineTextInput.read(console));
         assertEquals("Name must be longer than 30 characters.", exception.getMessage());
-        verify(mockScanner, times(4)).nextLine();
+        verify(console, times(4)).readLine();
     }
 
     @Test
     void testInputWithRetryOnInvalid() throws InputValidationException {
-        when(mockScanner.nextLine()).thenReturn("I", "am", "god", "", "Das ist die erste zeile", "und das die zweite", "und das die dritte", "");
+        when(console.readLine()).thenReturn("I", "am", "god", "", "Das ist die erste zeile", "und das die zweite", "und das die dritte", "");
 
         multilineTextInput.setPrompt("Tell us about yourself");
         multilineTextInput.setRetryOnInvalid(true);
         multilineTextInput.addValidationRule(minThirtyharsRule);
 
-        String result = multilineTextInput.read();
+        String result = multilineTextInput.read(console);
 
         assertEquals("Das ist die erste zeile\nund das die zweite\nund das die dritte", result);
-        verify(mockScanner, times(8)).nextLine();
+        verify(console, times(8)).readLine();
     }
 }

@@ -1,39 +1,24 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.StyledText;
-import org.strassburger.tui4j.formatting.ansi.AnsiColor;
+import org.strassburger.tui4j.console.Console;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
-import org.strassburger.tui4j.input.exceptions.RetryInputException;
-import org.strassburger.tui4j.printer.Printer;
 
 public class DoubleInput extends Input<Double, DoubleInput> {
     private boolean inline = true;
     private boolean allowComma = true;
 
-    public DoubleInput(Printer printer) {
-        super(printer);
+    @Override
+    protected void printPrompt(Console console) {
+        printPromptAndCursor(console, inline);
     }
 
     @Override
-    public Double read() throws InputValidationException {
-        printPromptAndCursor(inline);
-
-        String input = getScanner().nextLine();
+    protected Double parse(String input) throws InputValidationException {
         if (allowComma) input = input.replace(",", ".");
-
         try {
-            double value = Double.parseDouble(input);
-            validate(value);
-            return value;
+            return Double.parseDouble(input);
         } catch (NumberFormatException e) {
-            if (isRetryOnInvalid()) {
-                getPrinter().println(getErrorMessage());
-                return read();
-            } else {
-                throw new InputValidationException(StyledText.text("Invalid input: " + input).fg(AnsiColor.RED));
-            }
-        } catch (RetryInputException e) {
-            return read();
+            throw invalidInput();
         }
     }
 

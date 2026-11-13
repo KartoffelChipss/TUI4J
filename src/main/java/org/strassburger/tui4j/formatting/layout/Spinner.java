@@ -5,7 +5,7 @@ import org.strassburger.colorlab4j.color.Color;
 import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
-import org.strassburger.tui4j.printer.Printer;
+import org.strassburger.tui4j.console.Printer;
 
 import java.util.List;
 

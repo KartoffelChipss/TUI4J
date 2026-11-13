@@ -7,7 +7,7 @@ import org.strassburger.tui4j.formatting.layout.Renderable;
 import org.strassburger.tui4j.formatting.layout.table.styles.ColumnAlign;
 import org.strassburger.tui4j.formatting.layout.table.styles.TableStyle;
 import org.strassburger.tui4j.formatting.layout.table.styles.TableStyles;
-import org.strassburger.tui4j.printer.Printer;
+import org.strassburger.tui4j.console.Printer;
 
 import java.util.ArrayList;
 import java.util.HashMap;

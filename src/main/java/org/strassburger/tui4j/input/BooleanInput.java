@@ -1,34 +1,19 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.StyledText;
-import org.strassburger.tui4j.formatting.ansi.AnsiColor;
+import org.strassburger.tui4j.console.Console;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
-import org.strassburger.tui4j.printer.Printer;
 
 public class BooleanInput extends Input<Boolean, BooleanInput> {
 
-    public BooleanInput(Printer printer) {
-        super(printer);
+    @Override
+    protected void printPrompt(Console console) {
+        if (getPrompt() != null) console.print(getPrompt());
     }
 
     @Override
-    public Boolean read() throws InputValidationException {
-        if (getPrompt() != null) getPrinter().print(getPrompt());
-        String input = getScanner().nextLine();
-
-        if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")) {
-            return true;
-        }
-
-        if (input.equalsIgnoreCase("n") || input.equalsIgnoreCase("no")) {
-            return false;
-        }
-
-        if (isRetryOnInvalid()) {
-            getPrinter().println(getErrorMessage());
-            return read();
-        } else {
-            throw new InputValidationException(StyledText.text("Invalid input.").fg(AnsiColor.RED));
-        }
+    protected Boolean parse(String input) throws InputValidationException {
+        if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")) return true;
+        if (input.equalsIgnoreCase("n") || input.equalsIgnoreCase("no")) return false;
+        throw invalidInput();
     }
 }

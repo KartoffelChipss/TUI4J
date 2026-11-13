@@ -3,50 +3,42 @@ package org.strassburger.tui4j.input;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
-import org.strassburger.tui4j.printer.TestPrinter;
+import org.strassburger.tui4j.console.Console;
 
 import java.util.List;
-import java.util.Scanner;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SelectInputTest {
 
-    private final TestPrinter printer = new TestPrinter();
-
     private SelectInput<String> input;
-    private Scanner mockScanner;
+    private Console console;
 
     @BeforeEach
     void setUp() {
-        mockScanner = mock(Scanner.class);
-        input = new SelectInput<>(printer) {
-            @Override
-            protected Scanner getScanner() {
-                return mockScanner;
-            }
-        };
+        console = mock(Console.class);
+        input = new SelectInput<>();
     }
 
     @Test
     void testValidInput() {
-        when(mockScanner.nextLine()).thenReturn("1");
+        when(console.readLine()).thenReturn("1");
 
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
                 .addOption("Option C", "C");
         input.setPrompt("Choose an option:");
 
-        String result = input.read();
+        String result = input.read(console);
 
         assertEquals("A", result);
-        verify(mockScanner, times(1)).nextLine();
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testInvalidInput() {
-        when(mockScanner.nextLine()).thenReturn("4");
+        when(console.readLine()).thenReturn("4");
 
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
@@ -54,13 +46,13 @@ public class SelectInputTest {
         input.setPrompt("Choose an option:");
         input.setRetryOnInvalid(false);
 
-        assertThrows(InputValidationException.class, input::read);
-        verify(mockScanner, times(1)).nextLine();
+        assertThrows(InputValidationException.class, () -> input.read(console));
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testRetryOnInvalidInput() {
-        when(mockScanner.nextLine()).thenReturn("4").thenReturn("1");
+        when(console.readLine()).thenReturn("4").thenReturn("1");
 
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
@@ -68,15 +60,15 @@ public class SelectInputTest {
         input.setPrompt("Choose an option:");
         input.setRetryOnInvalid(true);
 
-        String result = input.read();
+        String result = input.read(console);
 
         assertEquals("A", result);
-        verify(mockScanner, times(2)).nextLine();
+        verify(console, times(2)).readLine();
     }
 
     @Test
     void testEmptyInput() {
-        when(mockScanner.nextLine()).thenReturn("");
+        when(console.readLine()).thenReturn("");
 
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
@@ -84,13 +76,13 @@ public class SelectInputTest {
         input.setPrompt("Choose an option:");
         input.setRetryOnInvalid(false);
 
-        assertThrows(InputValidationException.class, input::read);
-        verify(mockScanner, times(1)).nextLine();
+        assertThrows(InputValidationException.class, () -> input.read(console));
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testInvalidFormatInput() {
-        when(mockScanner.nextLine()).thenReturn("abc");
+        when(console.readLine()).thenReturn("abc");
 
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
@@ -98,13 +90,13 @@ public class SelectInputTest {
         input.setPrompt("Choose an option:");
         input.setRetryOnInvalid(false);
 
-        assertThrows(InputValidationException.class, input::read);
-        verify(mockScanner, times(1)).nextLine();
+        assertThrows(InputValidationException.class, () -> input.read(console));
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testOptionsStyle() {
-        when(mockScanner.nextLine()).thenReturn("2");
+        when(console.readLine()).thenReturn("2");
 
         input.addOption("Option A", "A")
                 .addOption("Option B", "B")
@@ -112,15 +104,15 @@ public class SelectInputTest {
         input.setPrompt("Choose an option:");
         input.setOptionsStyle(" &8(%num%) &7%label%");
 
-        String result = input.read();
+        String result = input.read(console);
 
         assertEquals("B", result);
-        verify(mockScanner, times(1)).nextLine();
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testRetryWithMultipleInvalidInputs() {
-        when(mockScanner.nextLine())
+        when(console.readLine())
                 .thenReturn("invalid")
                 .thenReturn("5")
                 .thenReturn("1");
@@ -131,9 +123,9 @@ public class SelectInputTest {
         input.setPrompt("Choose an option:");
         input.setRetryOnInvalid(true);
 
-        String result = input.read();
+        String result = input.read(console);
 
         assertEquals("A", result);
-        verify(mockScanner, times(3)).nextLine();
+        verify(console, times(3)).readLine();
     }
 }

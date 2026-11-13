@@ -3,7 +3,7 @@ package org.strassburger.tui4j.formatting.layout;
 import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
-import org.strassburger.tui4j.printer.Printer;
+import org.strassburger.tui4j.console.Printer;
 
 import java.util.ArrayList;
 import java.util.List;

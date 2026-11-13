@@ -1,16 +1,19 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.printer.Printer;
+import org.strassburger.tui4j.console.Console;
 
 public class ContinueInput extends Input<Void, ContinueInput> {
-    public ContinueInput(Printer printer) {
-        super(printer);
+    @Override
+    @SuppressWarnings("NullAway") // Void can only ever be null
+    public Void read(Console console) {
+        if (getPrompt() != null) console.println(getPrompt());
+        console.readLine();
+        return null;
     }
 
     @Override
-    public Void read() {
-        if (getPrompt() != null) getPrinter().println(getPrompt());
-        getScanner().nextLine();
+    @SuppressWarnings("NullAway") // Void can only ever be null
+    protected Void parse(String input) {
         return null;
     }
 }

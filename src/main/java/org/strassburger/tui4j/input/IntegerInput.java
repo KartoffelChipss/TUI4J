@@ -1,37 +1,22 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.StyledText;
-import org.strassburger.tui4j.formatting.ansi.AnsiColor;
+import org.strassburger.tui4j.console.Console;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
-import org.strassburger.tui4j.input.exceptions.RetryInputException;
-import org.strassburger.tui4j.printer.Printer;
 
 public class IntegerInput extends Input<Integer, IntegerInput> {
     private boolean inline = true;
 
-    public IntegerInput(Printer printer) {
-        super(printer);
+    @Override
+    protected void printPrompt(Console console) {
+        printPromptAndCursor(console, inline);
     }
 
     @Override
-    public Integer read() throws InputValidationException {
-        printPromptAndCursor(inline);
-
-        String input = getScanner().nextLine();
-
+    protected Integer parse(String input) throws InputValidationException {
         try {
-            int value = Integer.parseInt(input);
-            validate(value);
-            return value;
+            return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            if (isRetryOnInvalid()) {
-                getPrinter().println(getErrorMessage());
-                return read();
-            } else {
-                throw new InputValidationException(StyledText.text("Invalid input: " + input).fg(AnsiColor.RED));
-            }
-        } catch (RetryInputException e) {
-            return read();
+            throw invalidInput();
         }
     }
 

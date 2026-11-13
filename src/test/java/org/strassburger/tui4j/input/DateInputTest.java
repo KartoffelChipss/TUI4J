@@ -6,87 +6,79 @@ import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
-import org.strassburger.tui4j.printer.TestPrinter;
+import org.strassburger.tui4j.console.Console;
 
 import java.time.LocalDate;
-import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
-public class LocalDateInputTest {
+public class DateInputTest {
 
-    private final TestPrinter printer = new TestPrinter();
-
-    private LocalDateInput dateInput;
-    private Scanner mockScanner;
+    private DateInput dateInput;
+    private Console console;
 
     @BeforeEach
     void setUp() {
-        mockScanner = mock(Scanner.class);
-        dateInput = new LocalDateInput(printer) {
-            @Override
-            protected Scanner getScanner() {
-                return mockScanner;
-            }
-        };
+        console = mock(Console.class);
+        dateInput = new DateInput();
     }
 
     @Test
     void testValidDateInput() throws InputValidationException {
-        when(mockScanner.nextLine()).thenReturn("2023-12-31");
+        when(console.readLine()).thenReturn("2023-12-31");
 
         dateInput.setPrompt("Enter a date (yyyy-MM-dd):");
 
-        LocalDate result = dateInput.read();
+        LocalDate result = dateInput.read(console);
 
         assertNotNull(result);
-        verify(mockScanner, times(1)).nextLine();
+        verify(console, times(1)).readLine();
         assertEquals("2023-12-31", result.toString());
     }
 
     @Test
     void testInvalidDateFormat() {
-        when(mockScanner.nextLine()).thenReturn("31-12-2023");
+        when(console.readLine()).thenReturn("31-12-2023");
 
         dateInput.setPrompt("Enter a date (yyyy-MM-dd):");
         dateInput.setRetryOnInvalid(false);
 
-        InputValidationException exception = assertThrows(InputValidationException.class, dateInput::read);
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> dateInput.read(console));
         assertEquals("Invalid date format. Expected format: yyyy-MM-dd", exception.getMessage());
-        verify(mockScanner, times(1)).nextLine();
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testDateInputWithRetryOnInvalid() throws InputValidationException {
-        when(mockScanner.nextLine()).thenReturn("31-12-2023", "2023-12-31");
+        when(console.readLine()).thenReturn("31-12-2023", "2023-12-31");
 
         dateInput.setPrompt("Enter a date (yyyy-MM-dd):");
         dateInput.setRetryOnInvalid(true);
 
-        LocalDate result = dateInput.read();
+        LocalDate result = dateInput.read(console);
 
         assertNotNull(result);
-        verify(mockScanner, times(2)).nextLine();
+        verify(console, times(2)).readLine();
     }
 
     @Test
     void testDateInputWithCustomFormat() throws InputValidationException {
-        when(mockScanner.nextLine()).thenReturn("31/12/2023");
+        when(console.readLine()).thenReturn("31/12/2023");
 
         dateInput.setPrompt("Enter a date (dd/MM/yyyy):");
         dateInput.setDateFormat("dd/MM/yyyy");
 
-        LocalDate result = dateInput.read();
+        LocalDate result = dateInput.read(console);
 
         assertNotNull(result);
-        verify(mockScanner, times(1)).nextLine();
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testDateInputWithValidationRule() {
-        when(mockScanner.nextLine()).thenReturn("2023-01-01");
+        when(console.readLine()).thenReturn("2023-01-01");
 
         dateInput.setPrompt("Enter a date (yyyy-MM-dd):");
         dateInput.setRetryOnInvalid(false);
@@ -103,8 +95,8 @@ public class LocalDateInputTest {
             }
         });
 
-        InputValidationException exception = assertThrows(InputValidationException.class, dateInput::read);
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> dateInput.read(console));
         assertEquals("Date must be after 2023-06-01.", exception.getMessage());
-        verify(mockScanner, times(1)).nextLine();
+        verify(console, times(1)).readLine();
     }
 }

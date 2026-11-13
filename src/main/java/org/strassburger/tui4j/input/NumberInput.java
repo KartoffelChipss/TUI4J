@@ -1,9 +1,7 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.formatting.StyledText;
-import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
-import org.strassburger.tui4j.printer.Printer;
+import org.strassburger.tui4j.console.Console;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,42 +34,37 @@ public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
      * <p>Example usage:</p>
      * <pre>
      * {@code
-     * NumberInput<Integer> input = new NumberInput<>(Integer.class, new ConsolePrinter())
+     * NumberInput<Integer> input = new NumberInput<>(Integer.class)
      *     .setPrompt("Enter an integer:")
      *     .setRetryOnInvalid(true);
      *
-     * int value = input.read();
+     * int value = console.read(input);
      * System.out.println("You entered: " + value);
      * }
      * </pre>
      */
-    public NumberInput(Class<U> type, Printer printer) {
-        super(printer);
+    public NumberInput(Class<U> type) {
         this.type = type;
     }
 
     @Override
-    public U read() throws InputValidationException {
-        printPromptAndCursor(inline);
+    protected void printPrompt(Console console) {
+        printPromptAndCursor(console, inline);
+    }
 
-        String input = getScanner().nextLine();
-        if (!allowComma) input = input.replace(",", "");
-
+    @Override
+    @SuppressWarnings("unchecked")
+    protected U parse(String input) throws InputValidationException {
         Function<String, ? extends Number> parser = PARSERS.get(getTypeClass());
-
         if (parser == null) {
             throw new UnsupportedOperationException("Unsupported number type: " + getTypeClass().getName());
         }
 
+        if (!allowComma) input = input.replace(",", "");
         try {
             return (U) parser.apply(input);
         } catch (NumberFormatException e) {
-            if (isRetryOnInvalid()) {
-                getPrinter().println(getErrorMessage());
-                return read();
-            } else {
-                throw new InputValidationException(StyledText.text("Invalid input: " + input).fg(AnsiColor.RED));
-            }
+            throw invalidInput();
         }
     }
 

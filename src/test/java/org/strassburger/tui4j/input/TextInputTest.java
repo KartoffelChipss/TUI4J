@@ -7,9 +7,7 @@ import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.TextInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
-import org.strassburger.tui4j.printer.TestPrinter;
-
-import java.util.Scanner;
+import org.strassburger.tui4j.console.Console;
 
 import static org.mockito.Mockito.*;
 
@@ -17,21 +15,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TextInputTest {
 
-    private final TestPrinter printer = new TestPrinter();
-
     private TextInput textInput;
-    private Scanner mockScanner;
+    private Console console;
     private ValidationRule<String> minFifeCharsRule;
 
     @BeforeEach
     void setUp() {
-        mockScanner = mock(Scanner.class);
-        textInput = new TextInput(printer) {
-            @Override
-            protected Scanner getScanner() {
-                return mockScanner;
-            }
-        };
+        console = mock(Console.class);
+        textInput = new TextInput();
         minFifeCharsRule = new ValidationRule<>() {
             @Override
             public boolean validate(String input) {
@@ -47,52 +38,52 @@ class TextInputTest {
 
     @Test
     void testValidInput() throws InputValidationException {
-        when(mockScanner.nextLine()).thenReturn("John Doe");
+        when(console.readLine()).thenReturn("John Doe");
 
         textInput.setPrompt("What is your name?");
 
-        String result = textInput.read();
+        String result = textInput.read(console);
 
         assertEquals("John Doe", result);
-        verify(mockScanner, times(1)).nextLine();
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testEmptyInput() throws InputValidationException {
-        when(mockScanner.nextLine()).thenReturn("").thenReturn("John Doe");
+        when(console.readLine()).thenReturn("").thenReturn("John Doe");
 
         textInput.setPrompt("What is your name?");
 
-        String result = textInput.read();
+        String result = textInput.read(console);
 
         assertEquals("John Doe", result);
-        verify(mockScanner, times(2)).nextLine();
+        verify(console, times(2)).readLine();
     }
 
     @Test
     void testInputWithValidationRule() {
-        when(mockScanner.nextLine()).thenReturn("John");
+        when(console.readLine()).thenReturn("John");
 
         textInput.setPrompt("What is your name?");
         textInput.setRetryOnInvalid(false);
         textInput.addValidationRule(minFifeCharsRule);
 
-        InputValidationException exception = assertThrows(InputValidationException.class, textInput::read);
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> textInput.read(console));
         assertEquals("Name must be longer than 5 characters.", exception.getMessage());
-        verify(mockScanner, times(1)).nextLine();
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testInputWithRetryOnInvalid() throws InputValidationException {
-        when(mockScanner.nextLine()).thenReturn("John", "John", "John Doe");
+        when(console.readLine()).thenReturn("John", "John", "John Doe");
 
         textInput.setPrompt("What is your name?");
         textInput.setRetryOnInvalid(true);
         textInput.addValidationRule(minFifeCharsRule);
 
-        String result = textInput.read();
+        String result = textInput.read(console);
 
         assertEquals("John Doe", result);
-        verify(mockScanner, times(3)).nextLine();
+        verify(console, times(3)).readLine();
     }
 }

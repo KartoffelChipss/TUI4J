@@ -1,6 +1,5 @@
-package org.strassburger.tui4j.terminal;
+package org.strassburger.tui4j.console.terminal;
 
-import java.nio.charset.Charset;
 import java.util.Locale;
 
 /**

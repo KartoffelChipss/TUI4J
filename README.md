@@ -90,103 +90,96 @@ import org.strassburger.tui4j.input.*;
 import org.strassburger.tui4j.input.validationrules.NumberValidationRules;
 import org.strassburger.tui4j.input.validationrules.TextValidationRules;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
-import org.strassburger.tui4j.printer.ConsolePrinter;
-import org.strassburger.tui4j.printer.Printer;
+import org.strassburger.tui4j.console.Console;
+import org.strassburger.tui4j.console.TerminalConsole;
 
 public class Main {
-    public static void main(String[] args) {
-        Printer printer = new ConsolePrinter();
-    
-        printer.println(" ");
-        printer.println(new FlexText(StyledText.text("Welcome to the TUI4J example application!").fg(AnsiColor.BLUE).bold()));
-        printer.println(" ");
-    
-        String name = new TextInput(printer)
-                .setPrompt("What is your name? ")
-                .setInline(true)
-                .read();
-    
-        String gender = new SelectInput<String>(printer)
-                .setPrompt("Select your gender: ")
-                .addOption("Male", "Male")
-                .addOption("Female", "Female")
-                .addOption("Other", "Other")
-                .setOptionsStyle(StyledText.text(" (%num%) ").fg(AnsiColor.CYAN).append("%label%"))
-                .read();
-    
-        String email = new TextInput(printer)
-                .setPrompt("What is your email address?")
-                .addValidationRule(
-                        new ValidationRule<String>() {
-                            @Override
-                            public boolean validate(String s) {
-                                return s.contains("@") && s.contains(".");
-                            }
-      
-                            @Override
-                            public StyledText getErrorMessage() {
-                                return StyledText.text("Email address must contain '@' and '.'").fg(AnsiColor.RED);
-                            }
-                        }
-                )
-                .read();
-    
-        String about = new MultilineTextInput(printer)
-                .setPrompt("Tell me about yourself: ")
-                .addValidationRule(TextValidationRules.minLength(30))
-                .read();
-    
-        int age = new IntegerInput(printer)
-                .setPrompt("How old are you? ")
-                .addValidationRule(NumberValidationRules.greaterThan(0))
-                .addValidationRule(NumberValidationRules.lessThan(150))
-                .read();
-    
-        double height = new DoubleInput(printer)
-                .setPrompt("How tall are you? ")
-                .addValidationRule(NumberValidationRules.greaterThan(0.0))
-                .addValidationRule(NumberValidationRules.lessThan(3.0))
-                .read();
-    
-        printer.println(" ");
-        printer.println(StyledText.text("Your Inputs:").fg(AnsiColor.BRIGHT_WHITE).bold());
-        printer.println(new FlexText()
-                .addPart(StyledText.text("Name ").fg(AnsiColor.BRIGHT_WHITE))
-                .addPart(StyledText.text(" " + name).fg(AnsiColor.BRIGHT_WHITE))
-                .setJustify(FlexJustify.SPACE_BETWEEN)
-                .setSeparatorChar(StyledText.text(".").fg(AnsiColor.BRIGHT_BLACK))
-        );
-        printer.println(FlexText.keyValue("Email ", " " + email));
-        printer.println(FlexText.keyValue("Age ", " " + age));
-        printer.println(FlexText.keyValue("Height (m) ", " " + height));
-        printer.println(FlexText.keyValue("Gender ", " " + gender));
-        printer.println(" ");
-    
-        boolean shouldContinue = new BooleanInput(printer)
-                .setPrompt("Do you want to continue? (y/n)")
-                .read();
-    
-        if (shouldContinue) {
-            printer.println("Continuing...");
+  public static void main(String[] args) {
+    Console console = new TerminalConsole();
 
-          Spinner spinner = new Spinner()
-                  .setMessage(StyledText.text("Loading some stuff..."))
-                  .setSpinnerColor(AnsiColor.CYAN)
-                  .setSpinnerFrames(SpinnerFrames.SYNTHWAVE)
-                  .setSpeedMs(100);
-          printer.print(spinner);
+    console.println(" ");
+    console.println(new FlexText(StyledText.text("Welcome to the TUI4J example application!").fg(AnsiColor.BLUE).bold()));
+    console.println(" ");
 
-          for (int i = 0; i < 50; i++) {
-            Thread.sleep(100);
-            spinner.setMessage(StyledText.text("Loading some stuff... " + (i + 1) * 2 + "%"));
-          }
+    String name = console.read(new TextInput()
+            .setPrompt("What is your name? ")
+            .setInline(true));
 
-          spinner.stop(StyledText.text("✔ Loading complete!").fg(AnsiColor.GREEN).bold());
-            
-        } else {
-            printer.println("Exiting...");
-        }
+    String gender = console.read(new SelectInput<String>()
+            .setPrompt("Select your gender: ")
+            .addOption("Male", "Male")
+            .addOption("Female", "Female")
+            .addOption("Other", "Other")
+            .setOptionsStyle(StyledText.text(" (%num%) ").fg(AnsiColor.CYAN).append("%label%")));
+
+    String email = console.read(new TextInput()
+            .setPrompt("What is your email address?")
+            .addValidationRule(
+                    new ValidationRule<String>() {
+                      @Override
+                      public boolean validate(String s) {
+                        return s.contains("@") && s.contains(".");
+                      }
+
+                      @Override
+                      public StyledText getErrorMessage() {
+                        return StyledText.text("Email address must contain '@' and '.'").fg(AnsiColor.RED);
+                      }
+                    }
+            ));
+
+    String about = console.read(new MultilineTextInput()
+            .setPrompt("Tell me about yourself: ")
+            .addValidationRule(TextValidationRules.minLength(30)));
+
+    int age = console.read(new IntegerInput()
+            .setPrompt("How old are you? ")
+            .addValidationRule(NumberValidationRules.greaterThan(0))
+            .addValidationRule(NumberValidationRules.lessThan(150)));
+
+    double height = console.read(new DoubleInput()
+            .setPrompt("How tall are you? ")
+            .addValidationRule(NumberValidationRules.greaterThan(0.0))
+            .addValidationRule(NumberValidationRules.lessThan(3.0)));
+
+    console.println(" ");
+    console.println(StyledText.text("Your Inputs:").fg(AnsiColor.BRIGHT_WHITE).bold());
+    console.println(new FlexText()
+            .addPart(StyledText.text("Name ").fg(AnsiColor.BRIGHT_WHITE))
+            .addPart(StyledText.text(" " + name).fg(AnsiColor.BRIGHT_WHITE))
+            .setJustify(FlexJustify.SPACE_BETWEEN)
+            .setSeparatorChar(StyledText.text(".").fg(AnsiColor.BRIGHT_BLACK))
+    );
+    console.println(FlexText.keyValue("Email ", " " + email));
+    console.println(FlexText.keyValue("Age ", " " + age));
+    console.println(FlexText.keyValue("Height (m) ", " " + height));
+    console.println(FlexText.keyValue("Gender ", " " + gender));
+    console.println(" ");
+
+    boolean shouldContinue = console.read(new BooleanInput()
+            .setPrompt("Do you want to continue? (y/n)"));
+
+    if (shouldContinue) {
+      console.println("Continuing...");
+
+      Spinner spinner = new Spinner()
+              .setMessage(StyledText.text("Loading some stuff..."))
+              .setSpinnerColor(AnsiColor.CYAN)
+              .setSpinnerFrames(SpinnerFrames.SYNTHWAVE)
+              .setSpeedMs(100);
+      console.print(spinner);
+
+      for (int i = 0; i < 50; i++) {
+        Thread.sleep(100);
+        spinner.setMessage(StyledText.text("Loading some stuff... " + (i + 1) * 2 + "%"));
+      }
+
+      spinner.stop(StyledText.text("✔ Loading complete!").fg(AnsiColor.GREEN).bold());
+
+    } else {
+      console.println("Exiting...");
     }
+  }
 }
 ```
 
@@ -236,57 +229,58 @@ public class Main {
 ### Table
 
 ```java
+
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.formatting.layout.table.Table;
 import org.strassburger.tui4j.formatting.layout.table.styles.ColumnAlign;
 import org.strassburger.tui4j.formatting.layout.table.styles.TableStyles;
-import org.strassburger.tui4j.printer.ConsolePrinter;
-import org.strassburger.tui4j.printer.Printer;
+import org.strassburger.tui4j.console.Printer;
+import org.strassburger.tui4j.console.TerminalConsole;
 
 import java.util.List;
 
 public class Main {
   public static void main(String[] args) {
-      Printer printer = new ConsolePrinter();
-    
-      List<StyledText> headers = List.of(
-              StyledText.text("Name").fg(AnsiColor.BRIGHT_WHITE).bold(),
-              StyledText.text("Age").fg(AnsiColor.BRIGHT_WHITE).bold(),
-              StyledText.text("City").fg(AnsiColor.BRIGHT_WHITE).bold()
-      );
-    
-      List<StyledText> row1 = List.of(
-              StyledText.text("Alice").fg(AnsiColor.CYAN),
-              StyledText.text("30").fg(AnsiColor.GREEN),
-              StyledText.text("New York").fg(AnsiColor.MAGENTA)
-      );
-    
-      List<StyledText> row2 = List.of(
-              StyledText.text("Bob").fg(AnsiColor.CYAN),
-              StyledText.text("25").fg(AnsiColor.GREEN),
-              StyledText.text("Los Angeles").fg(AnsiColor.MAGENTA)
-      );
-    
-      List<StyledText> row3 = List.of(
-              StyledText.text("Charlie").fg(AnsiColor.CYAN),
-              StyledText.text("35").fg(AnsiColor.GREEN),
-              StyledText.text("Chicago").fg(AnsiColor.MAGENTA)
-      );
-    
-      Table table = new Table()
-              .setStyle(TableStyles.UNICODE_BOX.withBorderColor(AnsiColor.BRIGHT_BLACK))
-              .setHasHeader(true)
-              .setColumnGrow(0, 1)
-              .setColumnAlignment(0, ColumnAlign.START)
-              .setColumnAlignment(1, ColumnAlign.CENTER)
-              .setColumnAlignment(2, ColumnAlign.END)
-              .addRow(headers)
-              .addRow(row1)
-              .addRow(row2)
-              .addRow(row3);
-    
-      printer.println(table);
+    Printer printer = new TerminalConsole();
+
+    List<StyledText> headers = List.of(
+            StyledText.text("Name").fg(AnsiColor.BRIGHT_WHITE).bold(),
+            StyledText.text("Age").fg(AnsiColor.BRIGHT_WHITE).bold(),
+            StyledText.text("City").fg(AnsiColor.BRIGHT_WHITE).bold()
+    );
+
+    List<StyledText> row1 = List.of(
+            StyledText.text("Alice").fg(AnsiColor.CYAN),
+            StyledText.text("30").fg(AnsiColor.GREEN),
+            StyledText.text("New York").fg(AnsiColor.MAGENTA)
+    );
+
+    List<StyledText> row2 = List.of(
+            StyledText.text("Bob").fg(AnsiColor.CYAN),
+            StyledText.text("25").fg(AnsiColor.GREEN),
+            StyledText.text("Los Angeles").fg(AnsiColor.MAGENTA)
+    );
+
+    List<StyledText> row3 = List.of(
+            StyledText.text("Charlie").fg(AnsiColor.CYAN),
+            StyledText.text("35").fg(AnsiColor.GREEN),
+            StyledText.text("Chicago").fg(AnsiColor.MAGENTA)
+    );
+
+    Table table = new Table()
+            .setStyle(TableStyles.UNICODE_BOX.withBorderColor(AnsiColor.BRIGHT_BLACK))
+            .setHasHeader(true)
+            .setColumnGrow(0, 1)
+            .setColumnAlignment(0, ColumnAlign.START)
+            .setColumnAlignment(1, ColumnAlign.CENTER)
+            .setColumnAlignment(2, ColumnAlign.END)
+            .addRow(headers)
+            .addRow(row1)
+            .addRow(row2)
+            .addRow(row3);
+
+    printer.println(table);
   }
 }
 ```

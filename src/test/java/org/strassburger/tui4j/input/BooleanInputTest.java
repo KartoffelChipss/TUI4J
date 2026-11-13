@@ -6,9 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.strassburger.tui4j.input.BooleanInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
-import org.strassburger.tui4j.printer.TestPrinter;
-
-import java.util.Scanner;
+import org.strassburger.tui4j.console.Console;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -16,53 +14,46 @@ import static org.mockito.Mockito.times;
 
 public class BooleanInputTest {
 
-    private final TestPrinter printer = new TestPrinter();
-
     private BooleanInput input;
-    private Scanner mockScanner;
+    private Console console;
 
     @BeforeEach
     void setUp() {
-        mockScanner = mock(Scanner.class);
-        input = new BooleanInput(printer) {
-            @Override
-            protected Scanner getScanner() {
-                return mockScanner;
-            }
-        };
+        console = mock(Console.class);
+        input = new BooleanInput();
     }
 
     @Test
     void testValidInput() throws InputValidationException {
-        when(mockScanner.nextLine()).thenReturn("yes");
+        when(console.readLine()).thenReturn("yes");
 
         input.setPrompt("Do you like ice cream?");
 
-        boolean result = input.read();
+        boolean result = input.read(console);
 
         assertTrue(result);
-        verify(mockScanner, times(1)).nextLine();
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testInvalidInput() {
-        when(mockScanner.nextLine()).thenReturn("maybe");
+        when(console.readLine()).thenReturn("maybe");
 
         input.setRetryOnInvalid(false);
         input.setPrompt("Do you like ice cream?");
 
-        assertThrows(InputValidationException.class, input::read);
-        verify(mockScanner, times(1)).nextLine();
+        assertThrows(InputValidationException.class, () -> input.read(console));
+        verify(console, times(1)).readLine();
     }
 
     private void testBooleanInput(String inputValue, boolean expectedResult) throws InputValidationException {
-        when(mockScanner.nextLine()).thenReturn(inputValue);
+        when(console.readLine()).thenReturn(inputValue);
         input.setPrompt("Do you like ice cream?");
 
-        boolean result = input.read();
+        boolean result = input.read(console);
 
         assertEquals(expectedResult, result);
-        verify(mockScanner, times(1)).nextLine();
+        verify(console, times(1)).readLine();
     }
 
     @ParameterizedTest

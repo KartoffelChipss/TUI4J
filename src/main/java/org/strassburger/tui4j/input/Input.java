@@ -1,16 +1,14 @@
 package org.strassburger.tui4j.input;
 
 import org.jspecify.annotations.Nullable;
+import org.strassburger.tui4j.console.Console;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
-import org.strassburger.tui4j.input.exceptions.RetryInputException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
-import org.strassburger.tui4j.printer.Printer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Abstract class for input
@@ -22,26 +20,54 @@ public abstract class Input<T, S extends Input<T, S>> {
     private boolean retryOnInvalid = true;
     private StyledText errorMessage = StyledText.text("Invalid input. Please try again.").fg(AnsiColor.RED);
     private StyledText cursor = StyledText.text(">").fg(AnsiColor.BRIGHT_BLACK).append(" ").fg(AnsiColor.WHITE);
-    private final List<ValidationRule<T>> validationRules;
-    private Scanner scanner;
-    private Printer printer;
+    private final List<ValidationRule<T>> validationRules = new ArrayList<>();
 
     /**
-     * Constructor with default scanner
-     * @param printer the printer to use
-     */
-    public Input(Printer printer) {
-        validationRules = new ArrayList<>();
-        scanner = new Scanner(System.in);
-        this.printer = printer;
-    }
-
-    /**
-     * Read the input value
+     * Read the input value. Prints the prompt, reads the raw input, parses and validates it.
+     * If the input is invalid and {@link #isRetryOnInvalid()} is true, the error message is printed
+     * and the user is asked again.
+     * @param console the console instance used to read the input
      * @return the input value
      * @throws InputValidationException if the input is invalid and retryOnInvalid is false
      */
-    public abstract T read() throws InputValidationException;
+    public T read(Console console) throws InputValidationException {
+        while (true) {
+            printPrompt(console);
+            try {
+                T value = parse(readInput(console));
+                validate(value);
+                return value;
+            } catch (InputValidationException e) {
+                if (!retryOnInvalid) throw e;
+                console.println(e.getStyledMessage());
+            }
+        }
+    }
+
+    /**
+     * Print the prompt before reading the input. Defaults to the prompt followed by the cursor on a new line.
+     * @param console the console to print to
+     */
+    protected void printPrompt(Console console) {
+        printPromptAndCursor(console, false);
+    }
+
+    /**
+     * Read the raw input. Defaults to a single line.
+     * @param console the console to read from
+     * @return the raw input
+     */
+    protected String readInput(Console console) {
+        return console.readLine();
+    }
+
+    /**
+     * Convert the raw input into the input value
+     * @param input the raw input
+     * @return the parsed value
+     * @throws InputValidationException if the input cannot be parsed
+     */
+    protected abstract T parse(String input) throws InputValidationException;
 
     /**
      * Set the label for the input
@@ -121,18 +147,6 @@ public abstract class Input<T, S extends Input<T, S>> {
     }
 
     @SuppressWarnings("unchecked")
-    public S setPrinter(Printer printer) {
-        this.printer = printer;
-        return (S) this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public S setScanner(Scanner scanner) {
-        this.scanner = scanner;
-        return (S) this;
-    }
-
-    @SuppressWarnings("unchecked")
     public S setCursor(StyledText cursor) {
         this.cursor = cursor;
         return (S) this;
@@ -143,22 +157,25 @@ public abstract class Input<T, S extends Input<T, S>> {
     }
 
     /**
-     * Validate the input value
+     * Validate the input value against all validation rules
      * @param value the input value to validate
      * @throws InputValidationException if the input is invalid
      */
     protected void validate(T value) throws InputValidationException {
         for (ValidationRule<T> rule : validationRules) {
             if (!rule.validate(value)) {
-                StyledText errMessage = rule.getErrorMessage() != null ? rule.getErrorMessage() : errorMessage;
-                if (retryOnInvalid) {
-                    printer.println(errMessage);
-                    throw new RetryInputException(errMessage);
-                } else {
-                    throw new InputValidationException(errMessage);
-                }
+                StyledText ruleMessage = rule.getErrorMessage();
+                throw new InputValidationException(ruleMessage != null ? ruleMessage : errorMessage);
             }
         }
+    }
+
+    /**
+     * Create an exception for input that cannot be parsed, using the configured error message
+     * @return the exception to throw
+     */
+    protected InputValidationException invalidInput() {
+        return new InputValidationException(errorMessage);
     }
 
     public @Nullable StyledText getPrompt() {
@@ -173,21 +190,13 @@ public abstract class Input<T, S extends Input<T, S>> {
         return errorMessage;
     }
 
-    protected Scanner getScanner() {
-        return scanner;
-    }
+    protected void printPromptAndCursor(Console console, boolean inline) {
+        if (getPrompt() != null) console.print(getPrompt());
 
-    protected Printer getPrinter() {
-        return printer;
-    }
-
-    protected void printPromptAndCursor(boolean inline) {
-        if (getPrompt() != null) getPrinter().print(getPrompt());
-
-        if (inline) getPrinter().print("");
+        if (inline) console.print("");
         else {
-            if (getPrompt() != null) getPrinter().println();
-            getPrinter().print(getCursor());
+            if (getPrompt() != null) console.println();
+            console.print(getCursor());
         }
     }
 }

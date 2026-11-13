@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.strassburger.tui4j.input.DoubleInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.validationrules.NumberValidationRules;
-import org.strassburger.tui4j.printer.TestPrinter;
-
-import java.util.Scanner;
+import org.strassburger.tui4j.console.Console;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -15,79 +13,72 @@ import static org.mockito.Mockito.*;
 
 public class DoubleInputTest {
 
-    private final TestPrinter printer = new TestPrinter();
-
     private DoubleInput input;
-    private Scanner mockScanner;
+    private Console console;
 
     @BeforeEach
     void setUp() {
-        mockScanner = mock(Scanner.class);
-        input = new DoubleInput(printer) {
-            @Override
-            protected Scanner getScanner() {
-                return mockScanner;
-            }
-        };
+        console = mock(Console.class);
+        input = new DoubleInput();
     }
 
     @Test
     void testValidInput() {
-        when(mockScanner.nextLine()).thenReturn("90.15");
+        when(console.readLine()).thenReturn("90.15");
 
         input.setPrompt("What is your weight?");
 
-        double result = input.read();
+        double result = input.read(console);
 
         assertEquals(90.15, result);
-        verify(mockScanner, times(1)).nextLine();
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testInvalidInput() {
-        when(mockScanner.nextLine()).thenReturn("abc");
+        when(console.readLine()).thenReturn("abc");
 
         input.setRetryOnInvalid(false);
         input.setPrompt("What is your weight?");
 
-        assertThrows(InputValidationException.class, input::read);
-        verify(mockScanner, times(1)).nextLine();
+        assertThrows(InputValidationException.class, () -> input.read(console));
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testRetryOnInvalid() {
-        when(mockScanner.nextLine()).thenReturn("abc").thenReturn("90.15");
+        when(console.readLine()).thenReturn("abc").thenReturn("90.15");
 
         input.setRetryOnInvalid(true);
         input.setPrompt("What is your weight?");
 
-        double result = input.read();
+        double result = input.read(console);
 
         assertEquals(90.15, result);
-        verify(mockScanner, times(2)).nextLine();
+        verify(console, times(2)).readLine();
     }
 
     @Test
     void testValidationRules() {
-        when(mockScanner.nextLine()).thenReturn("0.0");
+        when(console.readLine()).thenReturn("0.0");
 
         input.setPrompt("What is your weight?");
         input.setRetryOnInvalid(false);
         input.addValidationRule(NumberValidationRules.greaterThan(0.0));
 
-        assertThrows(InputValidationException.class, () -> input.read());
-        verify(mockScanner, times(1)).nextLine();
+        assertThrows(InputValidationException.class, () -> input.read(console));
+        verify(console, times(1)).readLine();
     }
 
     @Test
     void testAllowComma() {
-        when(mockScanner.nextLine()).thenReturn("90,15");
+        when(console.readLine()).thenReturn("90,15");
 
         input.setPrompt("What is your weight?");
         input.setAllowComma(false);
         input.setRetryOnInvalid(false);
 
-        assertThrows(InputValidationException.class, () -> input.read());
-        verify(mockScanner, times(1)).nextLine();
+        assertThrows(InputValidationException.class, () -> input.read(console));
+        verify(console, times(1)).readLine();
     }
 }

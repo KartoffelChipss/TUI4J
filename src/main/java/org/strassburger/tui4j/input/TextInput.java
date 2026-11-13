@@ -1,46 +1,40 @@
 package org.strassburger.tui4j.input;
 
-import org.strassburger.tui4j.input.exceptions.InputValidationException;
-import org.strassburger.tui4j.input.exceptions.RetryInputException;
-import org.strassburger.tui4j.printer.Printer;
+import org.strassburger.tui4j.console.Console;
 
+/**
+ * <p>
+ * Reads a single line of text from the console.
+ * </p>
+ * <p>
+ * Example usage:
+ * </p>
+ * <pre>{@code
+ * String name = console.read(new TextInput()
+ *        .setPrompt("What is your name?")
+ *        .setRetryOnInvalid(true));
+ * }</pre>
+ */
 public class TextInput extends Input<String, TextInput> {
     private boolean inline;
 
-    /**
-     * <p>
-     * Reads a single line of text from the console.
-     * </p>
-     * <p>
-     * Example usage:
-     * </p>
-     * <pre>{@code
-     * String name = new TextInput(new ConsolePrinter())
-     *        .setPrompt("What is your name?")
-     *        .setRetryOnInvalid(true)
-     *        .read();
-     * }</pre>
-     */
-    public TextInput(Printer printer) {
-        super(printer);
+    @Override
+    protected void printPrompt(Console console) {
+        printPromptAndCursor(console, inline);
     }
 
     @Override
-    public String read() throws InputValidationException {
-        printPromptAndCursor(inline);
-
-        String value = getScanner().nextLine();
+    protected String readInput(Console console) {
+        String value = console.readLine();
         while (value.isEmpty()) {
-            value = getScanner().nextLine();
+            value = console.readLine();
         }
-
-        try {
-            validate(value);
-        } catch (RetryInputException e) {
-            return read();
-        }
-
         return value;
+    }
+
+    @Override
+    protected String parse(String input) {
+        return input;
     }
 
     /**

@@ -1,4 +1,4 @@
-package org.strassburger.tui4j.printer;
+package org.strassburger.tui4j.console;
 
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.layout.Renderable;

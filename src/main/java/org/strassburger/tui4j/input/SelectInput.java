@@ -1,9 +1,9 @@
 package org.strassburger.tui4j.input;
 
+import org.strassburger.tui4j.console.Console;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
-import org.strassburger.tui4j.printer.Printer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,53 +15,42 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
     private final List<Option<T>> options;
     private StyledText optionsStyle = StyledText.text(" %num%. ").fg(AnsiColor.BRIGHT_WHITE).append(StyledText.text("%label%"));
 
-    public SelectInput(Printer printer) {
-        super(printer);
+    public SelectInput() {
         options = new ArrayList<>();
     }
 
-    public SelectInput(Printer printer, List<Option<T>> options) {
-        super(printer);
+    public SelectInput(List<Option<T>> options) {
         this.options = options;
     }
 
     @Override
-    public T read() throws InputValidationException {
-        try {
-            if (getPrompt() != null) getPrinter().println(getPrompt());
-            for (int i = 0; i < options.size(); i++) {
-                StyledText message = optionsStyle
-                        .replace("%num%", String.valueOf(i + 1))
-                        .replace("%label%", options.get(i).getLabel());
-                getPrinter().println(message);
-            }
-            getPrinter().print(getCursor());
-            String input = getScanner().nextLine().trim();
-
-            if (input.contains(".")) {
-                input = input.substring(0, input.indexOf("."));
-            }
-
-            int selectedIndex = Integer.parseInt(input) - 1;
-
-            if (selectedIndex < 0 || selectedIndex >= options.size()) {
-                if (isRetryOnInvalid()) {
-                    getPrinter().println(getErrorMessage());
-                    return read();
-                } else {
-                    throw new InputValidationException(StyledText.text("Invalid input.").fg(AnsiColor.RED));
-                }
-            }
-
-            return options.get(selectedIndex).getValue();
-        } catch (NumberFormatException e) {
-            if (isRetryOnInvalid()) {
-                getPrinter().println(getErrorMessage());
-                return read();
-            } else {
-                throw new InputValidationException(StyledText.text("Invalid input.").fg(AnsiColor.RED));
-            }
+    protected void printPrompt(Console console) {
+        if (getPrompt() != null) console.println(getPrompt());
+        for (int i = 0; i < options.size(); i++) {
+            StyledText message = optionsStyle
+                    .replace("%num%", String.valueOf(i + 1))
+                    .replace("%label%", options.get(i).getLabel());
+            console.println(message);
         }
+        console.print(getCursor());
+    }
+
+    @Override
+    protected T parse(String input) throws InputValidationException {
+        input = input.trim();
+        if (input.contains(".")) {
+            input = input.substring(0, input.indexOf("."));
+        }
+
+        try {
+            int selectedIndex = Integer.parseInt(input) - 1;
+            if (selectedIndex >= 0 && selectedIndex < options.size()) {
+                return options.get(selectedIndex).getValue();
+            }
+        } catch (NumberFormatException ignored) {
+            // handled below
+        }
+        throw invalidInput();
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.printer;
 
+import org.strassburger.tui4j.console.Printer;
 import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.StyledTextRenderer;

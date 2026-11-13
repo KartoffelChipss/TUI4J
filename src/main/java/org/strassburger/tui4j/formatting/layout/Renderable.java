@@ -1,6 +1,6 @@
 package org.strassburger.tui4j.formatting.layout;
 
-import org.strassburger.tui4j.printer.Printer;
+import org.strassburger.tui4j.console.Printer;
 
 /**
  * An interface for renderable layout elements
