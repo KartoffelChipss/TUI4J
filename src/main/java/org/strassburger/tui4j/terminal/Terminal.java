@@ -27,7 +27,7 @@ public class Terminal {
      */
     public TerminalSize.Size getSize() {
         long now = System.currentTimeMillis();
-        if (cachedSize == null || (now - lastFetchTime) > CACHE_DURATION_MS) {
+        if ((now - lastFetchTime) > CACHE_DURATION_MS) {
             cachedSize = TerminalSize.get();
             lastFetchTime = now;
         }

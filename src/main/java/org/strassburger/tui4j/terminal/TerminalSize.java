@@ -1,5 +1,7 @@
 package org.strassburger.tui4j.terminal;
 
+import org.jspecify.annotations.Nullable;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -35,7 +37,7 @@ public final class TerminalSize {
     }
 
     /* Unix: stty */
-    private static Size fromStty() {
+    private static @Nullable Size fromStty() {
         try {
             Process p = new ProcessBuilder("sh", "-c", "stty size < /dev/tty")
                     .redirectErrorStream(true)
@@ -61,7 +63,7 @@ public final class TerminalSize {
     }
 
     /* Windows: mode con */
-    private static Size fromWindowsMode() {
+    private static @Nullable Size fromWindowsMode() {
         if (!isWindows()) return null;
 
         try {
@@ -95,7 +97,7 @@ public final class TerminalSize {
     }
 
     /* Environment variables */
-    private static Size fromEnv() {
+    private static @Nullable Size fromEnv() {
         Map<String, String> env = System.getenv();
         try {
             String cols = env.get("COLUMNS");
@@ -110,7 +112,7 @@ public final class TerminalSize {
     }
 
     /* Unix: tput */
-    private static Size fromTput() {
+    private static @Nullable Size fromTput() {
         try {
             int cols = runAndReadInt("tput", "cols");
             int rows = runAndReadInt("tput", "lines");
