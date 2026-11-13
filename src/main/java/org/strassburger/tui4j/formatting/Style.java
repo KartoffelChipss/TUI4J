@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.formatting;
 
+import org.jspecify.annotations.Nullable;
 import org.strassburger.colorlab4j.color.Color;
 import org.strassburger.tui4j.formatting.ansi.AnsiCode;
 
@@ -9,8 +10,8 @@ import java.util.Objects;
  * Represents text style attributes.
  */
 public final class Style {
-    private final Color foreground;
-    private final Color background;
+    private final @Nullable Color foreground;
+    private final @Nullable Color background;
     private final boolean bold;
     private final boolean underline;
     private final boolean inverse;
@@ -23,8 +24,8 @@ public final class Style {
     }
 
     private Style(
-            Color foreground,
-            Color background,
+            @Nullable Color foreground,
+            @Nullable Color background,
             boolean bold,
             boolean underline,
             boolean inverse
@@ -89,11 +90,11 @@ public final class Style {
     }
 
 
-    public Color getForeground() {
+    public @Nullable Color getForeground() {
         return foreground;
     }
 
-    public Color getBackground() {
+    public @Nullable Color getBackground() {
         return background;
     }
 
