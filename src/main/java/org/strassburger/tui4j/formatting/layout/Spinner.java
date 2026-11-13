@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.formatting.layout;
 
+import org.jspecify.annotations.Nullable;
 import org.strassburger.colorlab4j.color.Color;
 import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
@@ -19,7 +20,7 @@ public class Spinner implements Renderable, Runnable {
 
     private volatile boolean running = false;
     private int index = 0;
-    private Printer printer;
+    private @Nullable Printer printer;
     private int width = 0;
 
     /**

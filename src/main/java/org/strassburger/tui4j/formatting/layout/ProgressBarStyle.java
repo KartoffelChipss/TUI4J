@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.formatting.layout;
 
+import org.jspecify.annotations.Nullable;
 import org.strassburger.tui4j.formatting.StyledText;
 
 /**
@@ -13,6 +14,11 @@ public class ProgressBarStyle {
     private final StyledText pointerChar;
 
     private ProgressBarStyle(Builder builder) {
+        if (builder.startDelimiter == null) throw new IllegalArgumentException("startDelimiter must not be null");
+        if (builder.endDelimiter == null) throw new IllegalArgumentException("endDelimiter must not be null");
+        if (builder.fillChar == null) throw new IllegalArgumentException("fillChar must not be null");
+        if (builder.emptyChar == null) throw new IllegalArgumentException("emptyChar must not be null");
+        if (builder.pointerChar == null) throw new IllegalArgumentException("pointerChar must not be null");
         this.startDelimiter = builder.startDelimiter;
         this.endDelimiter = builder.endDelimiter;
         this.fillChar = builder.fillChar;
@@ -44,14 +50,13 @@ public class ProgressBarStyle {
      * Builder for ProgressBarStyle
      */
     public static class Builder {
-        private StyledText startDelimiter;
-        private StyledText endDelimiter;
-        private StyledText fillChar;
-        private StyledText emptyChar;
-        private StyledText pointerChar;
+        private @Nullable StyledText startDelimiter;
+        private @Nullable StyledText endDelimiter;
+        private @Nullable StyledText fillChar;
+        private @Nullable StyledText emptyChar;
+        private @Nullable StyledText pointerChar;
 
         private void validateSingleChar(StyledText text, String name) {
-            if (text == null) throw new IllegalArgumentException(name + " cannot be null");
             if (text.length() != 1) throw new IllegalArgumentException(name + " must be a single character");
         }
 

@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.formatting.layout;
 
+import org.jspecify.annotations.Nullable;
 import org.strassburger.colorlab4j.color.Color;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.printer.Printer;
@@ -9,11 +10,11 @@ import org.strassburger.tui4j.printer.Printer;
  */
 public class ProgressBar implements Renderable {
     private StyledText message = StyledText.text("Loading...");
-    private Color barColor = null;
-    private ProgressBarStyle style;
+    private @Nullable Color barColor = null;
+    private ProgressBarStyle style = ProgressBarStyle.SQUARES;
 
     private volatile int progress = 0;
-    private Printer printer;
+    private @Nullable Printer printer;
     private int width = 0;
 
     /**
@@ -76,7 +77,7 @@ public class ProgressBar implements Renderable {
         return this;
     }
 
-    public Color getBarColor() {
+    public @Nullable Color getBarColor() {
         return barColor;
     }
 
