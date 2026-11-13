@@ -10,14 +10,6 @@ public class DoubleInput extends Input<Double, DoubleInput> {
     private boolean inline = true;
     private boolean allowComma = true;
 
-    /**
-     * @deprecated Use {@link #DoubleInput(Printer)} instead
-     */
-    @Deprecated
-    public DoubleInput() {
-        super();
-    }
-
     public DoubleInput(Printer printer) {
         super(printer);
     }

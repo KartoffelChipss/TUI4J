@@ -6,7 +6,6 @@ import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.exceptions.RetryInputException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
-import org.strassburger.tui4j.printer.ConsolePrinter;
 import org.strassburger.tui4j.printer.Printer;
 
 import java.util.ArrayList;
@@ -26,17 +25,6 @@ public abstract class Input<T, S extends Input<T, S>> {
     private final List<ValidationRule<T>> validationRules;
     private Scanner scanner;
     private Printer printer;
-
-    /**
-     * Constructor with default scanner and printer
-     * @deprecated Use {@link #Input(Printer)} instead
-     */
-    @Deprecated
-    public Input() {
-        validationRules = new ArrayList<>();
-        scanner = new Scanner(System.in);
-        printer = new ConsolePrinter();
-    }
 
     /**
      * Constructor with default scanner
@@ -68,36 +56,12 @@ public abstract class Input<T, S extends Input<T, S>> {
 
     /**
      * Set the label for the input
-     * @param label the label to set
-     * @return the input object
-     * @deprecated Use {@link #setPrompt(String)} instead
-     */
-    @SuppressWarnings("unchecked") @Deprecated
-    public S setLabel(String label) {
-        this.prompt = StyledText.text(label).fg(AnsiColor.BRIGHT_WHITE);
-        return (S) this;
-    }
-
-    /**
-     * Set the label for the input
      * @param prompt the label to set
      * @return the input object
      */
     @SuppressWarnings("unchecked")
     public S setPrompt(StyledText prompt) {
         this.prompt = prompt;
-        return (S) this;
-    }
-
-    /**
-     * Set the label for the input
-     * @param label the label to set
-     * @return the input object
-     * @deprecated Use {@link #setPrompt(StyledText)} instead
-     */
-    @SuppressWarnings("unchecked") @Deprecated
-    public S setLabel(StyledText label) {
-        this.prompt = label;
         return (S) this;
     }
 
@@ -195,14 +159,6 @@ public abstract class Input<T, S extends Input<T, S>> {
                 }
             }
         }
-    }
-
-    /**
-     * @deprecated Use {@link #getPrompt()} instead
-     */
-    @Deprecated
-    public @Nullable StyledText getLabel() {
-        return prompt;
     }
 
     public @Nullable StyledText getPrompt() {

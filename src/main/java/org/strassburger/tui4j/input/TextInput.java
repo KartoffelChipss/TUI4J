@@ -15,28 +15,8 @@ public class TextInput extends Input<String, TextInput> {
      * Example usage:
      * </p>
      * <pre>{@code
-     * String name = new TextInput()
-     *        .setLabel("What is your name?")
-     *        .setRetryOnInvalid(true)
-     *        .read();
-     * }</pre>
-     * @deprecated Use {@link #TextInput(Printer)} instead
-     */
-    @Deprecated
-    public TextInput() {
-        super();
-    }
-
-    /**
-     * <p>
-     * Reads a single line of text from the console.
-     * </p>
-     * <p>
-     * Example usage:
-     * </p>
-     * <pre>{@code
-     * String name = new TextInput()
-     *        .setLabel("What is your name?")
+     * String name = new TextInput(new ConsolePrinter())
+     *        .setPrompt("What is your name?")
      *        .setRetryOnInvalid(true)
      *        .read();
      * }</pre>

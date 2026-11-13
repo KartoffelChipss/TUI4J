@@ -15,27 +15,9 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
     private final List<Option<T>> options;
     private StyledText optionsStyle = StyledText.text(" %num%. ").fg(AnsiColor.BRIGHT_WHITE).append(StyledText.text("%label%"));
 
-    /**
-     * @deprecated Use {@link #SelectInput(Printer)} instead
-     */
-    @Deprecated
-    public SelectInput() {
-        super();
-        options = new ArrayList<>();
-    }
-
     public SelectInput(Printer printer) {
         super(printer);
         options = new ArrayList<>();
-    }
-
-    /**
-     * @deprecated Use {@link #SelectInput(Printer, List)} instead
-     */
-    @Deprecated
-    public SelectInput(List<Option<T>> options) {
-        super();
-        this.options = options;
     }
 
     public SelectInput(Printer printer, List<Option<T>> options) {

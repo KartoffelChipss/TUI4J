@@ -2,7 +2,6 @@ package org.strassburger.tui4j.input.validationrules;
 
 import org.junit.jupiter.api.Test;
 import org.strassburger.tui4j.formatting.PlainTextRenderer;
-import org.strassburger.tui4j.formatting.TextFormatter;
 import org.strassburger.tui4j.input.validationrules.TextValidationRules;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
 

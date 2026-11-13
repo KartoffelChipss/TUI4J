@@ -8,14 +8,6 @@ import java.util.List;
 
 public class MultilineTextInput extends Input<String, MultilineTextInput> {
 
-    /**
-     * @deprecated Use {@link #MultilineTextInput(Printer)} instead
-     */
-    @Deprecated
-    public MultilineTextInput() {
-        super();
-    }
-
     public MultilineTextInput(Printer printer) {
         super(printer);
     }

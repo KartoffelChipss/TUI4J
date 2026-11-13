@@ -36,31 +36,8 @@ public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
      * <p>Example usage:</p>
      * <pre>
      * {@code
-     * NumberInput<Integer> input = new NumberInput<>(Integer.class)
-     *     .setLabel("Enter an integer:")
-     *     .setRetryOnInvalid(true);
-     *
-     * int value = input.read();
-     * System.out.println("You entered: " + value);
-     * }
-     * </pre>
-     * @deprecated Use {@link #NumberInput(Class, Printer)} instead
-     */
-    @Deprecated
-    public NumberInput(Class<U> type) {
-        super();
-        this.type = type;
-    }
-
-    /**
-     * Create a new NumberInput object.
-     * @param type The type of number to read (Integer, Double, etc.)
-     *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
-     * NumberInput<Integer> input = new NumberInput<>(Integer.class)
-     *     .setLabel("Enter an integer:")
+     * NumberInput<Integer> input = new NumberInput<>(Integer.class, new ConsolePrinter())
+     *     .setPrompt("Enter an integer:")
      *     .setRetryOnInvalid(true);
      *
      * int value = input.read();

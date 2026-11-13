@@ -7,14 +7,6 @@ import org.strassburger.tui4j.printer.Printer;
 
 public class BooleanInput extends Input<Boolean, BooleanInput> {
 
-    /**
-     * @deprecated Use {@link #BooleanInput(Printer)} instead
-     */
-    @Deprecated
-    public BooleanInput() {
-        super();
-    }
-
     public BooleanInput(Printer printer) {
         super(printer);
     }

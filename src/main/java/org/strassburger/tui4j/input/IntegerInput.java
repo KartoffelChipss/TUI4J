@@ -9,14 +9,6 @@ import org.strassburger.tui4j.printer.Printer;
 public class IntegerInput extends Input<Integer, IntegerInput> {
     private boolean inline = true;
 
-    /**
-     * @deprecated Use {@link #IntegerInput(Printer)} instead
-     */
-    @Deprecated
-    public IntegerInput() {
-        super();
-    }
-
     public IntegerInput(Printer printer) {
         super(printer);
     }
