@@ -55,7 +55,7 @@ public class DateInput extends Input<Date, DateInput> {
                 if (!isRetryOnInvalid()) {
                     throw e;
                 }
-                getPrinter().println(e.getMessage());
+                getPrinter().println(e.getStyledMessage());
             }
         }
     }

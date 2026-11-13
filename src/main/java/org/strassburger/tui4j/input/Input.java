@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.input;
 
+import org.jspecify.annotations.Nullable;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
@@ -18,7 +19,7 @@ import java.util.Scanner;
  * @param <S> the type of the input subclass
  */
 public abstract class Input<T, S extends Input<T, S>> {
-    private StyledText prompt = null;
+    private @Nullable StyledText prompt = null;
     private boolean retryOnInvalid = true;
     private StyledText errorMessage = StyledText.text("Invalid input. Please try again.").fg(AnsiColor.RED);
     private StyledText cursor = StyledText.text(">").fg(AnsiColor.BRIGHT_BLACK).append(" ").fg(AnsiColor.WHITE);
@@ -42,7 +43,6 @@ public abstract class Input<T, S extends Input<T, S>> {
      * @param printer the printer to use
      */
     public Input(Printer printer) {
-        if (printer == null) throw new IllegalArgumentException("Printer cannot be null");
         validationRules = new ArrayList<>();
         scanner = new Scanner(System.in);
         this.printer = printer;
@@ -186,12 +186,11 @@ public abstract class Input<T, S extends Input<T, S>> {
     protected void validate(T value) throws InputValidationException {
         for (ValidationRule<T> rule : validationRules) {
             if (!rule.validate(value)) {
+                StyledText errMessage = rule.getErrorMessage() != null ? rule.getErrorMessage() : errorMessage;
                 if (retryOnInvalid) {
-                    StyledText errMessage = rule.getErrorMessage() != null ? rule.getErrorMessage() : errorMessage;
                     printer.println(errMessage);
                     throw new RetryInputException(errMessage);
                 } else {
-                    StyledText errMessage = rule.getErrorMessage() != null ? rule.getErrorMessage() : errorMessage;
                     throw new InputValidationException(errMessage);
                 }
             }
@@ -202,11 +201,11 @@ public abstract class Input<T, S extends Input<T, S>> {
      * @deprecated Use {@link #getPrompt()} instead
      */
     @Deprecated
-    public StyledText getLabel() {
+    public @Nullable StyledText getLabel() {
         return prompt;
     }
 
-    public StyledText getPrompt() {
+    public @Nullable StyledText getPrompt() {
         return prompt;
     }
 

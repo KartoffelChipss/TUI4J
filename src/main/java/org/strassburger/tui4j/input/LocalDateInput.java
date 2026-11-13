@@ -42,7 +42,7 @@ public class LocalDateInput extends Input<LocalDate, LocalDateInput> {
                 if (!isRetryOnInvalid()) {
                     throw e;
                 }
-                getPrinter().println(e.getMessage());
+                getPrinter().println(e.getStyledMessage());
             }
         }
     }
