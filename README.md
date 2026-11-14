@@ -212,17 +212,17 @@ public class Main {
         Argument<String> nameArgument = Argument.str("name", true);
     
         Command command = Command.root()
-                .addSubCommand(
+                .subCommand(
                         Command.named("greet")
-                                .addOption(nameOption)
-                                .setHandler(context -> {
-                                  String name = context.getOptionValue(nameOption);
+                                .option(nameOption)
+                                .handler(context -> {
+                                  String name = context.optionValue(nameOption);
                                   console.println("Hello, " + name + "!");
                                 }),
                         Command.named("farewell")
-                                .addArgument(nameArgument)
-                                .setHandler(context -> {
-                                  String name = context.getArgumentValue(nameArgument);
+                                .argument(nameArgument)
+                                .handler(context -> {
+                                  String name = context.argumentValue(nameArgument);
                                   console.println("Goodbye, " + name + "!");
                                 })
                 );

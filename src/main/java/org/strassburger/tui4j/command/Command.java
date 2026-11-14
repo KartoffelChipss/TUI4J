@@ -24,11 +24,11 @@ public class Command {
         this.handler = handler;
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 
-    public List<Command> getSubCommands() {
+    public List<Command> subCommands() {
         return subCommands;
     }
 
@@ -39,17 +39,17 @@ public class Command {
      * can be represented as:<br/>
      * <pre>
      *     Command git = Command.named("git")
-     *         .addSubCommand(Command.named("commit"));
+     *         .subCommand(Command.named("commit"));
      * </pre>
      * @param command The Command(s) to add as sub-commands
      * @return The current Command instance for chaining
      */
-    public Command addSubCommand(Command... command) {
+    public Command subCommand(Command... command) {
         this.subCommands.addAll(List.of(command));
         return this;
     }
 
-    public List<Option<?>> getOptions() {
+    public List<Option<?>> options() {
         return options;
     }
 
@@ -60,17 +60,17 @@ public class Command {
      * can be represented as:<br/>
      * <pre>
      *     Command cmd = Command.named("remove")
-     *         .addOption(Option.bool("force", "force"), Option.str("file", "f", null));
+     *         .option(Option.bool("force", "force"), Option.str("file", "f", null));
      * </pre>
      * @param option The Option(s) to add
      * @return The current Command instance for chaining
      */
-    public Command addOption(Option<?>... option) {
+    public Command option(Option<?>... option) {
         this.options.addAll(List.of(option));
         return this;
     }
 
-    public List<Argument<?>> getArguments() {
+    public List<Argument<?>> arguments() {
         return arguments;
     }
 
@@ -81,17 +81,17 @@ public class Command {
      * can be represented as:<br/>
      * <pre>
      *     Command cmd = Command.named("copy")
-     *         .addArgument(Argument.str("source", true), Argument.str("destination", true));
+     *         .argument(Argument.str("source", true), Argument.str("destination", true));
      * </pre>
      * @param argument The Argument(s) to add
      * @return The current Command instance for chaining
      */
-    public Command addArgument(Argument<?>... argument) {
+    public Command argument(Argument<?>... argument) {
         this.arguments.addAll(List.of(argument));
         return this;
     }
 
-    public CommandHandler getHandler() {
+    public CommandHandler handler() {
         return handler;
     }
 
@@ -100,7 +100,7 @@ public class Command {
      * @param handler The CommandHandler to set
      * @return The current Command instance for chaining
      */
-    public Command setHandler(CommandHandler handler) {
+    public Command handler(CommandHandler handler) {
         this.handler = handler;
         return this;
     }
@@ -122,7 +122,7 @@ public class Command {
         return new Command(null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null);
     }
 
-    private String getFirstNotOptionArg(String[] args) {
+    private String firstNonOptionArg(String[] args) {
         for (String arg : args) {
             if (!arg.startsWith("-")) {
                 return arg;
@@ -141,10 +141,10 @@ public class Command {
     public void execute(String[] args) throws CommandException {
         if (handler == null && name != null) throw new IllegalStateException("No handler defined for command: " + name);
 
-        String firstArg = getFirstNotOptionArg(args);
+        String firstArg = firstNonOptionArg(args);
         if (firstArg != null) {
             for (Command subCommand : subCommands) {
-                if (subCommand.getName().equals(firstArg)) {
+                if (subCommand.name().equals(firstArg)) {
                     String[] subArgs = new String[args.length - 1];
                     int index = 0;
                     boolean skipped = false;

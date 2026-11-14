@@ -21,7 +21,7 @@ public class CommandContext {
         this.options = options;
 
         for (var entry : options.entrySet()) {
-            String optionsString = String.format("Option: %s, Value: %s", entry.getKey().getLongName(), entry.getValue());
+            String optionsString = String.format("Option: %s, Value: %s", entry.getKey().longName(), entry.getValue());
             System.out.println(optionsString);
         }
     }
@@ -30,7 +30,7 @@ public class CommandContext {
      * Retrieves the name of the command associated with this context.
      * @return The command name
      */
-    public String getCommandName() {
+    public String commandName() {
         return commandName;
     }
 
@@ -41,9 +41,9 @@ public class CommandContext {
      * @param <T> The type of the option's value
      * @return The value of the option, or its default value if not set
      */
-    public <T> T getOptionValue(Option<T> option) {
-        if (!options.containsKey(option)) return option.getDefaultValue();
-        return option.getType().cast(options.get(option));
+    public <T> T optionValue(Option<T> option) {
+        if (!options.containsKey(option)) return option.defaultValue();
+        return option.type().cast(options.get(option));
     }
 
     /**
@@ -53,10 +53,10 @@ public class CommandContext {
      * @param <T> The type of the option's value
      * @return The value of the option, or null if not found
      */
-    public <T> T getOptionValue(String optionName, Class<T> type) {
+    public <T> T optionValue(String optionName, Class<T> type) {
         for (var entry : options.entrySet()) {
-            if (entry.getKey().getLongName().equals(optionName)
-                    || entry.getKey().getShortName().equals(optionName)) {
+            if (entry.getKey().longName().equals(optionName)
+                    || entry.getKey().shortName().equals(optionName)) {
                 return type.cast(entry.getValue());
             }
         }
@@ -69,9 +69,9 @@ public class CommandContext {
      * @param <T> The type of the argument's value
      * @return The value of the argument
      */
-    public <T> T getArgumentValue(Argument<T> argument) {
+    public <T> T argumentValue(Argument<T> argument) {
         if (!arguments.containsKey(argument)) return null;
-        return argument.getType().cast(arguments.get(argument));
+        return argument.type().cast(arguments.get(argument));
     }
 
     /**
@@ -81,9 +81,9 @@ public class CommandContext {
      * @param <T> The type of the argument's value
      * @return The value of the argument, or null if not found
      */
-    public <T> T getArgumentValue(String argumentName, Class<T> type) {
+    public <T> T argumentValue(String argumentName, Class<T> type) {
         for (var entry : arguments.entrySet()) {
-            if (entry.getKey().getName().equals(argumentName)) {
+            if (entry.getKey().name().equals(argumentName)) {
                 return type.cast(entry.getValue());
             }
         }
@@ -94,7 +94,7 @@ public class CommandContext {
      * Retrieves the map of options and their corresponding values.
      * @return A map of Option instances to their values
      */
-    public Map<Option<?>, Object> getOptions() {
+    public Map<Option<?>, Object> options() {
         return options;
     }
 
@@ -102,7 +102,7 @@ public class CommandContext {
      * Retrieves the map of arguments and their corresponding values.
      * @return A map of Argument instances to their values
      */
-    public Map<Argument<?>, Object> getArguments() {
+    public Map<Argument<?>, Object> arguments() {
         return arguments;
     }
 }

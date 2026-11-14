@@ -11,15 +11,15 @@ public class Argument<T> {
         this.required = required;
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 
-    public Class<T> getType() {
+    public Class<T> type() {
         return type;
     }
 
-    public boolean isRequired() {
+    public boolean required() {
         return required;
     }
 

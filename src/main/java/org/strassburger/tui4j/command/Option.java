@@ -13,19 +13,19 @@ public class Option<T> {
         this.defaultValue = defaultValue;
     }
 
-    public String getLongName() {
+    public String longName() {
         return longName;
     }
 
-    public String getShortName() {
+    public String shortName() {
         return shortName;
     }
 
-    public Class<T> getType() {
+    public Class<T> type() {
         return type;
     }
 
-    public T getDefaultValue() {
+    public T defaultValue() {
         return defaultValue;
     }
 

@@ -22,13 +22,13 @@ public class CommandParser {
             }
         }
 
-        for (Argument<?> argument : command.getArguments()) {
-            if (!arguments.containsKey(argument) && argument.isRequired()) {
-                throw new MissingArgumentException(argument.getName());
+        for (Argument<?> argument : command.arguments()) {
+            if (!arguments.containsKey(argument) && argument.required()) {
+                throw new MissingArgumentException(argument.name());
             }
         }
 
-        return new CommandContext(command.getName(), arguments, options);
+        return new CommandContext(command.name(), arguments, options);
     }
 
     private static int parseLongOption(
@@ -39,19 +39,19 @@ public class CommandParser {
     ) throws CommandException {
         String optionName = args[index].substring(2);
 
-        Option<?> option = command.getOptions().stream()
-                .filter(opt -> opt.getLongName().equals(optionName))
+        Option<?> option = command.options().stream()
+                .filter(opt -> opt.longName().equals(optionName))
                 .findFirst()
                 .orElseThrow(() -> new UnknownOptionException(optionName));
 
         Object value;
-        if (option.getType() == Boolean.class) {
+        if (option.type() == Boolean.class) {
             value = true;
         } else {
             if (index + 1 >= args.length) {
                 throw new MissingOptionValueException(optionName);
             }
-            value = parseValue(option.getType(), args[++index]);
+            value = parseValue(option.type(), args[++index]);
         }
 
         options.put(option, value);
@@ -66,19 +66,19 @@ public class CommandParser {
     ) throws CommandException {
         String optionName = args[index].substring(1);
 
-        Option<?> option = command.getOptions().stream()
-                .filter(opt -> opt.getShortName().equals(optionName))
+        Option<?> option = command.options().stream()
+                .filter(opt -> opt.shortName().equals(optionName))
                 .findFirst()
                 .orElseThrow(() -> new UnknownOptionException(optionName));
 
         Object value;
-        if (option.getType() == Boolean.class) {
+        if (option.type() == Boolean.class) {
             value = true;
         } else {
             if (index + 1 >= args.length) {
                 throw new MissingOptionValueException(optionName);
             }
-            value = parseValue(option.getType(), args[++index]);
+            value = parseValue(option.type(), args[++index]);
         }
 
         options.put(option, value);
@@ -92,12 +92,12 @@ public class CommandParser {
             int index
     ) throws CommandException {
         int argIndex = arguments.size();
-        if (argIndex >= command.getArguments().size()) {
+        if (argIndex >= command.arguments().size()) {
             throw new TooManyArgumentsException();
         }
 
-        Argument<?> argument = command.getArguments().get(argIndex);
-        Object value = parseValue(argument.getType(), args[index]);
+        Argument<?> argument = command.arguments().get(argIndex);
+        Object value = parseValue(argument.type(), args[index]);
         arguments.put(argument, value);
 
         return index;
