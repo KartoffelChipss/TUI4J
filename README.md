@@ -42,7 +42,7 @@ TUI4J is a Java-based library for creating text-based user interfaces (TUIs).
 
 ## Installation
 
-Make sure to replace `0.0.0` with the version you want to use. (You can find the latest version [here](https://jitpack.io/#KartoffelChipss/TUI4J))
+Make sure to replace `0.0.0` with the version you want to use. (You can find the latest version [here](https://maven.strassburger.org/browse/org/strassburger/tui4j))
 
 ### Maven
 
