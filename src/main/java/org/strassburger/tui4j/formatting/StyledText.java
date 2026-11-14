@@ -4,7 +4,6 @@ import org.strassburger.colorlab4j.color.Color;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**

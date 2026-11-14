@@ -3,15 +3,21 @@ package org.strassburger.tui4j.console;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.layout.Renderable;
 
+import java.io.Flushable;
+import java.io.IOException;
+
 /**
  * An interface for printing text to various outputs
  */
-public interface Printer {
+public interface Printer extends Flushable {
     /**
      * Print a single character to the output
      * @param c the character to print
      */
     void print(char c);
+
+    @Override
+    void flush();
 
     /**
      * Print raw text to the output

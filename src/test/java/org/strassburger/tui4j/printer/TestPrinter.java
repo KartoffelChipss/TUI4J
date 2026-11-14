@@ -38,6 +38,11 @@ public class TestPrinter implements Printer {
     }
 
     @Override
+    public void flush() {
+
+    }
+
+    @Override
     public void print(String text) {
         output.append(text);
     }

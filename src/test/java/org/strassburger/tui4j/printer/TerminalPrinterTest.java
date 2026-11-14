@@ -3,11 +3,11 @@ package org.strassburger.tui4j.printer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.strassburger.tui4j.console.TerminalConsole;
+import org.strassburger.tui4j.console.terminal.Terminal;
 import org.strassburger.tui4j.formatting.Span;
 import org.strassburger.tui4j.formatting.StyledText;
 
 import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -18,10 +18,11 @@ class TerminalConsoleTest {
     @BeforeEach
     void setUp() {
         outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        console = new TerminalConsole((StyledText text) ->
-                text.getSpans().stream().map(Span::getText).reduce("", String::concat));
+        console = new TerminalConsole(
+                new Terminal(),
+                (StyledText text) -> text.getSpans().stream().map(Span::getText).reduce("", String::concat),
+                outContent
+        );
     }
 
     @Test
