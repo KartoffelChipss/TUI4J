@@ -17,7 +17,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(5));
         assertFalse(rule.validate(15));
 
-        assertEquals("This field must be less than 10.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must be less than 10.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -27,7 +27,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(15));
         assertFalse(rule.validate(5));
 
-        assertEquals("This field must be greater than 10.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must be greater than 10.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -38,7 +38,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(10));
         assertFalse(rule.validate(15));
 
-        assertEquals("This field must be less than or equal to 10.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must be less than or equal to 10.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -49,7 +49,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(10));
         assertFalse(rule.validate(5));
 
-        assertEquals("This field must be greater than or equal to 10.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must be greater than or equal to 10.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -59,7 +59,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(5.0));
         assertFalse(rule.validate(15.0));
 
-        assertEquals("This field must be less than 10.5.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must be less than 10.5.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -69,7 +69,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(15.0));
         assertFalse(rule.validate(5.0));
 
-        assertEquals("This field must be greater than 10.5.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must be greater than 10.5.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -80,7 +80,7 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(10.5));
         assertFalse(rule.validate(15.0));
 
-        assertEquals("This field must be less than or equal to 10.5.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must be less than or equal to 10.5.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -91,6 +91,6 @@ class NumberValidationRulesTest {
         assertTrue(rule.validate(10.5));
         assertFalse(rule.validate(5.0));
 
-        assertEquals("This field must be greater than or equal to 10.5.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must be greater than or equal to 10.5.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 }

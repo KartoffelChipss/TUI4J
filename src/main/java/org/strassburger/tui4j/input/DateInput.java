@@ -32,7 +32,7 @@ public class DateInput extends Input<LocalDate, DateInput> {
         }
     }
 
-    public String getDateFormat() {
+    public String dateFormat() {
         return dateFormat;
     }
 
@@ -41,13 +41,17 @@ public class DateInput extends Input<LocalDate, DateInput> {
      * @param dateFormat the date format to use (e.g., "dd/MM/yyyy")
      * @return the DateInput object
      */
-    public DateInput setDateFormat(String dateFormat) {
+    public DateInput dateFormat(String dateFormat) {
         this.dateFormat = dateFormat;
         return this;
     }
 
-    public DateInput setInline(boolean inline) {
+    public DateInput inline(boolean inline) {
         this.inline = inline;
         return this;
+    }
+
+    public boolean inline() {
+        return inline;
     }
 }

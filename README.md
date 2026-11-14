@@ -115,19 +115,19 @@ public class Main {
     console.println(" ");
 
     String name = console.read(new TextInput()
-            .setPrompt("What is your name? ")
-            .setInline(true));
+            .prompt("What is your name? ")
+            .inline(true));
 
     String gender = console.read(new SelectInput<String>()
-            .setPrompt("Select your gender: ")
-            .addOption("Male", "Male")
-            .addOption("Female", "Female")
-            .addOption("Other", "Other")
-            .setOptionsStyle(StyledText.text(" (%num%) ").fg(AnsiColor.CYAN).append("%label%")));
+            .prompt("Select your gender: ")
+            .option("Male", "Male")
+            .option("Female", "Female")
+            .option("Other", "Other")
+            .optionsStyle(StyledText.text(" (%num%) ").fg(AnsiColor.CYAN).append("%label%")));
 
     String email = console.read(new TextInput()
-            .setPrompt("What is your email address?")
-            .addValidationRule(
+            .prompt("What is your email address?")
+            .validationRule(
                     new ValidationRule<String>() {
                       @Override
                       public boolean validate(String s) {
@@ -135,25 +135,25 @@ public class Main {
                       }
 
                       @Override
-                      public StyledText getErrorMessage() {
+                      public StyledText errorMessage() {
                         return StyledText.text("Email address must contain '@' and '.'").fg(AnsiColor.RED);
                       }
                     }
             ));
 
     String about = console.read(new MultilineTextInput()
-            .setPrompt("Tell me about yourself: ")
-            .addValidationRule(TextValidationRules.minLength(30)));
+            .prompt("Tell me about yourself: ")
+            .validationRule(TextValidationRules.minLength(30)));
 
     int age = console.read(new IntegerInput()
-            .setPrompt("How old are you? ")
-            .addValidationRule(NumberValidationRules.greaterThan(0))
-            .addValidationRule(NumberValidationRules.lessThan(150)));
+            .prompt("How old are you? ")
+            .validationRule(NumberValidationRules.greaterThan(0))
+            .validationRule(NumberValidationRules.lessThan(150)));
 
     double height = console.read(new DoubleInput()
-            .setPrompt("How tall are you? ")
-            .addValidationRule(NumberValidationRules.greaterThan(0.0))
-            .addValidationRule(NumberValidationRules.lessThan(3.0)));
+            .prompt("How tall are you? ")
+            .validationRule(NumberValidationRules.greaterThan(0.0))
+            .validationRule(NumberValidationRules.lessThan(3.0)));
 
     console.println(" ");
     console.println(StyledText.text("Your Inputs:").fg(AnsiColor.BRIGHT_WHITE).bold());
@@ -170,7 +170,7 @@ public class Main {
     console.println(" ");
 
     boolean shouldContinue = console.read(new BooleanInput()
-            .setPrompt("Do you want to continue? (y/n)"));
+            .prompt("Do you want to continue? (y/n)"));
 
     if (shouldContinue) {
       console.println("Continuing...");

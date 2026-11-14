@@ -6,7 +6,7 @@ public class MultilineTextInput extends Input<String, MultilineTextInput> {
 
     @Override
     protected void printPrompt(Console console) {
-        if (getPrompt() != null) console.println(getPrompt());
+        if (prompt() != null) console.println(prompt());
     }
 
     /**

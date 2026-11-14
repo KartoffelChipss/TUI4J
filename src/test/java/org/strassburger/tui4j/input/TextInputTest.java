@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
-import org.strassburger.tui4j.input.TextInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
 import org.strassburger.tui4j.console.Console;
@@ -30,7 +29,7 @@ class TextInputTest {
             }
 
             @Override
-            public StyledText getErrorMessage() {
+            public StyledText errorMessage() {
                 return StyledText.text("Name must be longer than 5 characters.").fg(AnsiColor.RED);
             }
         };
@@ -40,7 +39,7 @@ class TextInputTest {
     void testValidInput() throws InputValidationException {
         when(console.readLine()).thenReturn("John Doe");
 
-        textInput.setPrompt("What is your name?");
+        textInput.prompt("What is your name?");
 
         String result = textInput.read(console);
 
@@ -52,7 +51,7 @@ class TextInputTest {
     void testEmptyInput() throws InputValidationException {
         when(console.readLine()).thenReturn("").thenReturn("John Doe");
 
-        textInput.setPrompt("What is your name?");
+        textInput.prompt("What is your name?");
 
         String result = textInput.read(console);
 
@@ -64,9 +63,9 @@ class TextInputTest {
     void testInputWithValidationRule() {
         when(console.readLine()).thenReturn("John");
 
-        textInput.setPrompt("What is your name?");
-        textInput.setRetryOnInvalid(false);
-        textInput.addValidationRule(minFifeCharsRule);
+        textInput.prompt("What is your name?");
+        textInput.retryOnInvalid(false);
+        textInput.validationRule(minFifeCharsRule);
 
         InputValidationException exception = assertThrows(InputValidationException.class, () -> textInput.read(console));
         assertEquals("Name must be longer than 5 characters.", exception.getMessage());
@@ -77,9 +76,9 @@ class TextInputTest {
     void testInputWithRetryOnInvalid() throws InputValidationException {
         when(console.readLine()).thenReturn("John", "John", "John Doe");
 
-        textInput.setPrompt("What is your name?");
-        textInput.setRetryOnInvalid(true);
-        textInput.addValidationRule(minFifeCharsRule);
+        textInput.prompt("What is your name?");
+        textInput.retryOnInvalid(true);
+        textInput.validationRule(minFifeCharsRule);
 
         String result = textInput.read(console);
 

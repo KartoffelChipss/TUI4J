@@ -25,14 +25,14 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
 
     @Override
     protected void printPrompt(Console console) {
-        if (getPrompt() != null) console.println(getPrompt());
+        if (prompt() != null) console.println(prompt());
         for (int i = 0; i < options.size(); i++) {
             StyledText message = optionsStyle
                     .replace("%num%", String.valueOf(i + 1))
-                    .replace("%label%", options.get(i).getLabel());
+                    .replace("%label%", options.get(i).label());
             console.println(message);
         }
-        console.print(getCursor());
+        console.print(cursor());
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
         try {
             int selectedIndex = Integer.parseInt(input) - 1;
             if (selectedIndex >= 0 && selectedIndex < options.size()) {
-                return options.get(selectedIndex).getValue();
+                return options.get(selectedIndex).value();
             }
         } catch (NumberFormatException ignored) {
             // handled below
@@ -59,7 +59,7 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
      * @param value The value that will be returned when the user selects this option
      * @return The select input object
      */
-    public SelectInput<T> addOption(String label, T value) {
+    public SelectInput<T> option(String label, T value) {
         this.options.add(new Option<>(label, value));
         return this;
     }
@@ -69,7 +69,7 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
      * @param options The options to add
      * @return The select input object
      */
-    public SelectInput<T> addOptions(List<Option<T>> options) {
+    public SelectInput<T> options(List<Option<T>> options) {
         this.options.addAll(options);
         return this;
     }
@@ -79,7 +79,7 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
      * @param optionsStyle The style of the options (%num% will be replaced with the number of the option, %label% will be replaced with the label of the option)
      * @return The select input object
      */
-    public SelectInput<T> setOptionsStyle(StyledText optionsStyle) {
+    public SelectInput<T> optionsStyle(StyledText optionsStyle) {
         this.optionsStyle = optionsStyle;
         return this;
     }
@@ -89,9 +89,17 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
      * @param optionsStyle The style of the options (%num% will be replaced with the number of the option, %label% will be replaced with the label of the option)
      * @return The select input object
      */
-    public SelectInput<T> setOptionsStyle(String optionsStyle) {
+    public SelectInput<T> optionsStyle(String optionsStyle) {
         this.optionsStyle = StyledText.text(optionsStyle);
         return this;
+    }
+
+    public List<Option<T>> options() {
+        return options;
+    }
+
+    public StyledText optionsStyle() {
+        return optionsStyle;
     }
 
     /**
@@ -111,11 +119,11 @@ public class SelectInput<T> extends Input<T, SelectInput<T>> {
             this.value = value;
         }
 
-        public String getLabel() {
+        public String label() {
             return label;
         }
 
-        public T getValue() {
+        public T value() {
             return value;
         }
     }

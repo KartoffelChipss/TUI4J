@@ -6,7 +6,7 @@ public class ContinueInput extends Input<Void, ContinueInput> {
     @Override
     @SuppressWarnings("NullAway") // Void can only ever be null
     public Void read(Console console) {
-        if (getPrompt() != null) console.println(getPrompt());
+        if (prompt() != null) console.println(prompt());
         console.readLine();
         return null;
     }

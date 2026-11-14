@@ -29,7 +29,7 @@ public class DateInputTest {
     void testValidDateInput() throws InputValidationException {
         when(console.readLine()).thenReturn("2023-12-31");
 
-        dateInput.setPrompt("Enter a date (yyyy-MM-dd):");
+        dateInput.prompt("Enter a date (yyyy-MM-dd):");
 
         LocalDate result = dateInput.read(console);
 
@@ -42,8 +42,8 @@ public class DateInputTest {
     void testInvalidDateFormat() {
         when(console.readLine()).thenReturn("31-12-2023");
 
-        dateInput.setPrompt("Enter a date (yyyy-MM-dd):");
-        dateInput.setRetryOnInvalid(false);
+        dateInput.prompt("Enter a date (yyyy-MM-dd):");
+        dateInput.retryOnInvalid(false);
 
         InputValidationException exception = assertThrows(InputValidationException.class, () -> dateInput.read(console));
         assertEquals("Invalid date format. Expected format: yyyy-MM-dd", exception.getMessage());
@@ -54,8 +54,8 @@ public class DateInputTest {
     void testDateInputWithRetryOnInvalid() throws InputValidationException {
         when(console.readLine()).thenReturn("31-12-2023", "2023-12-31");
 
-        dateInput.setPrompt("Enter a date (yyyy-MM-dd):");
-        dateInput.setRetryOnInvalid(true);
+        dateInput.prompt("Enter a date (yyyy-MM-dd):");
+        dateInput.retryOnInvalid(true);
 
         LocalDate result = dateInput.read(console);
 
@@ -67,8 +67,8 @@ public class DateInputTest {
     void testDateInputWithCustomFormat() throws InputValidationException {
         when(console.readLine()).thenReturn("31/12/2023");
 
-        dateInput.setPrompt("Enter a date (dd/MM/yyyy):");
-        dateInput.setDateFormat("dd/MM/yyyy");
+        dateInput.prompt("Enter a date (dd/MM/yyyy):");
+        dateInput.dateFormat("dd/MM/yyyy");
 
         LocalDate result = dateInput.read(console);
 
@@ -80,9 +80,9 @@ public class DateInputTest {
     void testDateInputWithValidationRule() {
         when(console.readLine()).thenReturn("2023-01-01");
 
-        dateInput.setPrompt("Enter a date (yyyy-MM-dd):");
-        dateInput.setRetryOnInvalid(false);
-        dateInput.addValidationRule(new ValidationRule<>() {
+        dateInput.prompt("Enter a date (yyyy-MM-dd):");
+        dateInput.retryOnInvalid(false);
+        dateInput.validationRule(new ValidationRule<>() {
             @Override
             public boolean validate(LocalDate input) {
                 // Example validation: date must be after 2023-06-01
@@ -90,7 +90,7 @@ public class DateInputTest {
             }
 
             @Override
-            public StyledText getErrorMessage() {
+            public StyledText errorMessage() {
                 return StyledText.text("Date must be after 2023-06-01.").fg(AnsiColor.RED);
             }
         });

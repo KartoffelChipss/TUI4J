@@ -2,7 +2,6 @@ package org.strassburger.tui4j.input;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.strassburger.tui4j.input.NumberInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.console.Console;
 
@@ -36,7 +35,7 @@ public class NumberInputTest {
     // Helper method to execute the tests on different types
     private <T extends Number> void testValidInput(NumberInput<T> input, T expectedValue) {
         when(console.readLine()).thenReturn(expectedValue.toString());
-        input.setPrompt("What is your value?");
+        input.prompt("What is your value?");
 
         T result = input.read(console);
 
@@ -46,8 +45,8 @@ public class NumberInputTest {
     // Helper method to test invalid input behavior
     private <T extends Number> void testInvalidInput(NumberInput<T> input) {
         when(console.readLine()).thenReturn("abc");
-        input.setRetryOnInvalid(false);
-        input.setPrompt("What is your value?");
+        input.retryOnInvalid(false);
+        input.prompt("What is your value?");
 
         assertThrows(InputValidationException.class, () -> input.read(console));
     }
@@ -56,8 +55,8 @@ public class NumberInputTest {
     private <T extends Number> void testRetryOnInvalid(NumberInput<T> input, T validValue) {
         when(console.readLine()).thenReturn("abc").thenReturn(validValue.toString());
 
-        input.setRetryOnInvalid(true);
-        input.setPrompt("What is your value?");
+        input.retryOnInvalid(true);
+        input.prompt("What is your value?");
 
         T result = input.read(console);
 

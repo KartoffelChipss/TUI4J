@@ -2,7 +2,6 @@ package org.strassburger.tui4j.input;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.strassburger.tui4j.input.IntegerInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.validationrules.NumberValidationRules;
 import org.strassburger.tui4j.console.Console;
@@ -26,7 +25,7 @@ public class IntegerInputTest {
     void testValidInput() {
         when(console.readLine()).thenReturn("100");
 
-        input.setPrompt("What is your age?");
+        input.prompt("What is your age?");
 
         int result = input.read(console);
 
@@ -38,8 +37,8 @@ public class IntegerInputTest {
     void testInvalidInput() {
         when(console.readLine()).thenReturn("abc");
 
-        input.setRetryOnInvalid(false);
-        input.setPrompt("What is your age?");
+        input.retryOnInvalid(false);
+        input.prompt("What is your age?");
 
         assertThrows(InputValidationException.class, () -> input.read(console));
         verify(console, times(1)).readLine();
@@ -49,8 +48,8 @@ public class IntegerInputTest {
     void testRetryOnInvalid() {
         when(console.readLine()).thenReturn("abc").thenReturn("100");
 
-        input.setRetryOnInvalid(true);
-        input.setPrompt("What is your age?");
+        input.retryOnInvalid(true);
+        input.prompt("What is your age?");
 
         int result = input.read(console);
 
@@ -62,8 +61,8 @@ public class IntegerInputTest {
     void testValidationRules() {
         when(console.readLine()).thenReturn("0").thenReturn("100");
 
-        input.setPrompt("What is your age?");
-        input.addValidationRule(NumberValidationRules.greaterThan(0));
+        input.prompt("What is your age?");
+        input.validationRule(NumberValidationRules.greaterThan(0));
 
         int result = input.read(console);
 

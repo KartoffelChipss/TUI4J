@@ -22,7 +22,7 @@ public class DoubleInput extends Input<Double, DoubleInput> {
         }
     }
 
-    public DoubleInput setInline(boolean inline) {
+    public DoubleInput inline(boolean inline) {
         this.inline = inline;
         return this;
     }
@@ -32,8 +32,16 @@ public class DoubleInput extends Input<Double, DoubleInput> {
      * @param allowComma Whether to allow commas as decimal separators.
      * @return The DoubleInput object.
      */
-    public DoubleInput setAllowComma(boolean allowComma) {
+    public DoubleInput allowComma(boolean allowComma) {
         this.allowComma = allowComma;
         return this;
+    }
+
+    public boolean inline() {
+        return inline;
+    }
+
+    public boolean allowComma() {
+        return allowComma;
     }
 }

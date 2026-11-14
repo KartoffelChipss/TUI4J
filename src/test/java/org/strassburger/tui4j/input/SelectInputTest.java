@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.console.Console;
 
-import java.util.List;
-
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,10 +23,10 @@ public class SelectInputTest {
     void testValidInput() {
         when(console.readLine()).thenReturn("1");
 
-        input.addOption("Option A", "A")
-                .addOption("Option B", "B")
-                .addOption("Option C", "C");
-        input.setPrompt("Choose an option:");
+        input.option("Option A", "A")
+                .option("Option B", "B")
+                .option("Option C", "C");
+        input.prompt("Choose an option:");
 
         String result = input.read(console);
 
@@ -40,11 +38,11 @@ public class SelectInputTest {
     void testInvalidInput() {
         when(console.readLine()).thenReturn("4");
 
-        input.addOption("Option A", "A")
-                .addOption("Option B", "B")
-                .addOption("Option C", "C");
-        input.setPrompt("Choose an option:");
-        input.setRetryOnInvalid(false);
+        input.option("Option A", "A")
+                .option("Option B", "B")
+                .option("Option C", "C");
+        input.prompt("Choose an option:");
+        input.retryOnInvalid(false);
 
         assertThrows(InputValidationException.class, () -> input.read(console));
         verify(console, times(1)).readLine();
@@ -54,11 +52,11 @@ public class SelectInputTest {
     void testRetryOnInvalidInput() {
         when(console.readLine()).thenReturn("4").thenReturn("1");
 
-        input.addOption("Option A", "A")
-                .addOption("Option B", "B")
-                .addOption("Option C", "C");
-        input.setPrompt("Choose an option:");
-        input.setRetryOnInvalid(true);
+        input.option("Option A", "A")
+                .option("Option B", "B")
+                .option("Option C", "C");
+        input.prompt("Choose an option:");
+        input.retryOnInvalid(true);
 
         String result = input.read(console);
 
@@ -70,11 +68,11 @@ public class SelectInputTest {
     void testEmptyInput() {
         when(console.readLine()).thenReturn("");
 
-        input.addOption("Option A", "A")
-                .addOption("Option B", "B")
-                .addOption("Option C", "C");
-        input.setPrompt("Choose an option:");
-        input.setRetryOnInvalid(false);
+        input.option("Option A", "A")
+                .option("Option B", "B")
+                .option("Option C", "C");
+        input.prompt("Choose an option:");
+        input.retryOnInvalid(false);
 
         assertThrows(InputValidationException.class, () -> input.read(console));
         verify(console, times(1)).readLine();
@@ -84,11 +82,11 @@ public class SelectInputTest {
     void testInvalidFormatInput() {
         when(console.readLine()).thenReturn("abc");
 
-        input.addOption("Option A", "A")
-                .addOption("Option B", "B")
-                .addOption("Option C", "C");
-        input.setPrompt("Choose an option:");
-        input.setRetryOnInvalid(false);
+        input.option("Option A", "A")
+                .option("Option B", "B")
+                .option("Option C", "C");
+        input.prompt("Choose an option:");
+        input.retryOnInvalid(false);
 
         assertThrows(InputValidationException.class, () -> input.read(console));
         verify(console, times(1)).readLine();
@@ -98,11 +96,11 @@ public class SelectInputTest {
     void testOptionsStyle() {
         when(console.readLine()).thenReturn("2");
 
-        input.addOption("Option A", "A")
-                .addOption("Option B", "B")
-                .addOption("Option C", "C");
-        input.setPrompt("Choose an option:");
-        input.setOptionsStyle(" &8(%num%) &7%label%");
+        input.option("Option A", "A")
+                .option("Option B", "B")
+                .option("Option C", "C");
+        input.prompt("Choose an option:");
+        input.optionsStyle(" &8(%num%) &7%label%");
 
         String result = input.read(console);
 
@@ -117,11 +115,11 @@ public class SelectInputTest {
                 .thenReturn("5")
                 .thenReturn("1");
 
-        input.addOption("Option A", "A")
-                .addOption("Option B", "B")
-                .addOption("Option C", "C");
-        input.setPrompt("Choose an option:");
-        input.setRetryOnInvalid(true);
+        input.option("Option A", "A")
+                .option("Option B", "B")
+                .option("Option C", "C");
+        input.prompt("Choose an option:");
+        input.retryOnInvalid(true);
 
         String result = input.read(console);
 

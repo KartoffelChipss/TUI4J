@@ -7,7 +7,7 @@ public class BooleanInput extends Input<Boolean, BooleanInput> {
 
     @Override
     protected void printPrompt(Console console) {
-        if (getPrompt() != null) console.print(getPrompt());
+        if (prompt() != null) console.print(prompt());
     }
 
     @Override

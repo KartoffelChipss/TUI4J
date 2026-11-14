@@ -5,5 +5,5 @@ import org.strassburger.tui4j.formatting.StyledText;
 
 public interface ValidationRule<T> {
     boolean validate(T input);
-    @Nullable StyledText getErrorMessage();
+    @Nullable StyledText errorMessage();
 }

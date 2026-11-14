@@ -20,8 +20,12 @@ public class IntegerInput extends Input<Integer, IntegerInput> {
         }
     }
 
-    public IntegerInput setInline(boolean inline) {
+    public IntegerInput inline(boolean inline) {
         this.inline = inline;
         return this;
+    }
+
+    public boolean inline() {
+        return inline;
     }
 }

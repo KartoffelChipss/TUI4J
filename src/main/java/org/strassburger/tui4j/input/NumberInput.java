@@ -35,8 +35,8 @@ public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
      * <pre>
      * {@code
      * NumberInput<Integer> input = new NumberInput<>(Integer.class)
-     *     .setPrompt("Enter an integer:")
-     *     .setRetryOnInvalid(true);
+     *     .prompt("Enter an integer:")
+     *     .retryOnInvalid(true);
      *
      * int value = console.read(input);
      * System.out.println("You entered: " + value);
@@ -55,9 +55,9 @@ public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
     @Override
     @SuppressWarnings("unchecked")
     protected U parse(String input) throws InputValidationException {
-        Function<String, ? extends Number> parser = PARSERS.get(getTypeClass());
+        Function<String, ? extends Number> parser = PARSERS.get(type());
         if (parser == null) {
-            throw new UnsupportedOperationException("Unsupported number type: " + getTypeClass().getName());
+            throw new UnsupportedOperationException("Unsupported number type: " + type().getName());
         }
 
         if (!allowComma) input = input.replace(",", "");
@@ -73,7 +73,7 @@ public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
      * @param allowComma Whether to allow commas as decimal separators.
      * @return The current NumberInput object.
      */
-    public NumberInput<U> setAllowComma(boolean allowComma) {
+    public NumberInput<U> allowComma(boolean allowComma) {
         this.allowComma = allowComma;
         return this;
     }
@@ -83,12 +83,20 @@ public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
      * @param inline Whether to display the input prompt inline.
      * @return The current NumberInput object.
      */
-    public NumberInput<U> setInline(boolean inline) {
+    public NumberInput<U> inline(boolean inline) {
         this.inline = inline;
         return this;
     }
 
-    private Class<U> getTypeClass() {
+    public boolean allowComma() {
+        return allowComma;
+    }
+
+    public boolean inline() {
+        return inline;
+    }
+
+    public Class<U> type() {
         return type;
     }
 }

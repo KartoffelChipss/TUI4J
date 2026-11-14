@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
-import org.strassburger.tui4j.input.MultilineTextInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.input.validationrules.ValidationRule;
 import org.strassburger.tui4j.console.Console;
@@ -29,7 +28,7 @@ class MultilineTextInputTest {
             }
 
             @Override
-            public StyledText getErrorMessage() {
+            public StyledText errorMessage() {
                 return StyledText.text("Name must be longer than 30 characters.").fg(AnsiColor.RED);
             }
         };
@@ -39,7 +38,7 @@ class MultilineTextInputTest {
     void testValidInput() throws InputValidationException {
         when(console.readLine()).thenReturn("Das ist die erste zeile", "und das die zweite", "und das die dritte", "");
 
-        multilineTextInput.setPrompt("Tell us about yourself");
+        multilineTextInput.prompt("Tell us about yourself");
 
         String result = multilineTextInput.read(console);
 
@@ -51,9 +50,9 @@ class MultilineTextInputTest {
     void testInputWithValidationRule() {
         when(console.readLine()).thenReturn("I", "am", "god", "");
 
-        multilineTextInput.setPrompt("Tell us about yourself");
-        multilineTextInput.setRetryOnInvalid(false);
-        multilineTextInput.addValidationRule(minThirtyharsRule);
+        multilineTextInput.prompt("Tell us about yourself");
+        multilineTextInput.retryOnInvalid(false);
+        multilineTextInput.validationRule(minThirtyharsRule);
 
         InputValidationException exception = assertThrows(InputValidationException.class, () -> multilineTextInput.read(console));
         assertEquals("Name must be longer than 30 characters.", exception.getMessage());
@@ -64,9 +63,9 @@ class MultilineTextInputTest {
     void testInputWithRetryOnInvalid() throws InputValidationException {
         when(console.readLine()).thenReturn("I", "am", "god", "", "Das ist die erste zeile", "und das die zweite", "und das die dritte", "");
 
-        multilineTextInput.setPrompt("Tell us about yourself");
-        multilineTextInput.setRetryOnInvalid(true);
-        multilineTextInput.addValidationRule(minThirtyharsRule);
+        multilineTextInput.prompt("Tell us about yourself");
+        multilineTextInput.retryOnInvalid(true);
+        multilineTextInput.validationRule(minThirtyharsRule);
 
         String result = multilineTextInput.read(console);
 

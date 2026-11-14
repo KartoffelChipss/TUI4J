@@ -41,7 +41,7 @@ public class NumberValidationRules {
             }
 
             @Override
-            public StyledText getErrorMessage() {
+            public StyledText errorMessage() {
                 return errorMessage;
             }
         };
@@ -83,7 +83,7 @@ public class NumberValidationRules {
             }
 
             @Override
-            public StyledText getErrorMessage() {
+            public StyledText errorMessage() {
                 return errorMessage;
             }
         };
@@ -125,7 +125,7 @@ public class NumberValidationRules {
             }
 
             @Override
-            public StyledText getErrorMessage() {
+            public StyledText errorMessage() {
                 return errorMessage;
             }
         };
@@ -167,7 +167,7 @@ public class NumberValidationRules {
             }
 
             @Override
-            public StyledText getErrorMessage() {
+            public StyledText errorMessage() {
                 return errorMessage;
             }
         };

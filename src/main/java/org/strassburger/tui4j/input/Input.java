@@ -24,7 +24,7 @@ public abstract class Input<T, S extends Input<T, S>> {
 
     /**
      * Read the input value. Prints the prompt, reads the raw input, parses and validates it.
-     * If the input is invalid and {@link #isRetryOnInvalid()} is true, the error message is printed
+     * If the input is invalid and {@link #retryOnInvalid()} is true, the error message is printed
      * and the user is asked again.
      * @param console the console instance used to read the input
      * @return the input value
@@ -75,7 +75,7 @@ public abstract class Input<T, S extends Input<T, S>> {
      * @return the input object
      */
     @SuppressWarnings("unchecked")
-    public S setPrompt(String prompt) {
+    public S prompt(String prompt) {
         this.prompt = StyledText.text(prompt).fg(AnsiColor.BRIGHT_WHITE);
         return (S) this;
     }
@@ -86,7 +86,7 @@ public abstract class Input<T, S extends Input<T, S>> {
      * @return the input object
      */
     @SuppressWarnings("unchecked")
-    public S setPrompt(StyledText prompt) {
+    public S prompt(StyledText prompt) {
         this.prompt = prompt;
         return (S) this;
     }
@@ -97,7 +97,7 @@ public abstract class Input<T, S extends Input<T, S>> {
      * @return the input object
      */
     @SuppressWarnings("unchecked")
-    public S setRetryOnInvalid(boolean retryOnInvalid) {
+    public S retryOnInvalid(boolean retryOnInvalid) {
         this.retryOnInvalid = retryOnInvalid;
         return (S) this;
     }
@@ -108,7 +108,7 @@ public abstract class Input<T, S extends Input<T, S>> {
      * @return the input object
      */
     @SuppressWarnings("unchecked")
-    public S setErrorMessage(String errorMessage) {
+    public S errorMessage(String errorMessage) {
         this.errorMessage = StyledText.text(errorMessage).fg(AnsiColor.RED);
         return (S) this;
     }
@@ -119,7 +119,7 @@ public abstract class Input<T, S extends Input<T, S>> {
      * @return the input object
      */
     @SuppressWarnings("unchecked")
-    public S setErrorMessage(StyledText errorMessage) {
+    public S errorMessage(StyledText errorMessage) {
         this.errorMessage = errorMessage;
         return (S) this;
     }
@@ -130,7 +130,7 @@ public abstract class Input<T, S extends Input<T, S>> {
      * @return the input object
      */
     @SuppressWarnings("unchecked")
-    public S addValidationRule(ValidationRule<T> rule) {
+    public S validationRule(ValidationRule<T> rule) {
         this.validationRules.add(rule);
         return (S) this;
     }
@@ -141,18 +141,18 @@ public abstract class Input<T, S extends Input<T, S>> {
      * @return the input object
      */
     @SuppressWarnings("unchecked")
-    public S addValidationRules(List<ValidationRule<T>> rules) {
+    public S validationRules(List<ValidationRule<T>> rules) {
         validationRules.addAll(rules);
         return (S) this;
     }
 
     @SuppressWarnings("unchecked")
-    public S setCursor(StyledText cursor) {
+    public S cursor(StyledText cursor) {
         this.cursor = cursor;
         return (S) this;
     }
 
-    public StyledText getCursor() {
+    public StyledText cursor() {
         return cursor;
     }
 
@@ -164,7 +164,7 @@ public abstract class Input<T, S extends Input<T, S>> {
     protected void validate(T value) throws InputValidationException {
         for (ValidationRule<T> rule : validationRules) {
             if (!rule.validate(value)) {
-                StyledText ruleMessage = rule.getErrorMessage();
+                StyledText ruleMessage = rule.errorMessage();
                 throw new InputValidationException(ruleMessage != null ? ruleMessage : errorMessage);
             }
         }
@@ -178,25 +178,25 @@ public abstract class Input<T, S extends Input<T, S>> {
         return new InputValidationException(errorMessage);
     }
 
-    public @Nullable StyledText getPrompt() {
+    public @Nullable StyledText prompt() {
         return prompt;
     }
 
-    public boolean isRetryOnInvalid() {
+    public boolean retryOnInvalid() {
         return retryOnInvalid;
     }
 
-    public StyledText getErrorMessage() {
+    public StyledText errorMessage() {
         return errorMessage;
     }
 
     protected void printPromptAndCursor(Console console, boolean inline) {
-        if (getPrompt() != null) console.print(getPrompt());
+        if (prompt() != null) console.print(prompt());
 
         if (inline) console.print("");
         else {
-            if (getPrompt() != null) console.println();
-            console.print(getCursor());
+            if (prompt() != null) console.println();
+            console.print(cursor());
         }
     }
 }

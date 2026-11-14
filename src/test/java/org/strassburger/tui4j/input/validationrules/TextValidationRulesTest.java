@@ -18,7 +18,7 @@ class TextValidationRulesTest {
 
         assertTrue(rule.validate("NoSpaces"));
         assertFalse(rule.validate("Spaces Here"));
-        assertEquals("This field cannot contain spaces.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field cannot contain spaces.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -27,7 +27,7 @@ class TextValidationRulesTest {
 
         assertTrue(rule.validate("Valid"));
         assertFalse(rule.validate("Too"));
-        assertEquals("This field must be at least 5 characters long.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must be at least 5 characters long.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -36,7 +36,7 @@ class TextValidationRulesTest {
 
         assertTrue(rule.validate("Short"));
         assertFalse(rule.validate("ThisIsTooLong"));
-        assertEquals("This field must be at most 5 characters long.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must be at most 5 characters long.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -45,7 +45,7 @@ class TextValidationRulesTest {
 
         assertTrue(rule.validate("NotEmpty"));
         assertFalse(rule.validate(""));
-        assertEquals("This field cannot be empty.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field cannot be empty.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -54,7 +54,7 @@ class TextValidationRulesTest {
 
         assertTrue(rule.validate("Valid"));
         assertFalse(rule.validate("Invalid123"));
-        assertEquals("This field must match the regex: [A-Za-z]+", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must match the regex: [A-Za-z]+", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -63,7 +63,7 @@ class TextValidationRulesTest {
 
         assertTrue(rule.validate("NoNumbers"));
         assertFalse(rule.validate("Has123Numbers"));
-        assertEquals("This field cannot contain numbers.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field cannot contain numbers.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -72,6 +72,6 @@ class TextValidationRulesTest {
 
         assertTrue(rule.validate("Valid123"));
         assertFalse(rule.validate("Invalid!@#"));
-        assertEquals("This field must be alphanumeric.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("This field must be alphanumeric.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 }

@@ -37,7 +37,7 @@ public class DateValidationRules {
             }
 
             @Override
-            public StyledText getErrorMessage() {
+            public StyledText errorMessage() {
                 return errorMessage;
             }
         };
@@ -74,7 +74,7 @@ public class DateValidationRules {
             }
 
             @Override
-            public StyledText getErrorMessage() {
+            public StyledText errorMessage() {
                 return errorMessage;
             }
         };
@@ -114,7 +114,7 @@ public class DateValidationRules {
             }
 
             @Override
-            public StyledText getErrorMessage() {
+            public StyledText errorMessage() {
                 return errorMessage;
             }
         };
@@ -154,7 +154,7 @@ public class DateValidationRules {
             }
 
             @Override
-            public StyledText getErrorMessage() {
+            public StyledText errorMessage() {
                 return errorMessage;
             }
         };

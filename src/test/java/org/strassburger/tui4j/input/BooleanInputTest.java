@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.strassburger.tui4j.input.BooleanInput;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.console.Console;
 
@@ -27,7 +26,7 @@ public class BooleanInputTest {
     void testValidInput() throws InputValidationException {
         when(console.readLine()).thenReturn("yes");
 
-        input.setPrompt("Do you like ice cream?");
+        input.prompt("Do you like ice cream?");
 
         boolean result = input.read(console);
 
@@ -39,8 +38,8 @@ public class BooleanInputTest {
     void testInvalidInput() {
         when(console.readLine()).thenReturn("maybe");
 
-        input.setRetryOnInvalid(false);
-        input.setPrompt("Do you like ice cream?");
+        input.retryOnInvalid(false);
+        input.prompt("Do you like ice cream?");
 
         assertThrows(InputValidationException.class, () -> input.read(console));
         verify(console, times(1)).readLine();
@@ -48,7 +47,7 @@ public class BooleanInputTest {
 
     private void testBooleanInput(String inputValue, boolean expectedResult) throws InputValidationException {
         when(console.readLine()).thenReturn(inputValue);
-        input.setPrompt("Do you like ice cream?");
+        input.prompt("Do you like ice cream?");
 
         boolean result = input.read(console);
 

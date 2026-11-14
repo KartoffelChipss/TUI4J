@@ -11,8 +11,8 @@ import org.strassburger.tui4j.console.Console;
  * </p>
  * <pre>{@code
  * String name = console.read(new TextInput()
- *        .setPrompt("What is your name?")
- *        .setRetryOnInvalid(true));
+ *        .prompt("What is your name?")
+ *        .retryOnInvalid(true));
  * }</pre>
  */
 public class TextInput extends Input<String, TextInput> {
@@ -41,8 +41,12 @@ public class TextInput extends Input<String, TextInput> {
      * Set whether the input should be inline or not.
      * @param inline Whether the input should be inline or not
      */
-    public TextInput setInline(boolean inline) {
+    public TextInput inline(boolean inline) {
         this.inline = inline;
         return this;
+    }
+
+    public boolean inline() {
+        return inline;
     }
 }

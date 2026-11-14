@@ -21,7 +21,7 @@ class DateValidationRulesTest {
 
         assertTrue(rule.validate(futureDate));
         assertFalse(rule.validate(pastDate));
-        assertEquals("The date must be in the future.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("The date must be in the future.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -33,7 +33,7 @@ class DateValidationRulesTest {
 
         assertTrue(rule.validate(pastDate));
         assertFalse(rule.validate(futureDate));
-        assertEquals("The date must be in the past.", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("The date must be in the past.", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -46,7 +46,7 @@ class DateValidationRulesTest {
 
         assertTrue(rule.validate(futureDate));
         assertFalse(rule.validate(pastDate));
-        assertEquals("The date must be after " + comparisonDate + ".", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("The date must be after " + comparisonDate + ".", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 
     @Test
@@ -59,6 +59,6 @@ class DateValidationRulesTest {
 
         assertTrue(rule.validate(pastDate));
         assertFalse(rule.validate(futureDate));
-        assertEquals("The date must be before " + comparisonDate + ".", renderer.render(Objects.requireNonNull(rule.getErrorMessage())));
+        assertEquals("The date must be before " + comparisonDate + ".", renderer.render(Objects.requireNonNull(rule.errorMessage())));
     }
 }
