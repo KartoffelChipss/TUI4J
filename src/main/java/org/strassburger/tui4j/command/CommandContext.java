@@ -19,11 +19,6 @@ public class CommandContext {
         this.commandName = commandName;
         this.arguments = arguments;
         this.options = options;
-
-        for (var entry : options.entrySet()) {
-            String optionsString = String.format("Option: %s, Value: %s", entry.getKey().longName(), entry.getValue());
-            System.out.println(optionsString);
-        }
     }
 
     /**
