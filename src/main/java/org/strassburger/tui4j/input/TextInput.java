@@ -1,6 +1,7 @@
 package org.strassburger.tui4j.input;
 
 import org.strassburger.tui4j.console.Console;
+import org.strassburger.tui4j.formatting.StyledText;
 
 /**
  * <p>
@@ -10,12 +11,30 @@ import org.strassburger.tui4j.console.Console;
  * Example usage:
  * </p>
  * <pre>{@code
- * String name = console.read(new TextInput()
- *        .prompt("What is your name?")
+ * String name = console.read(TextInput.withPrompt("What is your name?")
  *        .retryOnInvalid(true));
  * }</pre>
  */
 public class TextInput extends Input<String, TextInput> {
+
+    /**
+     * Create a new TextInput with the given prompt
+     * @param prompt the prompt to display
+     * @return the new TextInput
+     */
+    public static TextInput withPrompt(String prompt) {
+        return new TextInput().prompt(prompt);
+    }
+
+    /**
+     * Create a new TextInput with the given prompt
+     * @param prompt the prompt to display
+     * @return the new TextInput
+     */
+    public static TextInput withPrompt(StyledText prompt) {
+        return new TextInput().prompt(prompt);
+    }
+
     private boolean inline;
 
     @Override

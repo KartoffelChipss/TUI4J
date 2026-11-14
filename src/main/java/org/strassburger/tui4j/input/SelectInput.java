@@ -12,6 +12,27 @@ import java.util.List;
  * @param <T> The type of the value that will be returned when the user selects an option
  */
 public class SelectInput<T> extends Input<T, SelectInput<T>> {
+
+    /**
+     * Create a new SelectInput with the given prompt
+     * @param prompt the prompt to display
+     * @param <T> the type of the option values
+     * @return the new SelectInput
+     */
+    public static <T> SelectInput<T> withPrompt(String prompt) {
+        return new SelectInput<T>().prompt(prompt);
+    }
+
+    /**
+     * Create a new SelectInput with the given prompt
+     * @param prompt the prompt to display
+     * @param <T> the type of the option values
+     * @return the new SelectInput
+     */
+    public static <T> SelectInput<T> withPrompt(StyledText prompt) {
+        return new SelectInput<T>().prompt(prompt);
+    }
+
     private final List<Option<T>> options;
     private StyledText optionsStyle = StyledText.text(" %num%. ").fg(AnsiColor.BRIGHT_WHITE).append(StyledText.text("%label%"));
 

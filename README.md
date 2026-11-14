@@ -114,19 +114,16 @@ public class Main {
     console.println(new FlexText(StyledText.text("Welcome to the TUI4J example application!").fg(AnsiColor.BLUE).bold()));
     console.println(" ");
 
-    String name = console.read(new TextInput()
-            .prompt("What is your name? ")
+    String name = console.read(TextInput.withPrompt("What is your name? ")
             .inline(true));
 
-    String gender = console.read(new SelectInput<String>()
-            .prompt("Select your gender: ")
+    String gender = console.read(SelectInput.<String>withPrompt("Select your gender: ")
             .option("Male", "Male")
             .option("Female", "Female")
             .option("Other", "Other")
             .optionsStyle(StyledText.text(" (%num%) ").fg(AnsiColor.CYAN).append("%label%")));
 
-    String email = console.read(new TextInput()
-            .prompt("What is your email address?")
+    String email = console.read(TextInput.withPrompt("What is your email address?")
             .validationRule(
                     new ValidationRule<String>() {
                       @Override
@@ -141,17 +138,14 @@ public class Main {
                     }
             ));
 
-    String about = console.read(new MultilineTextInput()
-            .prompt("Tell me about yourself: ")
+    String about = console.read(MultilineTextInput.withPrompt("Tell me about yourself: ")
             .validationRule(TextValidationRules.minLength(30)));
 
-    int age = console.read(new IntegerInput()
-            .prompt("How old are you? ")
+    int age = console.read(IntegerInput.withPrompt("How old are you? ")
             .validationRule(NumberValidationRules.greaterThan(0))
             .validationRule(NumberValidationRules.lessThan(150)));
 
-    double height = console.read(new DoubleInput()
-            .prompt("How tall are you? ")
+    double height = console.read(DoubleInput.withPrompt("How tall are you? ")
             .validationRule(NumberValidationRules.greaterThan(0.0))
             .validationRule(NumberValidationRules.lessThan(3.0)));
 
@@ -169,8 +163,7 @@ public class Main {
     console.println(FlexText.keyValue("Gender ", " " + gender));
     console.println(" ");
 
-    boolean shouldContinue = console.read(new BooleanInput()
-            .prompt("Do you want to continue? (y/n)"));
+    boolean shouldContinue = console.read(BooleanInput.withPrompt("Do you want to continue? (y/n)"));
 
     if (shouldContinue) {
       console.println("Continuing...");

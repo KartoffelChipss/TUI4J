@@ -2,6 +2,7 @@ package org.strassburger.tui4j.input;
 
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 import org.strassburger.tui4j.console.Console;
+import org.strassburger.tui4j.formatting.StyledText;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,29 @@ import java.util.function.Function;
  * @param <U> the type of number (Integer, Double, etc.)
  */
 public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
+
+    /**
+     * Create a new NumberInput with the given prompt
+     * @param type the type of number to read (Integer, Double, etc.)
+     * @param prompt the prompt to display
+     * @param <U> the type of number
+     * @return the new NumberInput
+     */
+    public static <U extends Number> NumberInput<U> withPrompt(Class<U> type, String prompt) {
+        return new NumberInput<>(type).prompt(prompt);
+    }
+
+    /**
+     * Create a new NumberInput with the given prompt
+     * @param type the type of number to read (Integer, Double, etc.)
+     * @param prompt the prompt to display
+     * @param <U> the type of number
+     * @return the new NumberInput
+     */
+    public static <U extends Number> NumberInput<U> withPrompt(Class<U> type, StyledText prompt) {
+        return new NumberInput<>(type).prompt(prompt);
+    }
+
     private static final Map<Class<? extends Number>, Function<String, ? extends Number>> PARSERS = new HashMap<>();
     private final Class<U> type;
     private boolean allowComma = true;
@@ -34,8 +58,7 @@ public class NumberInput<U extends Number> extends Input<U, NumberInput<U>> {
      * <p>Example usage:</p>
      * <pre>
      * {@code
-     * NumberInput<Integer> input = new NumberInput<>(Integer.class)
-     *     .prompt("Enter an integer:")
+     * NumberInput<Integer> input = NumberInput.withPrompt(Integer.class, "Enter an integer:")
      *     .retryOnInvalid(true);
      *
      * int value = console.read(input);

@@ -1,6 +1,7 @@
 package org.strassburger.tui4j.input;
 
 import org.strassburger.tui4j.console.Console;
+import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 
 import java.time.LocalDate;
@@ -8,6 +9,25 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class DateInput extends Input<LocalDate, DateInput> {
+
+    /**
+     * Create a new DateInput with the given prompt
+     * @param prompt the prompt to display
+     * @return the new DateInput
+     */
+    public static DateInput withPrompt(String prompt) {
+        return new DateInput().prompt(prompt);
+    }
+
+    /**
+     * Create a new DateInput with the given prompt
+     * @param prompt the prompt to display
+     * @return the new DateInput
+     */
+    public static DateInput withPrompt(StyledText prompt) {
+        return new DateInput().prompt(prompt);
+    }
+
     private String dateFormat = "yyyy-MM-dd";
     private boolean inline;
 

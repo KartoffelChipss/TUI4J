@@ -1,9 +1,29 @@
 package org.strassburger.tui4j.input;
 
 import org.strassburger.tui4j.console.Console;
+import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 
 public class DoubleInput extends Input<Double, DoubleInput> {
+
+    /**
+     * Create a new DoubleInput with the given prompt
+     * @param prompt the prompt to display
+     * @return the new DoubleInput
+     */
+    public static DoubleInput withPrompt(String prompt) {
+        return new DoubleInput().prompt(prompt);
+    }
+
+    /**
+     * Create a new DoubleInput with the given prompt
+     * @param prompt the prompt to display
+     * @return the new DoubleInput
+     */
+    public static DoubleInput withPrompt(StyledText prompt) {
+        return new DoubleInput().prompt(prompt);
+    }
+
     private boolean inline = true;
     private boolean allowComma = true;
 

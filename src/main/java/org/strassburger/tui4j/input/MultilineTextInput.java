@@ -1,8 +1,27 @@
 package org.strassburger.tui4j.input;
 
 import org.strassburger.tui4j.console.Console;
+import org.strassburger.tui4j.formatting.StyledText;
 
 public class MultilineTextInput extends Input<String, MultilineTextInput> {
+
+    /**
+     * Create a new MultilineTextInput with the given prompt
+     * @param prompt the prompt to display
+     * @return the new MultilineTextInput
+     */
+    public static MultilineTextInput withPrompt(String prompt) {
+        return new MultilineTextInput().prompt(prompt);
+    }
+
+    /**
+     * Create a new MultilineTextInput with the given prompt
+     * @param prompt the prompt to display
+     * @return the new MultilineTextInput
+     */
+    public static MultilineTextInput withPrompt(StyledText prompt) {
+        return new MultilineTextInput().prompt(prompt);
+    }
 
     @Override
     protected void printPrompt(Console console) {

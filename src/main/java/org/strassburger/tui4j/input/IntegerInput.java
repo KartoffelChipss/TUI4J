@@ -1,9 +1,29 @@
 package org.strassburger.tui4j.input;
 
 import org.strassburger.tui4j.console.Console;
+import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 
 public class IntegerInput extends Input<Integer, IntegerInput> {
+
+    /**
+     * Create a new IntegerInput with the given prompt
+     * @param prompt the prompt to display
+     * @return the new IntegerInput
+     */
+    public static IntegerInput withPrompt(String prompt) {
+        return new IntegerInput().prompt(prompt);
+    }
+
+    /**
+     * Create a new IntegerInput with the given prompt
+     * @param prompt the prompt to display
+     * @return the new IntegerInput
+     */
+    public static IntegerInput withPrompt(StyledText prompt) {
+        return new IntegerInput().prompt(prompt);
+    }
+
     private boolean inline = true;
 
     @Override
