@@ -30,16 +30,16 @@ public class Spinner implements Renderable, Runnable {
      * <pre>
      * {@code
      * Spinner spinner = new Spinner()
-     *         .setMessage(StyledText.text("Loading some stuff..."))
-     *         .setSpinnerColor(AnsiColor.CYAN)
-     *         .setSpeedMs(100)
-     *         .setSpinnerFrames(SpinnerFrames.SYNTHWAVE);
+     *         .message(StyledText.text("Loading some stuff..."))
+     *         .spinnerColor(AnsiColor.CYAN)
+     *         .speedMs(100)
+     *         .spinnerFrames(SpinnerFrames.SYNTHWAVE);
      * printer.print(spinner);
      *
      * for (int i = 0; i < 50; i++) {
      *     try {
      *         Thread.sleep(100);
-     *         spinner.setMessage(StyledText.text("Loading some stuff... " + (i + 1) * 2 + "%") );
+     *         spinner.message(StyledText.text("Loading some stuff... " + (i + 1) * 2 + "%") );
      *     } catch (InterruptedException e) {
      *         throw new RuntimeException(e);
      *     }
@@ -58,16 +58,16 @@ public class Spinner implements Renderable, Runnable {
      * <pre>
      * {@code
      * Spinner spinner = new Spinner()
-     *         .setMessage(StyledText.text("Loading some stuff..."))
-     *         .setSpinnerColor(AnsiColor.CYAN)
-     *         .setSpeedMs(100)
-     *         .setSpinnerFrames(SpinnerFrames.SYNTHWAVE);
+     *         .message(StyledText.text("Loading some stuff..."))
+     *         .spinnerColor(AnsiColor.CYAN)
+     *         .speedMs(100)
+     *         .spinnerFrames(SpinnerFrames.SYNTHWAVE);
      * printer.print(spinner);
      *
      * for (int i = 0; i < 50; i++) {
      *     try {
      *         Thread.sleep(100);
-     *         spinner.setMessage(StyledText.text("Loading some stuff... " + (i + 1) * 2 + "%") );
+     *         spinner.message(StyledText.text("Loading some stuff... " + (i + 1) * 2 + "%") );
      *     } catch (InterruptedException e) {
      *         throw new RuntimeException(e);
      *     }
@@ -116,12 +116,16 @@ public class Spinner implements Renderable, Runnable {
     /**
      * Update the message displayed next to the spinner
      */
-    public Spinner setMessage(StyledText message) {
+    public Spinner message(StyledText message) {
         this.message = message;
         return this;
     }
 
-    public List<StyledText> getSpinnerFrames() {
+    public StyledText message() {
+        return message;
+    }
+
+    public List<StyledText> spinnerFrames() {
         return spinnerFrames;
     }
 
@@ -131,7 +135,7 @@ public class Spinner implements Renderable, Runnable {
      * You can find a collection of predefined spinner frames in the {@link SpinnerFrames} class.
      * @throws IllegalArgumentException if the frames are invalid
      */
-    public Spinner setSpinnerFrames(List<StyledText> spinnerFrames) {
+    public Spinner spinnerFrames(List<StyledText> spinnerFrames) {
         if (!isValidFrames(spinnerFrames)) {
             throw new IllegalArgumentException("Spinner frames must be non-empty and of equal length");
         }
@@ -152,26 +156,26 @@ public class Spinner implements Renderable, Runnable {
         return true;
     }
 
-    public int getSpeedMs() {
+    public int speedMs() {
         return speedMs;
     }
 
     /**
      * Set the speed of the spinner animation in milliseconds
      */
-    public Spinner setSpeedMs(int speedMs) {
+    public Spinner speedMs(int speedMs) {
         this.speedMs = speedMs;
         return this;
     }
 
-    public Color getSpinnerColor() {
+    public Color spinnerColor() {
         return spinnerColor;
     }
 
     /**
      * Set the color of the spinner
      */
-    public Spinner setSpinnerColor(Color spinnerColor) {
+    public Spinner spinnerColor(Color spinnerColor) {
         this.spinnerColor = spinnerColor;
         return this;
     }

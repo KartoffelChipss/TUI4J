@@ -26,23 +26,23 @@ public class ProgressBarStyle {
         this.pointerChar = builder.pointerChar;
     }
 
-    public StyledText getStartDelimiter() {
+    public StyledText startDelimiter() {
         return startDelimiter;
     }
 
-    public StyledText getEndDelimiter() {
+    public StyledText endDelimiter() {
         return endDelimiter;
     }
 
-    public StyledText getFillChar() {
+    public StyledText fillChar() {
         return fillChar;
     }
 
-    public StyledText getEmptyChar() {
+    public StyledText emptyChar() {
         return emptyChar;
     }
 
-    public StyledText getPointerChar() {
+    public StyledText pointerChar() {
         return pointerChar;
     }
 
@@ -60,31 +60,31 @@ public class ProgressBarStyle {
             if (text.length() != 1) throw new IllegalArgumentException(name + " must be a single character");
         }
 
-        public Builder setStartDelimiter(StyledText startDelimiter) {
+        public Builder startDelimiter(StyledText startDelimiter) {
             validateSingleChar(startDelimiter, "startDelimiter");
             this.startDelimiter = startDelimiter;
             return this;
         }
 
-        public Builder setEndDelimiter(StyledText endDelimiter) {
+        public Builder endDelimiter(StyledText endDelimiter) {
             validateSingleChar(endDelimiter, "endDelimiter");
             this.endDelimiter = endDelimiter;
             return this;
         }
 
-        public Builder setFillChar(StyledText fillChar) {
+        public Builder fillChar(StyledText fillChar) {
             validateSingleChar(fillChar, "fillChar");
             this.fillChar = fillChar;
             return this;
         }
 
-        public Builder setEmptyChar(StyledText emptyChar) {
+        public Builder emptyChar(StyledText emptyChar) {
             validateSingleChar(emptyChar, "emptyChar");
             this.emptyChar = emptyChar;
             return this;
         }
 
-        public Builder setPointerChar(StyledText pointerChar) {
+        public Builder pointerChar(StyledText pointerChar) {
             validateSingleChar(pointerChar, "pointerChar");
             this.pointerChar = pointerChar;
             return this;
@@ -102,82 +102,82 @@ public class ProgressBarStyle {
     }
 
     public static final ProgressBarStyle DEFAULT = new Builder()
-            .setStartDelimiter(StyledText.text("["))
-            .setEndDelimiter(StyledText.text("]"))
-            .setFillChar(StyledText.text("="))
-            .setEmptyChar(StyledText.text(" "))
-            .setPointerChar(StyledText.text("="))
+            .startDelimiter(StyledText.text("["))
+            .endDelimiter(StyledText.text("]"))
+            .fillChar(StyledText.text("="))
+            .emptyChar(StyledText.text(" "))
+            .pointerChar(StyledText.text("="))
             .build();
 
     public static final ProgressBarStyle ARROW = new Builder()
-            .setStartDelimiter(StyledText.text("["))
-            .setEndDelimiter(StyledText.text("]"))
-            .setFillChar(StyledText.text("-"))
-            .setEmptyChar(StyledText.text(" "))
-            .setPointerChar(StyledText.text(">"))
+            .startDelimiter(StyledText.text("["))
+            .endDelimiter(StyledText.text("]"))
+            .fillChar(StyledText.text("-"))
+            .emptyChar(StyledText.text(" "))
+            .pointerChar(StyledText.text(">"))
             .build();
 
     public static final ProgressBarStyle BLOCK = new Builder()
-            .setStartDelimiter(StyledText.text("["))
-            .setEndDelimiter(StyledText.text("]"))
-            .setFillChar(StyledText.text("█"))
-            .setEmptyChar(StyledText.text("░"))
-            .setPointerChar(StyledText.text("█"))
+            .startDelimiter(StyledText.text("["))
+            .endDelimiter(StyledText.text("]"))
+            .fillChar(StyledText.text("█"))
+            .emptyChar(StyledText.text("░"))
+            .pointerChar(StyledText.text("█"))
             .build();
 
     public static final ProgressBarStyle SQUARES = new Builder()
-            .setStartDelimiter(StyledText.text("["))
-            .setEndDelimiter(StyledText.text("]"))
-            .setFillChar(StyledText.text("■"))
-            .setEmptyChar(StyledText.text("□"))
-            .setPointerChar(StyledText.text("■"))
+            .startDelimiter(StyledText.text("["))
+            .endDelimiter(StyledText.text("]"))
+            .fillChar(StyledText.text("■"))
+            .emptyChar(StyledText.text("□"))
+            .pointerChar(StyledText.text("■"))
             .build();
 
     public static final ProgressBarStyle DASHED = new Builder()
-            .setStartDelimiter(StyledText.text("["))
-            .setEndDelimiter(StyledText.text("]"))
-            .setFillChar(StyledText.text("="))
-            .setEmptyChar(StyledText.text("-"))
-            .setPointerChar(StyledText.text(">"))
+            .startDelimiter(StyledText.text("["))
+            .endDelimiter(StyledText.text("]"))
+            .fillChar(StyledText.text("="))
+            .emptyChar(StyledText.text("-"))
+            .pointerChar(StyledText.text(">"))
             .build();
 
     public static final ProgressBarStyle BRACKET = new Builder()
-            .setStartDelimiter(StyledText.text("<"))
-            .setEndDelimiter(StyledText.text(">"))
-            .setFillChar(StyledText.text("#"))
-            .setEmptyChar(StyledText.text("."))
-            .setPointerChar(StyledText.text("#"))
+            .startDelimiter(StyledText.text("<"))
+            .endDelimiter(StyledText.text(">"))
+            .fillChar(StyledText.text("#"))
+            .emptyChar(StyledText.text("."))
+            .pointerChar(StyledText.text("#"))
             .build();
 
     public static final ProgressBarStyle CIRCLE = new Builder()
-            .setStartDelimiter(StyledText.text("("))
-            .setEndDelimiter(StyledText.text(")"))
-            .setFillChar(StyledText.text("●"))
-            .setEmptyChar(StyledText.text("○"))
-            .setPointerChar(StyledText.text("●"))
+            .startDelimiter(StyledText.text("("))
+            .endDelimiter(StyledText.text(")"))
+            .fillChar(StyledText.text("●"))
+            .emptyChar(StyledText.text("○"))
+            .pointerChar(StyledText.text("●"))
             .build();
 
     public static final ProgressBarStyle SLASHED = new Builder()
-            .setStartDelimiter(StyledText.text("["))
-            .setEndDelimiter(StyledText.text("]"))
-            .setFillChar(StyledText.text("/"))
-            .setEmptyChar(StyledText.text("\\"))
-            .setPointerChar(StyledText.text("/"))
+            .startDelimiter(StyledText.text("["))
+            .endDelimiter(StyledText.text("]"))
+            .fillChar(StyledText.text("/"))
+            .emptyChar(StyledText.text("\\"))
+            .pointerChar(StyledText.text("/"))
             .build();
 
     public static final ProgressBarStyle STAR = new Builder()
-            .setStartDelimiter(StyledText.text("["))
-            .setEndDelimiter(StyledText.text("]"))
-            .setFillChar(StyledText.text("*"))
-            .setEmptyChar(StyledText.text("."))
-            .setPointerChar(StyledText.text("*"))
+            .startDelimiter(StyledText.text("["))
+            .endDelimiter(StyledText.text("]"))
+            .fillChar(StyledText.text("*"))
+            .emptyChar(StyledText.text("."))
+            .pointerChar(StyledText.text("*"))
             .build();
 
     public static final ProgressBarStyle FUTURISTIC = new Builder()
-            .setStartDelimiter(StyledText.text(" "))
-            .setEndDelimiter(StyledText.text(" "))
-            .setFillChar(StyledText.text("▰"))
-            .setEmptyChar(StyledText.text("▱"))
-            .setPointerChar(StyledText.text("▰"))
+            .startDelimiter(StyledText.text(" "))
+            .endDelimiter(StyledText.text(" "))
+            .fillChar(StyledText.text("▰"))
+            .emptyChar(StyledText.text("▱"))
+            .pointerChar(StyledText.text("▰"))
             .build();
 }

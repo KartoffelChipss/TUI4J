@@ -24,14 +24,14 @@ public class ProgressBar implements Renderable {
      * <pre>
      * {@code
      * ProgressBar progressBar = new ProgressBar()
-     *          .setMessage(StyledText.text("Loading some stuff..."))
-     *          .setStyle(ProgressBarStyle.SQUARES);
+     *          .message(StyledText.text("Loading some stuff..."))
+     *          .style(ProgressBarStyle.SQUARES);
      * printer.print(progressBar);
      *
      * for (int i = 0; i <= 100; i++) {
      *     Thread.sleep(50);
-     *     progressBar.setProgress(i);
-     *     progressBar.setMessage(StyledText.text("Loading some stuff... " + i + "%"));
+     *     progressBar.progress(i);
+     *     progressBar.message(StyledText.text("Loading some stuff... " + i + "%"));
      * }
      *
      * progressBar.complete(StyledText.text("✔ Loading complete!").fg(AnsiColor.GREEN).bold());
@@ -47,13 +47,13 @@ public class ProgressBar implements Renderable {
      * <pre>
      * {@code
      * ProgressBar progressBar = new ProgressBar(StyledText.text("Loading some stuff..."))
-     *          .setStyle(ProgressBarStyle.SQUARES);
+     *          .style(ProgressBarStyle.SQUARES);
      * printer.print(progressBar);
      *
      * for (int i = 0; i <= 100; i++) {
      *     Thread.sleep(50);
-     *     progressBar.setProgress(i);
-     *     progressBar.setMessage(StyledText.text("Loading some stuff... " + i + "%"));
+     *     progressBar.progress(i);
+     *     progressBar.message(StyledText.text("Loading some stuff... " + i + "%"));
      * }
      *
      * progressBar.complete(StyledText.text("✔ Loading complete!").fg(AnsiColor.GREEN).bold());
@@ -65,35 +65,35 @@ public class ProgressBar implements Renderable {
         this.message = message;
     }
 
-    public StyledText getMessage() {
+    public StyledText message() {
         return message;
     }
 
     /**
      * Set the message displayed next to the progress bar
      */
-    public ProgressBar setMessage(StyledText message) {
+    public ProgressBar message(StyledText message) {
         this.message = message;
         return this;
     }
 
-    public @Nullable Color getBarColor() {
+    public @Nullable Color barColor() {
         return barColor;
     }
 
     /**
      * Overwrite the color of the entire progress bar
      */
-    public ProgressBar setBarColor(Color barColor) {
+    public ProgressBar barColor(Color barColor) {
         this.barColor = barColor;
         return this;
     }
 
-    public ProgressBarStyle getStyle() {
+    public ProgressBarStyle style() {
         return style;
     }
 
-    public ProgressBar setStyle(ProgressBarStyle style) {
+    public ProgressBar style(ProgressBarStyle style) {
         this.style = style;
         return this;
     }
@@ -101,9 +101,14 @@ public class ProgressBar implements Renderable {
     /**
      * Update the progress percentage. Clamped between 0 and 100.
      */
-    public void setProgress(int progress) {
+    public ProgressBar progress(int progress) {
         this.progress = Math.min(100, Math.max(0, progress)); // Clamp 0-100
         renderBar();
+        return this;
+    }
+
+    public int progress() {
+        return progress;
     }
 
     /**
@@ -122,7 +127,7 @@ public class ProgressBar implements Renderable {
     public void complete(StyledText finalMessage, boolean clearAfter) {
         if (printer == null) throw new IllegalStateException("ProgressBar not initialized. Call render() first.");
         if (finalMessage == null) throw new IllegalArgumentException("finalMessage cannot be null");
-        setProgress(100);
+        progress(100);
 
         if (clearAfter) {
             int spacesToAppend = width - finalMessage.length();
@@ -149,11 +154,11 @@ public class ProgressBar implements Renderable {
         int filledLength = (int) ((progress / 100.0) * lengthForBar);
         int emptyLength = lengthForBar - filledLength;
 
-        StyledText bar = style.getStartDelimiter()
-                .append(style.getFillChar().repeat(filledLength > 0 ? filledLength - 1 : 0))
-                .append(filledLength > 0 ? style.getPointerChar() : StyledText.text(""))
-                .append(style.getEmptyChar().repeat(emptyLength))
-                .append(style.getEndDelimiter());
+        StyledText bar = style.startDelimiter()
+                .append(style.fillChar().repeat(filledLength > 0 ? filledLength - 1 : 0))
+                .append(filledLength > 0 ? style.pointerChar() : StyledText.text(""))
+                .append(style.emptyChar().repeat(emptyLength))
+                .append(style.endDelimiter());
 
         if (barColor != null) bar = bar.fg(barColor);
 

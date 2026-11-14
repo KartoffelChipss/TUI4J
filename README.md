@@ -152,10 +152,10 @@ public class Main {
     console.println(" ");
     console.println(StyledText.text("Your Inputs:").fg(AnsiColor.BRIGHT_WHITE).bold());
     console.println(new FlexText()
-            .addPart(StyledText.text("Name ").fg(AnsiColor.BRIGHT_WHITE))
-            .addPart(StyledText.text(" " + name).fg(AnsiColor.BRIGHT_WHITE))
-            .setJustify(FlexJustify.SPACE_BETWEEN)
-            .setSeparatorChar(StyledText.text(".").fg(AnsiColor.BRIGHT_BLACK))
+            .part(StyledText.text("Name ").fg(AnsiColor.BRIGHT_WHITE))
+            .part(StyledText.text(" " + name).fg(AnsiColor.BRIGHT_WHITE))
+            .justify(FlexJustify.SPACE_BETWEEN)
+            .separatorChar(StyledText.text(".").fg(AnsiColor.BRIGHT_BLACK))
     );
     console.println(FlexText.keyValue("Email ", " " + email));
     console.println(FlexText.keyValue("Age ", " " + age));
@@ -169,15 +169,15 @@ public class Main {
       console.println("Continuing...");
 
       Spinner spinner = new Spinner()
-              .setMessage(StyledText.text("Loading some stuff..."))
-              .setSpinnerColor(AnsiColor.CYAN)
-              .setSpinnerFrames(SpinnerFrames.SYNTHWAVE)
-              .setSpeedMs(100);
+              .message(StyledText.text("Loading some stuff..."))
+              .spinnerColor(AnsiColor.CYAN)
+              .spinnerFrames(SpinnerFrames.SYNTHWAVE)
+              .speedMs(100);
       console.print(spinner);
 
       for (int i = 0; i < 50; i++) {
         Thread.sleep(100);
-        spinner.setMessage(StyledText.text("Loading some stuff... " + (i + 1) * 2 + "%"));
+        spinner.message(StyledText.text("Loading some stuff... " + (i + 1) * 2 + "%"));
       }
 
       spinner.stop(StyledText.text("✔ Loading complete!").fg(AnsiColor.GREEN).bold());
@@ -279,16 +279,16 @@ public class Main {
     );
 
     Table table = new Table()
-            .setStyle(TableStyles.UNICODE_BOX.withBorderColor(AnsiColor.BRIGHT_BLACK))
-            .setHasHeader(true)
-            .setColumnGrow(0, 1)
-            .setColumnAlignment(0, ColumnAlign.START)
-            .setColumnAlignment(1, ColumnAlign.CENTER)
-            .setColumnAlignment(2, ColumnAlign.END)
-            .addRow(headers)
-            .addRow(row1)
-            .addRow(row2)
-            .addRow(row3);
+            .style(TableStyles.UNICODE_BOX.withBorderColor(AnsiColor.BRIGHT_BLACK))
+            .hasHeader(true)
+            .columnGrow(0, 1)
+            .columnAlignment(0, ColumnAlign.START)
+            .columnAlignment(1, ColumnAlign.CENTER)
+            .columnAlignment(2, ColumnAlign.END)
+            .row(headers)
+            .row(row1)
+            .row(row2)
+            .row(row3);
 
     printer.println(table);
   }

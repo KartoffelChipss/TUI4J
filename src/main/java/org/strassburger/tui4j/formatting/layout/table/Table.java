@@ -38,9 +38,13 @@ public class Table implements Renderable {
      * @param rows the list of rows, each row is a list of StyledText cells
      * @return the Table instance for chaining
      */
-    public Table setRows(List<List<StyledText>> rows) {
+    public Table rows(List<List<StyledText>> rows) {
         this.rows = rows;
         return this;
+    }
+
+    public List<List<StyledText>> rows() {
+        return rows;
     }
 
     /**
@@ -48,7 +52,7 @@ public class Table implements Renderable {
      * @param row the row to add
      * @return the Table instance for chaining
      */
-    public Table addRow(List<StyledText> row) {
+    public Table row(List<StyledText> row) {
         this.rows.add(row);
         return this;
     }
@@ -62,7 +66,7 @@ public class Table implements Renderable {
      * @param hasHeader true if the first row is a header
      * @return the Table instance for chaining
      */
-    public Table setHasHeader(boolean hasHeader) {
+    public Table hasHeader(boolean hasHeader) {
         this.hasHeader = hasHeader;
         return this;
     }
@@ -73,9 +77,18 @@ public class Table implements Renderable {
      * @param columnAlignments the alignment to set
      * @return the Table instance for chaining
      */
-    public Table setColumnAlignment(int col, ColumnAlign columnAlignments) {
+    public Table columnAlignment(int col, ColumnAlign columnAlignments) {
         this.columnAlignments.put(col, columnAlignments);
         return this;
+    }
+
+    /**
+     * Gets the alignment of a specific column
+     * @param col the column index
+     * @return the alignment of the column ({@link ColumnAlign#START} if not set)
+     */
+    public ColumnAlign columnAlignment(int col) {
+        return columnAlignments.getOrDefault(col, ColumnAlign.START);
     }
 
     /**
@@ -84,10 +97,21 @@ public class Table implements Renderable {
      * @param grow the grow factor (must be >= 0)
      * @return the Table instance for chaining
      */
-    public Table setColumnGrow(int col, int grow) {
+    public Table columnGrow(int col, int grow) {
         if (grow < 0) throw new IllegalArgumentException("grow must be greater than 0");
         this.columnGrow.put(col, grow);
         return this;
+    }
+
+    /**
+     * Gets the grow factor of a specific column
+     * @param col the column index
+     * @return the grow factor of the column (the default grow, or 0 if neither is set)
+     */
+    public int columnGrow(int col) {
+        Integer grow = columnGrow.get(col);
+        if (grow != null) return grow;
+        return defaultGrow != null ? defaultGrow : 0;
     }
 
     /**
@@ -95,10 +119,14 @@ public class Table implements Renderable {
      * @param grow the default grow factor (must be >= 0)
      * @return the Table instance for chaining
      */
-    public Table setDefaultGrow(int grow) {
+    public Table defaultGrow(int grow) {
         if (grow < 0) throw new IllegalArgumentException("grow must be >= 0");
         this.defaultGrow = grow;
         return this;
+    }
+
+    public @Nullable Integer defaultGrow() {
+        return defaultGrow;
     }
 
     /**
@@ -106,9 +134,13 @@ public class Table implements Renderable {
      * @param style the {@link TableStyle} to use (e.g. {@link TableStyles#DEFAULT})
      * @return the Table instance for chaining
      */
-    public Table setStyle(TableStyle style) {
+    public Table style(TableStyle style) {
         this.style = style;
         return this;
+    }
+
+    public TableStyle style() {
+        return style;
     }
 
     @Override

@@ -33,26 +33,26 @@ public class FlexText implements Renderable {
         this.parts.addAll(List.of(part));
     }
 
-    public List<StyledText> getParts() {
+    public List<StyledText> parts() {
         return parts;
     }
 
-    public FlexText setParts(List<StyledText> parts) {
+    public FlexText parts(List<StyledText> parts) {
         this.parts = parts;
         return this;
     }
 
-    public FlexText addPart(StyledText part) {
+    public FlexText part(StyledText part) {
         this.parts.add(part);
         return this;
     }
 
-    public FlexText addPart(String text) {
+    public FlexText part(String text) {
         this.parts.add(StyledText.text(text));
         return this;
     }
 
-    public FlexJustify getJustify() {
+    public FlexJustify justify() {
         return justify;
     }
 
@@ -61,12 +61,12 @@ public class FlexText implements Renderable {
      * @param justify the FlexJustify mode
      * @return the FlexText instance
      */
-    public FlexText setJustify(FlexJustify justify) {
+    public FlexText justify(FlexJustify justify) {
         this.justify = justify;
         return this;
     }
 
-    public int getGap() {
+    public int gap() {
         return gap;
     }
 
@@ -75,12 +75,12 @@ public class FlexText implements Renderable {
      * @param gap the number of separator characters to insert between parts
      * @return the FlexText instance
      */
-    public FlexText setGap(int gap) {
+    public FlexText gap(int gap) {
         this.gap = gap;
         return this;
     }
 
-    public StyledText getSeparatorChar() {
+    public StyledText separatorChar() {
         return separatorChar;
     }
 
@@ -89,7 +89,7 @@ public class FlexText implements Renderable {
      * @param separatorChar the StyledText to use as the separator
      * @return the FlexText instance
      */
-    public FlexText setSeparatorChar(StyledText separatorChar) {
+    public FlexText separatorChar(StyledText separatorChar) {
         this.separatorChar = separatorChar;
         return this;
     }
@@ -217,9 +217,9 @@ public class FlexText implements Renderable {
      */
     public static FlexText keyValue(StyledText key, StyledText value) {
         return new FlexText()
-                .addPart(key)
-                .addPart(value)
-                .setJustify(FlexJustify.SPACE_BETWEEN)
-                .setSeparatorChar(StyledText.text("⋅").fg(AnsiColor.BRIGHT_BLACK));
+                .part(key)
+                .part(value)
+                .justify(FlexJustify.SPACE_BETWEEN)
+                .separatorChar(StyledText.text("⋅").fg(AnsiColor.BRIGHT_BLACK));
     }
 }
