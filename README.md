@@ -9,30 +9,36 @@ TUI4J is a Java-based library for creating text-based user interfaces (TUIs).
 
 ![Demo](https://f.j4n.net/tui_demo.gif)
 
-*You can find the code for this demo [here](#example-usage).*
+*You can find the code for this demo [here](#formatting-and-inputs).*
 
 ## Features
 
 - Flexible Inputs
-  - Text Input
-  - Multiline Text Input
-  - Number Input
+  - Text and Multiline Text Input
+  - Number Input (Integer, Double)
   - Boolean Input
   - Selection Input
   - Date Input
   - Enter-To-Continue Input
+  - Built-in validation rules for text, numbers and dates, or your own
 - Easy text formatting
-  - Colors
+  - Foreground and background colors, bold and underline
+  - Automatic plain-text fallback for terminals without ANSI support
   - Flex Layouts (Centering, Justifying, Spacing)
-  - Tables
-  - Spinners and Loaders
+  - Tables with alignment, column growth and several border styles
+  - Spinners and Progress Bars with built-in styles
+- Fast console output
+  - One shared console for the whole program
+  - Batched output for printing large amounts of text quickly
+  - Safe to print from multiple threads
 - Command Line Parsing
   - Subcommands
-  - Options
-  - Arguments
+  - Typed Options and Arguments (string, integer, double, float, boolean)
+  - Clear errors for unknown options, missing arguments and invalid values
 - Customizable
   - Custom Input Prompts
   - Custom Input Validators
+  - Custom Renderers and Table Styles
 
 ## Installation
 
@@ -75,6 +81,13 @@ The API documentation can be found [here](https://tui4j.strassburger.org).
 
 ## Examples
 
+- [Formatting and Inputs](#formatting-and-inputs)
+- [Commands](#commands)
+- [Table](#table)
+- [Printing Large Output](#printing-large-output)
+
+All examples use `TerminalConsole.system()`, the console for stdin and stdout. Call it once and pass the console around instead of creating new consoles: several consoles on the same terminal can take each other's input and print out of order.
+
 ### Formatting and Inputs
 
 ```java
@@ -94,8 +107,8 @@ import org.strassburger.tui4j.console.Console;
 import org.strassburger.tui4j.console.TerminalConsole;
 
 public class Main {
-  public static void main(String[] args) {
-    Console console = new TerminalConsole();
+  public static void main(String[] args) throws InterruptedException {
+    Console console = TerminalConsole.system();
 
     console.println(" ");
     console.println(new FlexText(StyledText.text("Welcome to the TUI4J example application!").fg(AnsiColor.BLUE).bold()));
@@ -190,13 +203,17 @@ import org.strassburger.tui4j.command.Argument;
 import org.strassburger.tui4j.command.Command;
 import org.strassburger.tui4j.command.Option;
 import org.strassburger.tui4j.command.exceptions.CommandException;
-import org.strassburger.tui4j.formatting.layout.*;
-import org.strassburger.tui4j.input.*;
+import org.strassburger.tui4j.console.Console;
+import org.strassburger.tui4j.console.TerminalConsole;
+import org.strassburger.tui4j.formatting.StyledText;
+import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 
 public class Main {
     public static void main(String[] args) {
+        Console console = TerminalConsole.system();
+
         String[] testArgs = "farewell franky".split(" ");
-        System.out.println("Executing with args: " + String.join(" ", testArgs));
+        console.println("Executing with args: " + String.join(" ", testArgs));
     
         Option<String> nameOption = Option.str("name", "n", "World");
         Argument<String> nameArgument = Argument.str("name", true);
@@ -207,20 +224,20 @@ public class Main {
                                 .addOption(nameOption)
                                 .setHandler(context -> {
                                   String name = context.getOptionValue(nameOption);
-                                  System.out.println("Hello, " + name + "!");
+                                  console.println("Hello, " + name + "!");
                                 }),
                         Command.named("farewell")
                                 .addArgument(nameArgument)
                                 .setHandler(context -> {
                                   String name = context.getArgumentValue(nameArgument);
-                                  System.out.println("Goodbye, " + name + "!");
+                                  console.println("Goodbye, " + name + "!");
                                 })
                 );
     
         try {
             command.execute(testArgs);
         } catch (CommandException e) {
-            System.err.println("Error: " + e.getMessage());
+            console.println(StyledText.text("Error: " + e.getMessage()).fg(AnsiColor.RED));
         }
     }
 }
@@ -242,7 +259,7 @@ import java.util.List;
 
 public class Main {
   public static void main(String[] args) {
-    Printer printer = new TerminalConsole();
+    Printer printer = TerminalConsole.system();
 
     List<StyledText> headers = List.of(
             StyledText.text("Name").fg(AnsiColor.BRIGHT_WHITE).bold(),
@@ -284,6 +301,42 @@ public class Main {
   }
 }
 ```
+
+### Printing Large Output
+
+By default, the console flushes after every print call so output appears immediately. When printing a lot at once, wrap it in a batch: the output is buffered and flushed once at the end, which is much faster. Tables and other layouts are batched automatically.
+
+```java
+import org.strassburger.tui4j.console.Batch;
+import org.strassburger.tui4j.console.Console;
+import org.strassburger.tui4j.console.TerminalConsole;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class Main {
+  public static void main(String[] args) throws IOException {
+    Console console = TerminalConsole.system();
+
+    // Lambda form
+    console.batch(() -> {
+      for (int i = 0; i < 100_000; i++) {
+        console.println("Line " + i);
+      }
+    });
+
+    // try-with-resources form, for code that throws checked exceptions or returns early
+    try (Batch ignored = console.buffered()) {
+      for (String line : Files.readAllLines(Path.of("data.csv"))) {
+        console.println(line);
+      }
+    }
+  }
+}
+```
+
+Batches can be nested, and the console is flushed even if the code inside throws. A prompt printed inside a batch is still shown, because reading input always flushes first.
 
 ## License
 
