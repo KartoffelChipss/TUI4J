@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.console;
 
+import org.jspecify.annotations.Nullable;
 import org.strassburger.tui4j.input.Input;
 import org.strassburger.tui4j.input.exceptions.InputValidationException;
 
@@ -23,6 +24,22 @@ public interface Console extends Printer {
      * @return the line that was read
      */
     String readLine();
+
+    /**
+     * Reads the next line of input without showing what is typed, for passwords and other secrets.
+     * Implementations flush pending output first, so a prompt printed just before is shown.
+     *
+     * <p>If {@code mask} is not {@code null}, it is shown once for every typed character;
+     * if it is {@code null}, nothing is shown while typing. Implementations that cannot hide
+     * input, such as consoles not attached to a terminal, may fall back to {@link #readLine()}.
+     * The default implementation does exactly that.
+     *
+     * @param mask the character shown for each typed character, or {@code null} to show nothing
+     * @return the line that was read, without the line separator
+     */
+    default String readPassword(@Nullable Character mask) {
+        return readLine();
+    }
 
     /**
      * Reads a value using the given input, which prompts, parses and validates it

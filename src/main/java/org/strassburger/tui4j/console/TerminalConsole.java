@@ -11,7 +11,9 @@ import org.strassburger.tui4j.formatting.ansi.AnsiRenderer;
 import org.strassburger.tui4j.formatting.layout.Renderable;
 
 import java.io.*;
-import java.util.Scanner;
+import java.nio.charset.Charset;
+import java.util.Locale;
+import java.util.NoSuchElementException;
 
 /**
  * A {@link Console} that reads from stdin and writes to stdout (or another stream),
@@ -64,7 +66,7 @@ public class TerminalConsole implements Console {
 
     private final Terminal terminal;
     private final StyledTextRenderer textRenderer;
-    private final Scanner scanner = new Scanner(System.in);
+    private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in, Charset.defaultCharset()));
     private final PrintWriter out;
 
     private boolean autoflush;
@@ -75,7 +77,7 @@ public class TerminalConsole implements Console {
      * Every later call returns the same instance.
      *
      * <p>Most programs should use this instance and pass it around rather than constructing
-     * their own. Each console reads stdin through its own {@link Scanner}, which reads ahead,
+     * their own. Each console reads stdin through its own buffered reader, which reads ahead,
      * so two consoles on stdin can take each other's input. Each console also has its own
      * output buffer, so output from two consoles on stdout can appear out of order.
      *
@@ -240,7 +242,92 @@ public class TerminalConsole implements Console {
     @Override
     public String readLine() {
         flush();
-        return scanner.nextLine();
+        try {
+            String line = reader.readLine();
+            if (line == null) throw new NoSuchElementException("No line found");
+            return line;
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>On Unix-like systems, the terminal is switched with {@code stty} while reading and
+     * restored afterwards, also if the program is interrupted with Ctrl+C. With a mask,
+     * Backspace and Ctrl+U work, but other line editing such as the arrow keys does not.
+     * On Windows, nothing is shown while typing, even if a mask is given.
+     * If stdin is not a terminal (for example when input is piped), the line is read
+     * with {@link #readLine()}.
+     *
+     * @throws java.util.NoSuchElementException if stdin has no more lines
+     */
+    @Override
+    public String readPassword(@Nullable Character mask) {
+        flush();
+        if (isWindows()) return readPasswordWindows();
+
+        String saved = stty("-g");
+        if (saved == null) return readLine(); // stdin is not a terminal
+        String settings = saved.trim();
+
+        Thread restore = new Thread(() -> stty(settings), "tui4j-restore-tty");
+        Runtime.getRuntime().addShutdownHook(restore);
+        try {
+            if (mask == null) {
+                if (stty("-echo") == null) return readLine();
+                String line = readLine();
+                out.println(); // the newline of Enter is not echoed either
+                out.flush();
+                return line;
+            }
+            if (stty("-echo", "-icanon", "min", "1") == null) return readLine();
+            return MaskedLineReader.read(reader, out, mask);
+        } finally {
+            stty(settings);
+            try {
+                Runtime.getRuntime().removeShutdownHook(restore);
+            } catch (IllegalStateException ignored) {
+                // the JVM is already shutting down; the hook restores the terminal
+            }
+        }
+    }
+
+    private String readPasswordWindows() {
+        java.io.Console systemConsole = System.console();
+        if (systemConsole == null) return readLine();
+        char[] password = systemConsole.readPassword();
+        if (password == null) throw new NoSuchElementException("No line found");
+        return new String(password);
+    }
+
+    private boolean isWindows() {
+        return terminal.osName().toLowerCase(Locale.ROOT).contains("win");
+    }
+
+    /**
+     * Runs {@code stty} on this process's stdin.
+     *
+     * @return the output of stty, or {@code null} if it failed, for example because stdin is not a terminal
+     */
+    private static @Nullable String stty(String... args) {
+        String[] command = new String[args.length + 1];
+        command[0] = "stty";
+        System.arraycopy(args, 0, command, 1, args.length);
+        try {
+            Process p = new ProcessBuilder(command)
+                    .redirectInput(ProcessBuilder.Redirect.INHERIT)
+                    .redirectError(ProcessBuilder.Redirect.DISCARD)
+                    .start();
+            String output = new String(p.getInputStream().readAllBytes(), Charset.defaultCharset());
+            return p.waitFor() == 0 ? output : null;
+        } catch (IOException e) {
+            return null;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return null;
+        }
     }
 
     @Override
