@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.console;
 
+import org.jspecify.annotations.Nullable;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.layout.Renderable;
 
@@ -21,27 +22,27 @@ public interface Printer extends Flushable {
 
     /**
      * Print raw text to the output
-     * @param text the text to print
+     * @param text the text to print, or {@code null} to print {@code "null"}
      */
-    void print(String text);
+    void print(@Nullable String text);
 
     /**
      * Print styled text to the output
-     * @param text the styled text to print
+     * @param text the styled text to print, or {@code null} to print {@code "null"}
      */
-    void print(StyledText text);
+    void print(@Nullable StyledText text);
 
     /**
      * Print a renderable object to the output
-     * @param renderable the renderable object to print
+     * @param renderable the renderable object to print, or {@code null} to print {@code "null"}
      */
-    void print(Renderable renderable);
+    void print(@Nullable Renderable renderable);
 
     /**
      * Print the string representation of an object to the output
-     * @param object the object to print, converted using {@link String#valueOf(Object)}
+     * @param object the object to print, converted using {@link String#valueOf(Object)} (so {@code null} prints {@code "null"})
      */
-    void print(Object object);
+    void print(@Nullable Object object);
 
     /**
      * Print a newline to the output
@@ -56,27 +57,27 @@ public interface Printer extends Flushable {
 
     /**
      * Print raw text to the output with a newline
-     * @param text the text to print
+     * @param text the text to print, or {@code null} to print {@code "null"}
      */
-    void println(String text);
+    void println(@Nullable String text);
 
     /**
      * Print styled text to the output with a newline
-     * @param text the styled text to print
+     * @param text the styled text to print, or {@code null} to print {@code "null"}
      */
-    void println(StyledText text);
+    void println(@Nullable StyledText text);
 
     /**
      * Print a renderable object to the output with a newline
-     * @param renderable the renderable object to print
+     * @param renderable the renderable object to print, or {@code null} to print {@code "null"}
      */
-    void println(Renderable renderable);
+    void println(@Nullable Renderable renderable);
 
     /**
      * Print the string representation of an object to the output with a newline
-     * @param object the object to print, converted using {@link String#valueOf(Object)}
+     * @param object the object to print, converted using {@link String#valueOf(Object)} (so {@code null} prints {@code "null"})
      */
-    void println(Object object);
+    void println(@Nullable Object object);
 
     /**
      * Format and print text to the output

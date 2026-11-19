@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.printer;
 
+import org.jspecify.annotations.Nullable;
 import org.strassburger.tui4j.console.Printer;
 import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
@@ -43,22 +44,26 @@ public class TestPrinter implements Printer {
     }
 
     @Override
-    public void print(String text) {
+    public void print(@Nullable String text) {
         output.append(text);
     }
 
     @Override
-    public void print(StyledText text) {
-        output.append(textRenderer.render(text));
+    public void print(@Nullable StyledText text) {
+        output.append(text == null ? "null" : textRenderer.render(text));
     }
 
     @Override
-    public void print(Renderable renderable) {
+    public void print(@Nullable Renderable renderable) {
+        if (renderable == null) {
+            print((Object) null);
+            return;
+        }
         renderable.render(this, width, height);
     }
 
     @Override
-    public void print(Object object) {
+    public void print(@Nullable Object object) {
         output.append(object);
     }
 
@@ -73,23 +78,27 @@ public class TestPrinter implements Printer {
     }
 
     @Override
-    public void println(String text) {
+    public void println(@Nullable String text) {
         output.append(text).append(System.lineSeparator());
     }
 
     @Override
-    public void println(StyledText text) {
-        output.append(textRenderer.render(text)).append(System.lineSeparator());
+    public void println(@Nullable StyledText text) {
+        output.append(text == null ? "null" : textRenderer.render(text)).append(System.lineSeparator());
     }
 
     @Override
-    public void println(Renderable renderable) {
+    public void println(@Nullable Renderable renderable) {
+        if (renderable == null) {
+            println((Object) null);
+            return;
+        }
         renderable.render(this, width, height);
         output.append(System.lineSeparator());
     }
 
     @Override
-    public void println(Object object) {
+    public void println(@Nullable Object object) {
         output.append(object).append(System.lineSeparator());
     }
 

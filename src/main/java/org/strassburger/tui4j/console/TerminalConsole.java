@@ -337,25 +337,29 @@ public class TerminalConsole implements Console {
     }
 
     @Override
-    public synchronized void print(String text) {
+    public synchronized void print(@Nullable String text) {
         out.print(text);
         autoFlush();
     }
 
     @Override
-    public synchronized void print(StyledText text) {
-        out.print(textRenderer.render(text));
+    public synchronized void print(@Nullable StyledText text) {
+        out.print(text == null ? "null" : textRenderer.render(text));
         autoFlush();
     }
 
     @Override
-    public synchronized void print(Renderable renderable) {
+    public synchronized void print(@Nullable Renderable renderable) {
+        if (renderable == null) {
+            print((Object) null);
+            return;
+        }
         TerminalSize.Size size = terminal.size();
         batch(() -> renderable.render(this, size.width(), size.height()));
     }
 
     @Override
-    public synchronized void print(Object object) {
+    public synchronized void print(@Nullable Object object) {
         out.print(object);
         autoFlush();
     }
@@ -373,19 +377,23 @@ public class TerminalConsole implements Console {
     }
 
     @Override
-    public synchronized void println(String text) {
+    public synchronized void println(@Nullable String text) {
         out.println(text);
         autoFlush();
     }
 
     @Override
-    public synchronized void println(StyledText text) {
-        out.println(textRenderer.render(text));
+    public synchronized void println(@Nullable StyledText text) {
+        out.println(text == null ? "null" : textRenderer.render(text));
         autoFlush();
     }
 
     @Override
-    public synchronized void println(Renderable renderable) {
+    public synchronized void println(@Nullable Renderable renderable) {
+        if (renderable == null) {
+            println((Object) null);
+            return;
+        }
         TerminalSize.Size size = terminal.size();
         batch(() -> {
             renderable.render(this, size.width(), size.height());
@@ -394,7 +402,7 @@ public class TerminalConsole implements Console {
     }
 
     @Override
-    public synchronized void println(Object object) {
+    public synchronized void println(@Nullable Object object) {
         out.println(object);
         autoFlush();
     }
