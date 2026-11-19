@@ -1,5 +1,6 @@
 package org.strassburger.tui4j.formatting;
 
+import org.jspecify.annotations.Nullable;
 import org.strassburger.colorlab4j.color.Color;
 
 import java.util.*;
@@ -24,7 +25,7 @@ public final class StyledText {
 
     private final List<Span> spans;
 
-    private StyledText(List<Span> spans) {
+    private StyledText(@Nullable List<Span> spans) {
         this.spans = spans == null
                 ? List.of()
                 : List.copyOf(mergeSpans(spans));
@@ -52,7 +53,7 @@ public final class StyledText {
      * @param style the style to apply
      * @return the StyledText instance
      */
-    public static StyledText text(String text, Style style) {
+    public static StyledText text(String text, @Nullable Style style) {
         Objects.requireNonNull(text, "Text cannot be null");
         return new StyledText(List.of(new Span(text, style != null ? style : new Style())));
     }
@@ -236,7 +237,7 @@ public final class StyledText {
     }
 
     /**
-     * Make the last span italic
+     * Underline the last span
      * @return the modified StyledText
      */
     public StyledText underline() {
@@ -251,6 +252,43 @@ public final class StyledText {
         return modifyLast(Style::inverse);
     }
 
+    /**
+     * Make the last span italic
+     * @return the modified StyledText
+     */
+    public StyledText italic() {
+        return modifyLast(Style::italic);
+    }
+
+    /**
+     * Make the last span dim
+     * @return the modified StyledText
+     */
+    public StyledText dim() {
+        return modifyLast(Style::dim);
+    }
+
+    /**
+     * Make the last span blink
+     * <p>
+     * Note: Blinking text is not supported by every terminal and is often disabled by default.
+     * If the text does not blink, check the terminal settings. On macOS, both Terminal and iTerm2
+     * have a "Blinking text" option under Settings &rarr; Profiles &rarr; Text.
+     * </p>
+     * @return the modified StyledText
+     */
+    public StyledText blinking() {
+        return modifyLast(Style::blinking);
+    }
+
+    /**
+     * Hide the last span (ANSI conceal). The text still takes up space and can be selected or copied,
+     * so this must not be used to hide sensitive information such as passwords.
+     * @return the modified StyledText
+     */
+    public StyledText hidden() {
+        return modifyLast(Style::hidden);
+    }
 
     private static List<Span> mergeSpans(List<Span> spans) {
         if (spans.isEmpty()) return List.of();
