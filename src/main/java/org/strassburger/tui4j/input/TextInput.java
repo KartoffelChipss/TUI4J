@@ -45,6 +45,7 @@ public class TextInput extends Input<String, TextInput> {
     @Override
     protected String readInput(Console console) {
         String value = console.readLine();
+        if (defaultValue() != null) return value;
         while (value.isEmpty()) {
             value = console.readLine();
         }

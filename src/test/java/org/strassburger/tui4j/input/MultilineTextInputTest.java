@@ -72,4 +72,13 @@ class MultilineTextInputTest {
         assertEquals("Das ist die erste zeile\nund das die zweite\nund das die dritte", result);
         verify(console, times(8)).readLine();
     }
+
+    @Test
+    void testDefaultValueOnEmptyInput() throws InputValidationException {
+        when(console.readLine()).thenReturn("");
+
+        multilineTextInput.defaultValue("Nothing to say");
+
+        assertEquals("Nothing to say", multilineTextInput.read(console));
+    }
 }

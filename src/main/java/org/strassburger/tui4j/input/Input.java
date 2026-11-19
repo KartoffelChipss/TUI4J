@@ -21,9 +21,11 @@ public abstract class Input<T, S extends Input<T, S>> {
     private StyledText errorMessage = StyledText.text("Invalid input. Please try again.").fg(AnsiColor.RED);
     private StyledText cursor = StyledText.text(">").fg(AnsiColor.BRIGHT_BLACK).append(" ").fg(AnsiColor.WHITE);
     private final List<ValidationRule<T>> validationRules = new ArrayList<>();
+    private @Nullable T defaultValue = null;
 
     /**
      * Read the input value. Prints the prompt, reads the raw input, parses and validates it.
+     * If no input is provided (blank input) and a {@link #defaultValue()} is set, the default value is returned.
      * If the input is invalid and {@link #retryOnInvalid()} is true, the error message is printed
      * and the user is asked again.
      * @param console the console instance used to read the input
@@ -34,7 +36,9 @@ public abstract class Input<T, S extends Input<T, S>> {
         while (true) {
             printPrompt(console);
             try {
-                T value = parse(readInput(console));
+                String rawInput = readInput(console);
+                if (defaultValue != null && rawInput.isBlank()) return defaultValue;
+                T value = parse(rawInput);
                 validate(value);
                 return value;
             } catch (InputValidationException e) {
@@ -144,6 +148,25 @@ public abstract class Input<T, S extends Input<T, S>> {
     public S validationRules(List<ValidationRule<T>> rules) {
         validationRules.addAll(rules);
         return (S) this;
+    }
+
+    /**
+     * Set the default value which is returned when no input is provided (blank input).
+     * The default value is returned as-is and is not checked against the validation rules.
+     * @param defaultValue the default value, or {@code null} to require input
+     * @return the input object
+     */
+    @SuppressWarnings("unchecked")
+    public S defaultValue(@Nullable T defaultValue) {
+        this.defaultValue = defaultValue;
+        return (S) this;
+    }
+
+    /**
+     * @return the default value which is returned when no input is provided, or {@code null} if none is set
+     */
+    public @Nullable T defaultValue() {
+        return defaultValue;
     }
 
     @SuppressWarnings("unchecked")

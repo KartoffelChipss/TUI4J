@@ -65,4 +65,23 @@ public class BooleanInputTest {
     void testValidInputs(String inputValue, boolean expectedResult) throws InputValidationException {
         testBooleanInput(inputValue, expectedResult);
     }
+
+    @Test
+    void testDefaultValueOnEmptyInput() throws InputValidationException {
+        when(console.readLine()).thenReturn("  ");
+
+        input.defaultValue(true);
+
+        assertTrue(input.read(console));
+        verify(console, times(1)).readLine();
+    }
+
+    @Test
+    void testEmptyInputWithoutDefaultIsInvalid() {
+        when(console.readLine()).thenReturn("");
+
+        input.retryOnInvalid(false);
+
+        assertThrows(InputValidationException.class, () -> input.read(console));
+    }
 }

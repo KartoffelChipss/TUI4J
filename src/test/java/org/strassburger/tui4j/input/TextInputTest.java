@@ -85,4 +85,23 @@ class TextInputTest {
         assertEquals("John Doe", result);
         verify(console, times(3)).readLine();
     }
+
+    @Test
+    void testDefaultValueOnEmptyInput() throws InputValidationException {
+        when(console.readLine()).thenReturn("");
+
+        textInput.defaultValue("Anonymous");
+
+        assertEquals("Anonymous", textInput.read(console));
+        verify(console, times(1)).readLine();
+    }
+
+    @Test
+    void testDefaultValueIgnoredWhenInputProvided() throws InputValidationException {
+        when(console.readLine()).thenReturn("John Doe");
+
+        textInput.defaultValue("Anonymous");
+
+        assertEquals("John Doe", textInput.read(console));
+    }
 }

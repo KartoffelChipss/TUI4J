@@ -69,4 +69,14 @@ public class IntegerInputTest {
         assertEquals(100, result);
         verify(console, times(2)).readLine();
     }
+
+    @Test
+    void testDefaultValueOnEmptyInput() throws InputValidationException {
+        when(console.readLine()).thenReturn("");
+
+        input.defaultValue(42);
+
+        assertEquals(42, input.read(console));
+        verify(console, times(1)).readLine();
+    }
 }

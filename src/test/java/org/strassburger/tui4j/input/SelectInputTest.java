@@ -126,4 +126,15 @@ public class SelectInputTest {
         assertEquals("A", result);
         verify(console, times(3)).readLine();
     }
+
+    @Test
+    void testDefaultValueOnEmptyInput() throws InputValidationException {
+        when(console.readLine()).thenReturn("");
+
+        input.option("Option A", "A")
+                .option("Option B", "B")
+                .defaultValue("B");
+
+        assertEquals("B", input.read(console));
+    }
 }
