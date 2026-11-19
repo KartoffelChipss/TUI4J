@@ -39,7 +39,7 @@ public abstract class Input<T, S extends Input<T, S>> {
                 return value;
             } catch (InputValidationException e) {
                 if (!retryOnInvalid) throw e;
-                console.println(e.getStyledMessage());
+                console.println(e.styledMessage());
             }
         }
     }

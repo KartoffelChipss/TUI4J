@@ -30,7 +30,7 @@ public final class StyledText {
                 : List.copyOf(mergeSpans(spans));
     }
 
-    public List<Span> getSpans() {
+    public List<Span> spans() {
         return spans;
     }
 
@@ -142,8 +142,8 @@ public final class StyledText {
         List<Span> newSpans = new ArrayList<>();
 
         for (Span span : spans) {
-            String modifiedText = span.getText().replace(target, replacement);
-            newSpans.add(new Span(modifiedText, span.getStyle()));
+            String modifiedText = span.text().replace(target, replacement);
+            newSpans.add(new Span(modifiedText, span.style()));
         }
 
         return new StyledText(newSpans);
@@ -156,7 +156,7 @@ public final class StyledText {
     public int length() {
         int len = 0;
         for (Span span : spans) {
-            len += span.getText().length();
+            len += span.text().length();
         }
         return len;
     }
@@ -170,7 +170,7 @@ public final class StyledText {
     public StyledText substring(int beginIndex, int endIndex) {
         StringBuilder fullText = new StringBuilder();
         for (Span span : spans) {
-            fullText.append(span.getText());
+            fullText.append(span.text());
         }
         String substring = fullText.substring(beginIndex, endIndex);
         return StyledText.text(substring);
@@ -202,7 +202,7 @@ public final class StyledText {
         newSpans.addAll(spans.subList(0, spans.size() - 1));
 
         Span last = spans.get(spans.size() - 1);
-        newSpans.add(last.withStyle(modifier.apply(last.getStyle())));
+        newSpans.add(last.withStyle(modifier.apply(last.style())));
 
         return new StyledText(newSpans);
     }
@@ -261,10 +261,10 @@ public final class StyledText {
         for (int i = 1; i < spans.size(); i++) {
             Span next = spans.get(i);
 
-            if (current.getStyle().equals(next.getStyle())) {
+            if (current.style().equals(next.style())) {
                 current = new Span(
-                        current.getText() + next.getText(),
-                        current.getStyle()
+                        current.text() + next.text(),
+                        current.style()
                 );
             } else {
                 merged.add(current);

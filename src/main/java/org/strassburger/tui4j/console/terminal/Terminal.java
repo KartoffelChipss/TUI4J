@@ -24,7 +24,7 @@ public class Terminal {
     /**
      * Returns the terminal size in columns and rows.
      */
-    public TerminalSize.Size getSize() {
+    public TerminalSize.Size size() {
         long now = System.currentTimeMillis();
         if ((now - lastFetchTime) > CACHE_DURATION_MS) {
             cachedSize = TerminalSize.get();
@@ -36,14 +36,14 @@ public class Terminal {
     /**
      * Returns true if ANSI escape codes are likely supported.
      */
-    public boolean isAnsiSupported() {
+    public boolean ansiSupported() {
         return ansiSupported;
     }
 
     /**
      * Returns the OS name.
      */
-    public String getOsName() {
+    public String osName() {
         return osName;
     }
 
@@ -69,7 +69,7 @@ public class Terminal {
     @Override
     public String toString() {
         return "Terminal{" +
-                "size=" + getSize() +
+                "size=" + size() +
                 ", ansiSupported=" + ansiSupported +
                 ", osName='" + osName + '\'' +
                 '}';

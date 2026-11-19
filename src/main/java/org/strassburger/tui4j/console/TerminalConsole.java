@@ -41,7 +41,7 @@ import java.util.Scanner;
  * }</pre>
  * Printing a {@link Renderable} is batched automatically, and {@link #readLine()} always
  * flushes before reading, so prompts are shown. Autoflush can be turned off with
- * {@link #setAutoflush(boolean)}; output is then written when the buffer is full or on
+ * {@link #autoflush(boolean)}; output is then written when the buffer is full or on
  * {@link #flush()}. The {@link #system()} console is also flushed when the program exits.
  *
  * <h2>Rendering</h2>
@@ -86,7 +86,7 @@ public class TerminalConsole implements Console {
      * with {@link Runtime#halt(int)} or the process is killed.
      *
      * <p>Because the instance is shared, its settings are too: calling
-     * {@link #setAutoflush(boolean)} on it changes the behaviour for every part of the program.
+     * {@link #autoflush(boolean)} on it changes the behaviour for every part of the program.
      * Code that only needs to print a lot of output at once should use {@link #batch(Runnable)}
      * or {@link #buffered()} instead, which restore the previous behaviour when they end.
      *
@@ -194,7 +194,7 @@ public class TerminalConsole implements Console {
     }
 
     private static StyledTextRenderer defaultRenderer(Terminal terminal) {
-        return terminal.isAnsiSupported() ? new AnsiRenderer() : new PlainTextRenderer();
+        return terminal.ansiSupported() ? new AnsiRenderer() : new PlainTextRenderer();
     }
 
     private static OutputStream defaultOutput() {
@@ -263,7 +263,7 @@ public class TerminalConsole implements Console {
 
     @Override
     public synchronized void print(Renderable renderable) {
-        TerminalSize.Size size = terminal.getSize();
+        TerminalSize.Size size = terminal.size();
         batch(() -> renderable.render(this, size.width(), size.height()));
     }
 
@@ -293,7 +293,7 @@ public class TerminalConsole implements Console {
 
     @Override
     public synchronized void println(Renderable renderable) {
-        TerminalSize.Size size = terminal.getSize();
+        TerminalSize.Size size = terminal.size();
         batch(() -> {
             renderable.render(this, size.width(), size.height());
             out.println();
@@ -326,7 +326,7 @@ public class TerminalConsole implements Console {
 
     @Override
     public synchronized void clear() {
-        if (terminal.isAnsiSupported()) {
+        if (terminal.ansiSupported()) {
             out.println(AnsiCode.ERASE_DISPLAY_ENTIRE + AnsiCode.CURSOR_HOME.toString());
         } else {
             for (int i = 0; i < 50; i++) {
@@ -358,7 +358,7 @@ public class TerminalConsole implements Console {
      *
      * @return {@code true} if autoflush is enabled
      */
-    public synchronized boolean isAutoflush() {
+    public synchronized boolean autoflush() {
         return this.autoflush;
     }
 
@@ -376,9 +376,11 @@ public class TerminalConsole implements Console {
      * {@link #buffered()} instead, which leave the setting unchanged.
      *
      * @param autoflush {@code true} to flush after every print call
+     * @return this console
      */
-    public synchronized void setAutoflush(boolean autoflush) {
+    public synchronized TerminalConsole autoflush(boolean autoflush) {
         this.autoflush = autoflush;
+        return this;
     }
 
     /**
@@ -386,7 +388,7 @@ public class TerminalConsole implements Console {
      *
      * @return the terminal of this console
      */
-    public Terminal getTerminal() {
+    public Terminal terminal() {
         return terminal;
     }
 
@@ -395,7 +397,7 @@ public class TerminalConsole implements Console {
      *
      * @return the renderer of this console
      */
-    public StyledTextRenderer getTextRenderer() {
+    public StyledTextRenderer textRenderer() {
         return textRenderer;
     }
 }

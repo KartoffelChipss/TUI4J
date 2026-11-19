@@ -14,11 +14,11 @@ public final class Span {
         this.style = style != null ? style : new Style();
     }
 
-    public String getText() {
+    public String text() {
         return text;
     }
 
-    public Style getStyle() {
+    public Style style() {
         return style;
     }
 

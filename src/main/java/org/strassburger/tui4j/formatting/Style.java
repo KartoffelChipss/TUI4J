@@ -90,11 +90,11 @@ public final class Style {
     }
 
 
-    public @Nullable Color getForeground() {
+    public @Nullable Color foreground() {
         return foreground;
     }
 
-    public @Nullable Color getBackground() {
+    public @Nullable Color background() {
         return background;
     }
 

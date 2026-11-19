@@ -149,7 +149,7 @@ public class TestPrinter implements Printer {
         this.height = height;
     }
 
-    public StyledTextRenderer getTextRenderer() {
+    public StyledTextRenderer textRenderer() {
         return textRenderer;
     }
 }

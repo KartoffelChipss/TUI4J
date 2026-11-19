@@ -12,8 +12,8 @@ public class PlainTextRenderer implements StyledTextRenderer {
     @Override
     public String render(StyledText styledText) {
         StringBuilder sb = new StringBuilder();
-        for (Span span : styledText.getSpans()) {
-            sb.append(span.getText());
+        for (Span span : styledText.spans()) {
+            sb.append(span.text());
         }
         return sb.toString();
     }

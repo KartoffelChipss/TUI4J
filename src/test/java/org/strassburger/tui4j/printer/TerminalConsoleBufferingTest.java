@@ -43,7 +43,7 @@ class TerminalConsoleBufferingTest {
     private TerminalConsole console(boolean autoflush) {
         return new TerminalConsole(
                 new Terminal(),
-                (StyledText text) -> text.getSpans().stream().map(Span::getText).reduce("", String::concat),
+                (StyledText text) -> text.spans().stream().map(Span::text).reduce("", String::concat),
                 out,
                 autoflush
         );
@@ -54,7 +54,7 @@ class TerminalConsoleBufferingTest {
     @Test
     void autoflushIsEnabledByDefault() {
         TerminalConsole console = new TerminalConsole(new Terminal(), text -> "", out);
-        assertTrue(console.isAutoflush());
+        assertTrue(console.autoflush());
     }
 
     @Test
@@ -82,16 +82,16 @@ class TerminalConsoleBufferingTest {
     }
 
     @Test
-    void setAutoflushTakesEffectForLaterCalls() {
+    void autoflushTakesEffectForLaterCalls() {
         TerminalConsole console = console(false);
         console.print("a");
 
-        console.setAutoflush(true);
-        assertTrue(console.isAutoflush());
+        console.autoflush(true);
+        assertTrue(console.autoflush());
         console.print("b");
         assertEquals("ab", out.text());
 
-        console.setAutoflush(false);
+        console.autoflush(false);
         console.print("c");
         assertEquals("ab", out.text());
     }

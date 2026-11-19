@@ -16,9 +16,9 @@ public class AnsiRenderer implements StyledTextRenderer {
     @Override
     public String render(StyledText styledText) {
         StringBuilder sb = new StringBuilder();
-        for (Span span : styledText.getSpans()) {
-            sb.append(span.getStyle().toAnsiCodes());
-            sb.append(span.getText());
+        for (Span span : styledText.spans()) {
+            sb.append(span.style().toAnsiCodes());
+            sb.append(span.text());
             sb.append(AnsiCode.RESET);
         }
         return sb.toString();

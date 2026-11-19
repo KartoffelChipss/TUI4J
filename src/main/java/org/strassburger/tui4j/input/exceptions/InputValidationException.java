@@ -16,7 +16,7 @@ public class InputValidationException extends RuntimeException {
         this.styledMessage = styledMessage;
     }
 
-    public StyledText getStyledMessage() {
+    public StyledText styledMessage() {
         return styledMessage;
     }
 }

@@ -20,7 +20,7 @@ class TerminalConsoleTest {
         outContent = new ByteArrayOutputStream();
         console = new TerminalConsole(
                 new Terminal(),
-                (StyledText text) -> text.getSpans().stream().map(Span::getText).reduce("", String::concat),
+                (StyledText text) -> text.spans().stream().map(Span::text).reduce("", String::concat),
                 outContent
         );
     }
