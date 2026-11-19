@@ -58,6 +58,11 @@ public class TestPrinter implements Printer {
     }
 
     @Override
+    public void print(Object object) {
+        output.append(object);
+    }
+
+    @Override
     public void println() {
         output.append(System.lineSeparator());
     }
@@ -81,6 +86,11 @@ public class TestPrinter implements Printer {
     public void println(Renderable renderable) {
         renderable.render(this, width, height);
         output.append(System.lineSeparator());
+    }
+
+    @Override
+    public void println(Object object) {
+        output.append(object).append(System.lineSeparator());
     }
 
     @Override

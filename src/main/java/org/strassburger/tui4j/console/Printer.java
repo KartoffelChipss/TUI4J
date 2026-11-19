@@ -38,6 +38,12 @@ public interface Printer extends Flushable {
     void print(Renderable renderable);
 
     /**
+     * Print the string representation of an object to the output
+     * @param object the object to print, converted using {@link String#valueOf(Object)}
+     */
+    void print(Object object);
+
+    /**
      * Print a newline to the output
      */
     void println();
@@ -65,6 +71,12 @@ public interface Printer extends Flushable {
      * @param renderable the renderable object to print
      */
     void println(Renderable renderable);
+
+    /**
+     * Print the string representation of an object to the output with a newline
+     * @param object the object to print, converted using {@link String#valueOf(Object)}
+     */
+    void println(Object object);
 
     /**
      * Format and print text to the output

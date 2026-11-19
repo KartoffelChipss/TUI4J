@@ -355,6 +355,12 @@ public class TerminalConsole implements Console {
     }
 
     @Override
+    public synchronized void print(Object object) {
+        out.print(object);
+        autoFlush();
+    }
+
+    @Override
     public synchronized void println() {
         out.println();
         autoFlush();
@@ -385,6 +391,12 @@ public class TerminalConsole implements Console {
             renderable.render(this, size.width(), size.height());
             out.println();
         });
+    }
+
+    @Override
+    public synchronized void println(Object object) {
+        out.println(object);
+        autoFlush();
     }
 
     @Override
