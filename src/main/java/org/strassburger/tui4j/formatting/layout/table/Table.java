@@ -24,6 +24,7 @@ public class Table implements Renderable {
     private boolean hasHeader;
     private TableStyle style;
     private @Nullable Integer defaultGrow = null;
+    private boolean wrap = false;
 
     public Table() {
         this.rows = new ArrayList<>();
@@ -167,6 +168,26 @@ public class Table implements Renderable {
         return style;
     }
 
+    /**
+     * <p>
+     * Sets whether cell text is wrapped.
+     * </p>
+     * <p>
+     * When enabled, line breaks ({@code \n}) in cells are respected, and if the table is wider than
+     * the available width, the widest columns are shrunk and their cells are wrapped onto multiple lines.
+     * </p>
+     * @param wrap true to wrap cell text
+     * @return the Table instance for chaining
+     */
+    public Table wrap(boolean wrap) {
+        this.wrap = wrap;
+        return this;
+    }
+
+    public boolean wrap() {
+        return wrap;
+    }
+
     @Override
     public void render(Printer printer, int width, int height) {
         if (rows.isEmpty()) return;
@@ -179,6 +200,7 @@ public class Table implements Renderable {
 
         int[] colWidths = computeColumnWidths(columns);
 
+        if (wrap) shrinkToFit(colWidths, columns, width);
         applyGrow(colWidths, columns, width);
 
         renderTopBorder(printer, colWidths, columns);
@@ -191,7 +213,7 @@ public class Table implements Renderable {
 
         for (List<StyledText> row : rows) {
             for (int c = 0; c < row.size(); c++) {
-                int len = row.get(c).length();
+                int len = wrap ? longestLine(row.get(c)) : row.get(c).length();
                 colWidths[c] = Math.max(colWidths[c], len);
             }
         }
@@ -201,6 +223,39 @@ public class Table implements Renderable {
         }
 
         return colWidths;
+    }
+
+    private static int longestLine(StyledText text) {
+        int max = 0;
+        for (String line : text.plainText().split("\n", -1)) {
+            max = Math.max(max, line.length());
+        }
+        return max;
+    }
+
+    /**
+     * Shrinks the widest columns until the table fits into the given width
+     * (a column never gets narrower than one character of content)
+     */
+    private void shrinkToFit(int[] colWidths, int columns, int totalWidth) {
+        int padding = style.paddingLeft() + style.paddingRight();
+        int borderWidth = 1 + (columns - 1) + 1;
+
+        int total = borderWidth;
+        for (int w : colWidths) total += w;
+
+        while (total > totalWidth) {
+            int widest = -1;
+            for (int c = 0; c < columns; c++) {
+                if (colWidths[c] - padding > 1 && (widest == -1 || colWidths[c] > colWidths[widest])) {
+                    widest = c;
+                }
+            }
+            if (widest == -1) return; // cannot shrink any further
+
+            colWidths[widest]--;
+            total--;
+        }
     }
 
     private void applyGrow(int[] colWidths, int columns, int totalWidth) {
@@ -257,15 +312,27 @@ public class Table implements Renderable {
             int columns
     ) {
         for (int r = 0; r < rows.size(); r++) {
-            printer.print(border(style.verticalLeft()));
-
+            List<List<StyledText>> cellLines = new ArrayList<>(columns);
+            int rowHeight = 1;
             for (int c = 0; c < columns; c++) {
-                renderCell(printer, r, c, colWidths[c]);
-                if (c < columns - 1) printer.print(border(style.vertical()));
+                List<StyledText> lines = cellLines(r, c, colWidths[c]);
+                cellLines.add(lines);
+                rowHeight = Math.max(rowHeight, lines.size());
             }
 
-            printer.print(border(style.verticalRight()));
-            printer.println();
+            for (int line = 0; line < rowHeight; line++) {
+                printer.print(border(style.verticalLeft()));
+
+                for (int c = 0; c < columns; c++) {
+                    List<StyledText> lines = cellLines.get(c);
+                    StyledText text = line < lines.size() ? lines.get(line) : StyledText.text("");
+                    renderCell(printer, text, c, colWidths[c]);
+                    if (c < columns - 1) printer.print(border(style.vertical()));
+                }
+
+                printer.print(border(style.verticalRight()));
+                printer.println();
+            }
 
             if (hasHeader && r == 0) {
                 renderHeaderSeparator(printer, colWidths, columns);
@@ -273,19 +340,29 @@ public class Table implements Renderable {
         }
     }
 
-    private void renderCell(
-            Printer printer,
-            int row,
-            int col,
-            int colWidth
-    ) {
+    /**
+     * Returns the lines of a cell (a single line unless wrapping is enabled)
+     */
+    private List<StyledText> cellLines(int row, int col, int colWidth) {
         StyledText cell = col < rows.get(row).size()
                 ? rows.get(row).get(col)
                 : StyledText.text("");
 
+        if (!wrap) return List.of(cell);
+
+        int contentWidth = Math.max(1, colWidth - style.paddingLeft() - style.paddingRight());
+        return cell.wrap(contentWidth);
+    }
+
+    private void renderCell(
+            Printer printer,
+            StyledText cell,
+            int col,
+            int colWidth
+    ) {
         int cellLen = cell.length();
         int contentWidth = colWidth - style.paddingLeft() - style.paddingRight();
-        int padding = contentWidth - cellLen;
+        int padding = Math.max(0, contentWidth - cellLen);
 
         ColumnAlign align = columnAlignments.getOrDefault(col, ColumnAlign.START);
 

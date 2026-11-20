@@ -163,18 +163,101 @@ public final class StyledText {
     }
 
     /**
-     * Get a substring of the entire StyledText
+     * Get a substring of the entire StyledText, keeping the styles of the spans it covers
      * @param beginIndex the beginning index, inclusive
      * @param endIndex the ending index, exclusive
      * @return a new StyledText instance representing the substring
+     * @throws IndexOutOfBoundsException if the indices are out of range or beginIndex is greater than endIndex
      */
     public StyledText substring(int beginIndex, int endIndex) {
-        StringBuilder fullText = new StringBuilder();
-        for (Span span : spans) {
-            fullText.append(span.text());
+        int length = length();
+        if (beginIndex < 0 || endIndex > length || beginIndex > endIndex) {
+            throw new IndexOutOfBoundsException(
+                    "begin " + beginIndex + ", end " + endIndex + ", length " + length);
         }
-        String substring = fullText.substring(beginIndex, endIndex);
-        return StyledText.text(substring);
+        if (beginIndex == endIndex) return new StyledText(List.of());
+
+        List<Span> result = new ArrayList<>();
+        int offset = 0;
+        for (Span span : spans) {
+            int spanStart = offset;
+            int spanEnd = offset + span.text().length();
+            offset = spanEnd;
+
+            if (spanEnd <= beginIndex) continue;
+            if (spanStart >= endIndex) break;
+
+            int from = Math.max(beginIndex, spanStart) - spanStart;
+            int to = Math.min(endIndex, spanEnd) - spanStart;
+            result.add(new Span(span.text().substring(from, to), span.style()));
+        }
+        return new StyledText(result);
+    }
+
+    /**
+     * Get the plain text content without any styling
+     * @return the plain text
+     */
+    public String plainText() {
+        StringBuilder sb = new StringBuilder();
+        for (Span span : spans) sb.append(span.text());
+        return sb.toString();
+    }
+
+    /**
+     * <p>
+     * Wrap the text into lines of at most the given width, keeping all styles.
+     * </p>
+     * <p>
+     * Lines are broken at spaces where possible; words longer than the width are split.
+     * Existing line breaks ({@code \n}) are kept. The spaces at a soft line break are dropped.
+     * </p>
+     * @param width the maximum line length (must be at least 1)
+     * @return the wrapped lines (never empty)
+     */
+    public List<StyledText> wrap(int width) {
+        if (width < 1) throw new IllegalArgumentException("width must be at least 1");
+
+        String plain = plainText();
+        List<StyledText> lines = new ArrayList<>();
+
+        int paragraphStart = 0;
+        while (true) {
+            int newline = plain.indexOf('\n', paragraphStart);
+            int paragraphEnd = newline == -1 ? plain.length() : newline;
+            wrapParagraph(plain, paragraphStart, paragraphEnd, width, lines);
+            if (newline == -1) break;
+            paragraphStart = newline + 1;
+        }
+
+        return lines;
+    }
+
+    private void wrapParagraph(String plain, int start, int end, int width, List<StyledText> lines) {
+        int pos = start;
+        while (end - pos > width) {
+            // find the last space at which we can break so the line fits
+            int breakAt = -1;
+            for (int i = pos + width; i > pos; i--) {
+                if (plain.charAt(i) == ' ') {
+                    breakAt = i;
+                    break;
+                }
+            }
+
+            if (breakAt == -1) {
+                // no space to break at: hard-break the word
+                lines.add(substring(pos, pos + width));
+                pos += width;
+            } else {
+                int lineEnd = breakAt;
+                while (lineEnd > pos && plain.charAt(lineEnd - 1) == ' ') lineEnd--;
+                lines.add(substring(pos, lineEnd));
+                pos = breakAt;
+                while (pos < end && plain.charAt(pos) == ' ') pos++;
+            }
+        }
+        lines.add(substring(pos, end));
     }
 
     /**

@@ -471,4 +471,83 @@ class FlexTextTest {
         FlexText flex = FlexText.keyValue("a", "b").part("c");
         assertEquals(3, flex.parts().size());
     }
+
+    // ---------------------------------------------------------------------
+    // Wrapping
+    // ---------------------------------------------------------------------
+
+    private static String renderLines(FlexText flex, int width) {
+        return render(flex, width).replace(System.lineSeparator(), "\n");
+    }
+
+    @Test
+    void testWrapIsOffByDefault() {
+        assertFalse(new FlexText().wrap());
+        assertTrue(new FlexText().wrap(true).wrap());
+    }
+
+    @Test
+    void testWrapDoesNothingWhenContentFits() {
+        FlexText flex = flex(FlexJustify.START, 1, "aa", "bb").wrap(true);
+        assertEquals("aa.bb.....", renderLines(flex, 10));
+    }
+
+    @Test
+    void testWrapOffOverflowsOnOneLine() {
+        FlexText flex = flex(FlexJustify.START, 1, "aaa", "bbb", "ccc");
+        assertEquals("aaa.bbb.ccc", renderLines(flex, 7));
+    }
+
+    @Test
+    void testWrapKeepsPartsNextToEachOther() {
+        FlexText flex = flex(FlexJustify.START, 1, "ab", "one two three").wrap(true);
+        assertEquals("ab.one two\n  .three  ", renderLines(flex, 10));
+    }
+
+    @Test
+    void testWrapShrinksTheWidestPart() {
+        FlexText flex = flex(FlexJustify.START, 1, "aaaa bbbb", "cc dd").wrap(true);
+        assertEquals("aaaa.cc dd\nbbbb.     ", renderLines(flex, 10));
+    }
+
+    @Test
+    void testWrapShrinksMultiplePartsEvenly() {
+        FlexText flex = flex(FlexJustify.START, 1, "aaa bbb", "ccc ddd").wrap(true);
+        assertEquals("aaa.ccc\nbbb.ddd", renderLines(flex, 7));
+    }
+
+    @Test
+    void testWrapColumnsStayAlignedWithSpaceEvenly() {
+        FlexText flex = flex(FlexJustify.SPACE_EVENLY, 1, "x", "aaaa bb").wrap(true);
+        assertEquals(".x.aaaa.\n. .bb  .", renderLines(flex, 8));
+    }
+
+    @Test
+    void testWrapSplitsWordsWiderThanTheColumn() {
+        FlexText flex = flex(FlexJustify.START, 1, "a", "bcdef").wrap(true);
+        assertEquals("a.bcd\n .ef ", renderLines(flex, 5));
+    }
+
+    @Test
+    void testWrapOverflowsWhenPartsCannotShrinkFurther() {
+        FlexText flex = flex(FlexJustify.START, 1, "ab", "cd").wrap(true);
+        assertEquals("a.c\nb.d", renderLines(flex, 2));
+    }
+
+    @Test
+    void testWrapKeepsStyles() {
+        TestPrinter printer = new TestPrinter(new AnsiRenderer());
+        new FlexText()
+                .part(StyledText.text("aaa").bold())
+                .part(StyledText.text("bbb").bold())
+                .justify(FlexJustify.START)
+                .gap(1)
+                .wrap(true)
+                .render(printer, 5, 1);
+
+        String out = printer.getOutput();
+        assertEquals(2, out.split(java.util.regex.Pattern.quote(System.lineSeparator())).length);
+        assertTrue(out.contains("aa"));
+        assertTrue(out.contains("\u001B[1m"));
+    }
 }

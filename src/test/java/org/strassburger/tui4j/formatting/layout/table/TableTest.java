@@ -770,4 +770,98 @@ class TableTest {
 
         assertTrue(printer.getOutput().contains(ansi.render(bold)));
     }
+
+    // ---------------------------------------------------------------------
+    // Wrapping
+    // ---------------------------------------------------------------------
+
+    @Test
+    void testWrapIsOffByDefault() {
+        assertFalse(new Table().wrap());
+        assertTrue(new Table().wrap(true).wrap());
+    }
+
+    @Test
+    void testWrapDoesNothingWhenTableFits() {
+        assertEquals(render(nameAgeTable(), 80), render(nameAgeTable().wrap(true), 80));
+    }
+
+    @Test
+    void testWrapShrinksWidestColumnAndWrapsCells() {
+        Table table = new Table()
+                .row("Name", "Description")
+                .row("Alice", "likes long walks")
+                .wrap(true);
+
+        assertEquals(lines(
+                "+-------+------------+",
+                "| Name  | Descriptio |",
+                "|       | n          |",
+                "| Alice | likes long |",
+                "|       | walks      |",
+                "+-------+------------+"
+        ), render(table, 22));
+    }
+
+    @Test
+    void testWrapKeepsLineBreaksInCells() {
+        Table table = new Table()
+                .row("a\nbb", "c")
+                .wrap(true);
+
+        assertEquals(lines(
+                "+----+---+",
+                "| a  | c |",
+                "| bb |   |",
+                "+----+---+"
+        ), render(table, 80));
+    }
+
+    @Test
+    void testWrapRespectsAlignment() {
+        Table table = new Table()
+                .row("aaa bb")
+                .columnAlignment(0, ColumnAlign.END)
+                .wrap(true);
+
+        assertEquals(lines(
+                "+-----+",
+                "| aaa |",
+                "|  bb |",
+                "+-----+"
+        ), render(table, 7));
+    }
+
+    @Test
+    void testWrapNeverShrinksBelowOneCharacter() {
+        Table table = new Table()
+                .row("ab", "cd")
+                .wrap(true);
+
+        assertEquals(lines(
+                "+---+---+",
+                "| a | c |",
+                "| b | d |",
+                "+---+---+"
+        ), render(table, 0));
+    }
+
+    @Test
+    void testWrapWithHeaderSeparator() {
+        Table table = new Table()
+                .row("Title")
+                .row("one two")
+                .hasHeader(true)
+                .wrap(true);
+
+        String out = render(table, 9);
+        assertEquals(lines(
+                "+-------+",
+                "| Title |",
+                "+-------+",
+                "| one   |",
+                "| two   |",
+                "+-------+"
+        ), out);
+    }
 }

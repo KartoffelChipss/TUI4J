@@ -15,6 +15,7 @@ public class FlexText implements Renderable {
     private FlexJustify justify;
     private int gap;
     private StyledText separatorChar = StyledText.text(" ");
+    private boolean wrap = false;
 
     public FlexText() {
         this.parts = new ArrayList<>();
@@ -92,29 +93,112 @@ public class FlexText implements Renderable {
         return this;
     }
 
+    public boolean wrap() {
+        return wrap;
+    }
+
+    /**
+     * <p>
+     * Sets whether the parts wrap when they do not fit into the available width.
+     * </p>
+     * <p>
+     * When enabled, the parts stay next to each other: the widest parts are shrunk until everything
+     * fits (keeping at least the gap between parts), and the text of each shrunk part is word-wrapped
+     * within its own column. Every resulting line is justified the same way, so the columns stay aligned.
+     * </p>
+     * @param wrap true to wrap
+     * @return the FlexText instance
+     */
+    public FlexText wrap(boolean wrap) {
+        this.wrap = wrap;
+        return this;
+    }
+
     @Override
     public void render(Printer printer, int width, int height) {
+        if (!wrap || parts.isEmpty() || contentLength(parts) <= width) {
+            renderLine(printer, parts, width);
+            return;
+        }
+
+        int[] colWidths = shrinkToFit(width);
+
+        // wrap every part into its column and narrow the column to its longest line
+        List<List<StyledText>> columns = new ArrayList<>(parts.size());
+        int rowCount = 1;
+        for (int i = 0; i < parts.size(); i++) {
+            List<StyledText> lines = parts.get(i).wrap(colWidths[i]);
+            int longest = 0;
+            for (StyledText line : lines) longest = Math.max(longest, line.length());
+            colWidths[i] = longest;
+            columns.add(lines);
+            rowCount = Math.max(rowCount, lines.size());
+        }
+
+        for (int row = 0; row < rowCount; row++) {
+            if (row > 0) printer.println();
+
+            List<StyledText> rowParts = new ArrayList<>(parts.size());
+            for (int i = 0; i < parts.size(); i++) {
+                List<StyledText> lines = columns.get(i);
+                StyledText line = row < lines.size() ? lines.get(row) : StyledText.text("");
+                rowParts.add(line.append(" ".repeat(colWidths[i] - line.length())));
+            }
+            renderLine(printer, rowParts, width);
+        }
+    }
+
+    /**
+     * Computes the width of every part, shrinking the widest parts until all parts
+     * plus the gaps between them fit into the given width (a part never gets narrower than one character)
+     */
+    private int[] shrinkToFit(int width) {
+        int[] colWidths = new int[parts.size()];
+        int total = gap * (parts.size() - 1);
+        for (int i = 0; i < parts.size(); i++) {
+            colWidths[i] = Math.max(1, parts.get(i).length());
+            total += colWidths[i];
+        }
+
+        while (total > width) {
+            int widest = -1;
+            for (int i = 0; i < colWidths.length; i++) {
+                if (colWidths[i] > 1 && (widest == -1 || colWidths[i] > colWidths[widest])) widest = i;
+            }
+            if (widest == -1) break; // cannot shrink any further
+
+            colWidths[widest]--;
+            total--;
+        }
+
+        return colWidths;
+    }
+
+    /**
+     * Renders a single line of parts according to the justification mode
+     */
+    private void renderLine(Printer printer, List<StyledText> parts, int width) {
         StyledText gapStr = separatorChar.repeat(gap);
 
         switch (justify) {
             case START: {
-                int free = Math.max(0, width - contentLength());
-                printPartsWithGap(printer, gapStr);
+                int free = Math.max(0, width - contentLength(parts));
+                printPartsWithGap(printer, parts, gapStr);
                 printer.print(separatorChar.repeat(free));
                 break;
             }
             case CENTER: {
-                int free = Math.max(0, width - contentLength());
+                int free = Math.max(0, width - contentLength(parts));
                 int left = free / 2;
                 printer.print(separatorChar.repeat(left));
-                printPartsWithGap(printer, gapStr);
+                printPartsWithGap(printer, parts, gapStr);
                 printer.print(separatorChar.repeat(free - left));
                 break;
             }
             case END: {
-                int free = Math.max(0, width - contentLength());
+                int free = Math.max(0, width - contentLength(parts));
                 printer.print(separatorChar.repeat(free));
-                printPartsWithGap(printer, gapStr);
+                printPartsWithGap(printer, parts, gapStr);
                 break;
             }
             case SPACE_BETWEEN:
@@ -175,7 +259,7 @@ public class FlexText implements Renderable {
     /**
      * Returns the plain-text length of all parts plus the fixed gaps between them
      */
-    private int contentLength() {
+    private int contentLength(List<StyledText> parts) {
         int partsLength = parts.stream()
                 .mapToInt(StyledText::length)
                 .sum();
@@ -186,7 +270,7 @@ public class FlexText implements Renderable {
     /**
      * Prints all parts with the given gap between them (not after the last one)
      */
-    private void printPartsWithGap(Printer printer, StyledText gapStr) {
+    private void printPartsWithGap(Printer printer, List<StyledText> parts, StyledText gapStr) {
         for (int i = 0; i < parts.size(); i++) {
             if (i > 0) printer.print(gapStr);
             printer.print(parts.get(i));
