@@ -179,8 +179,6 @@ public class Table implements Renderable {
                 .max()
                 .orElse(0);
 
-        resolveColumnGrow(columns);
-
         int[] colWidths = computeColumnWidths(plain, columns);
 
         applyGrow(colWidths, columns, width);
@@ -188,12 +186,6 @@ public class Table implements Renderable {
         renderTopBorder(printer, colWidths, columns);
         renderRows(printer, plain, colWidths, columns);
         renderBottomBorder(printer, colWidths, columns);
-    }
-
-    private void resolveColumnGrow(int columns) {
-        for (int c = 0; c < columns; c++) {
-            columnGrow.putIfAbsent(c, defaultGrow != null ? defaultGrow : 0);
-        }
     }
 
     private int[] computeColumnWidths(PlainTextRenderer plain, int columns) {
@@ -224,7 +216,7 @@ public class Table implements Renderable {
 
         int totalGrow = 0;
         for (int c = 0; c < columns; c++) {
-            totalGrow += columnGrow.getOrDefault(c, 0);
+            totalGrow += columnGrow(c);
         }
 
         if (totalGrow == 0) return;
@@ -232,7 +224,7 @@ public class Table implements Renderable {
         int remaining = available;
 
         for (int c = 0; c < columns; c++) {
-            int grow = columnGrow.getOrDefault(c, 0);
+            int grow = columnGrow(c);
             if (grow > 0) {
                 int extra = (available * grow) / totalGrow;
                 colWidths[c] += extra;
@@ -242,7 +234,7 @@ public class Table implements Renderable {
 
         // rounding leftovers
         for (int c = 0; remaining > 0 && c < columns; c++) {
-            if (columnGrow.getOrDefault(c, 0) > 0) {
+            if (columnGrow(c) > 0) {
                 colWidths[c]++;
                 remaining--;
             }
