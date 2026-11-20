@@ -1,7 +1,6 @@
 package org.strassburger.tui4j.formatting.layout.table;
 
 import org.jspecify.annotations.Nullable;
-import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.layout.Renderable;
 import org.strassburger.tui4j.formatting.layout.table.styles.ColumnAlign;
@@ -172,28 +171,27 @@ public class Table implements Renderable {
     public void render(Printer printer, int width, int height) {
         if (rows.isEmpty()) return;
 
-        PlainTextRenderer plain = new PlainTextRenderer();
 
         int columns = rows.stream()
                 .mapToInt(List::size)
                 .max()
                 .orElse(0);
 
-        int[] colWidths = computeColumnWidths(plain, columns);
+        int[] colWidths = computeColumnWidths(columns);
 
         applyGrow(colWidths, columns, width);
 
         renderTopBorder(printer, colWidths, columns);
-        renderRows(printer, plain, colWidths, columns);
+        renderRows(printer, colWidths, columns);
         renderBottomBorder(printer, colWidths, columns);
     }
 
-    private int[] computeColumnWidths(PlainTextRenderer plain, int columns) {
+    private int[] computeColumnWidths(int columns) {
         int[] colWidths = new int[columns];
 
         for (List<StyledText> row : rows) {
             for (int c = 0; c < row.size(); c++) {
-                int len = plain.render(row.get(c)).length();
+                int len = row.get(c).length();
                 colWidths[c] = Math.max(colWidths[c], len);
             }
         }
@@ -255,7 +253,6 @@ public class Table implements Renderable {
 
     private void renderRows(
             Printer printer,
-            PlainTextRenderer plain,
             int[] colWidths,
             int columns
     ) {
@@ -263,7 +260,7 @@ public class Table implements Renderable {
             printer.print(border(style.verticalLeft()));
 
             for (int c = 0; c < columns; c++) {
-                renderCell(printer, plain, r, c, colWidths[c]);
+                renderCell(printer, r, c, colWidths[c]);
                 if (c < columns - 1) printer.print(border(style.vertical()));
             }
 
@@ -278,7 +275,6 @@ public class Table implements Renderable {
 
     private void renderCell(
             Printer printer,
-            PlainTextRenderer plain,
             int row,
             int col,
             int colWidth
@@ -287,7 +283,7 @@ public class Table implements Renderable {
                 ? rows.get(row).get(col)
                 : StyledText.text("");
 
-        int cellLen = plain.render(cell).length();
+        int cellLen = cell.length();
         int contentWidth = colWidth - style.paddingLeft() - style.paddingRight();
         int padding = contentWidth - cellLen;
 

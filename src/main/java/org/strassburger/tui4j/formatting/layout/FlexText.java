@@ -1,6 +1,5 @@
 package org.strassburger.tui4j.formatting.layout;
 
-import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.console.Printer;
@@ -16,7 +15,6 @@ public class FlexText implements Renderable {
     private FlexJustify justify;
     private int gap;
     private StyledText separatorChar = StyledText.text(" ");
-    private final PlainTextRenderer plainTextRenderer = new PlainTextRenderer();
 
     public FlexText() {
         this.parts = new ArrayList<>();
@@ -38,7 +36,7 @@ public class FlexText implements Renderable {
     }
 
     public FlexText parts(List<StyledText> parts) {
-        this.parts = parts;
+        this.parts = new ArrayList<>(parts);
         return this;
     }
 
@@ -99,54 +97,29 @@ public class FlexText implements Renderable {
         StyledText gapStr = separatorChar.repeat(gap);
 
         switch (justify) {
-            case START:
-                for (StyledText part : parts) {
-                    printer.print(part);
-                    printer.print(gapStr);
-                }
-
-                int partsLen = parts.stream()
-                        .mapToInt(part -> plainTextRenderer.render(part).length())
-                        .sum();
-                int gapsLen = gap * (parts.size() - 1);
-                int len = partsLen + gapsLen;
-                int pad = width - len;
-                printer.print(separatorChar.repeat(Math.max(0, pad)));
+            case START: {
+                int free = Math.max(0, width - contentLength());
+                printPartsWithGap(printer, gapStr);
+                printer.print(separatorChar.repeat(free));
                 break;
-            case CENTER:
-                int totalPartsLength = parts.stream()
-                        .mapToInt(part -> plainTextRenderer.render(part).length())
-                        .sum();
-                int totalGapsLength = gap * (parts.size() - 1);
-                int totalLength = totalPartsLength + totalGapsLength;
-
-                int leftPadding = (width - totalLength) / 2;
-                printer.print(separatorChar.repeat(Math.max(0, leftPadding)));
-
-                for (StyledText part : parts) {
-                    printer.print(part);
-                    printer.print(gapStr);
-                }
-
-                int rightPadding = width - leftPadding - totalLength;
-                printer.print(separatorChar.repeat(Math.max(0, rightPadding)));
+            }
+            case CENTER: {
+                int free = Math.max(0, width - contentLength());
+                int left = free / 2;
+                printer.print(separatorChar.repeat(left));
+                printPartsWithGap(printer, gapStr);
+                printer.print(separatorChar.repeat(free - left));
                 break;
-            case END:
-                int partsLength = parts.stream()
-                        .mapToInt(part -> plainTextRenderer.render(part).length())
-                        .sum();
-                int gapsLength = gap * (parts.size() - 1);
-                int length = partsLength + gapsLength;
-                int padding = width - length;
-                printer.print(separatorChar.repeat(Math.max(0, padding)));
-                for (StyledText part : parts) {
-                    printer.print(part);
-                    printer.print(gapStr);
-                }
+            }
+            case END: {
+                int free = Math.max(0, width - contentLength());
+                printer.print(separatorChar.repeat(free));
+                printPartsWithGap(printer, gapStr);
                 break;
+            }
             case SPACE_BETWEEN:
                 int totalPartsLen = parts.stream()
-                        .mapToInt(part -> plainTextRenderer.render(part).length())
+                        .mapToInt(StyledText::length)
                         .sum();
                 int spaceAvailable = width - totalPartsLen;
                 int gapsCount = parts.size() - 1;
@@ -162,7 +135,7 @@ public class FlexText implements Renderable {
                 break;
             case SPACE_AROUND:
                 int partsLenAround = parts.stream()
-                        .mapToInt(part -> plainTextRenderer.render(part).length())
+                        .mapToInt(StyledText::length)
                         .sum();
 
                 int spaceAvailAround = width - partsLenAround;
@@ -183,7 +156,7 @@ public class FlexText implements Renderable {
                 break;
             case SPACE_EVENLY:
                 int total_Length = parts.stream()
-                        .mapToInt(part -> plainTextRenderer.render(part).length())
+                        .mapToInt(StyledText::length)
                         .sum();
                 int space_Avail = width - total_Length;
                 int gaps_Cnt = parts.size() + 1;
@@ -196,6 +169,27 @@ public class FlexText implements Renderable {
                     printer.print(dynamic_Gap);
                 }
                 break;
+        }
+    }
+
+    /**
+     * Returns the plain-text length of all parts plus the fixed gaps between them
+     */
+    private int contentLength() {
+        int partsLength = parts.stream()
+                .mapToInt(StyledText::length)
+                .sum();
+        int gapCount = Math.max(0, parts.size() - 1);
+        return partsLength + gap * gapCount;
+    }
+
+    /**
+     * Prints all parts with the given gap between them (not after the last one)
+     */
+    private void printPartsWithGap(Printer printer, StyledText gapStr) {
+        for (int i = 0; i < parts.size(); i++) {
+            if (i > 0) printer.print(gapStr);
+            printer.print(parts.get(i));
         }
     }
 
