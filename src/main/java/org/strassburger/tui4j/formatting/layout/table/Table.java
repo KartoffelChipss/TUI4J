@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * A table layout component that arranges data in rows and columns with customizable styles and alignments.
@@ -39,7 +40,7 @@ public class Table implements Renderable {
      * @return the Table instance for chaining
      */
     public Table rows(List<List<StyledText>> rows) {
-        this.rows = rows;
+        this.rows = new ArrayList<>(rows);
         return this;
     }
 
@@ -53,6 +54,30 @@ public class Table implements Renderable {
      * @return the Table instance for chaining
      */
     public Table row(List<StyledText> row) {
+        this.rows.add(row);
+        return this;
+    }
+
+    /**
+     * Sets a row to the table
+     * @param row the row to add
+     * @return the Table instance for chaining
+     */
+    public Table stringRow(List<String> row) {
+        this.rows.add(row.stream()
+                .map(StyledText::text)
+                .collect(Collectors.toList()));
+        return this;
+    }
+
+    /**
+     * Adds a row to the table
+     * @param cells the row of cells to add
+     * @return the Table instance for chaining
+     */
+    public Table row(String... cells) {
+        List<StyledText> row = new ArrayList<>(cells.length);
+        for (String cell : cells) row.add(StyledText.text(cell));
         this.rows.add(row);
         return this;
     }
