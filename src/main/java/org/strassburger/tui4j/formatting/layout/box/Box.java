@@ -22,7 +22,7 @@ public class Box implements Renderable {
     private BoxStyle style;
     private BoxAlign align;
     private boolean grow = false;
-    private boolean wrap = false;
+    private boolean wrap = true;
 
     // padding overrides (null = use the style's padding)
     private @Nullable Integer paddingTop = null;

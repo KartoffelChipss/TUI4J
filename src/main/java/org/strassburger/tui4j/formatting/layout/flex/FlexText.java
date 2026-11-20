@@ -16,7 +16,7 @@ public class FlexText implements Renderable {
     private FlexJustify justify;
     private int gap;
     private StyledText separatorChar = StyledText.text(" ");
-    private boolean wrap = false;
+    private boolean wrap = true;
 
     public FlexText() {
         this.parts = new ArrayList<>();

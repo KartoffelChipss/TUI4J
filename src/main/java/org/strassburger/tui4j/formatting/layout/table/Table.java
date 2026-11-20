@@ -24,7 +24,7 @@ public class Table implements Renderable {
     private boolean hasHeader;
     private TableStyle style;
     private @Nullable Integer defaultGrow = null;
-    private boolean wrap = false;
+    private boolean wrap = true;
 
     public Table() {
         this.rows = new ArrayList<>();
