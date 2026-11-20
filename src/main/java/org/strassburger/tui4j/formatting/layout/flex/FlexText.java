@@ -1,8 +1,9 @@
-package org.strassburger.tui4j.formatting.layout;
+package org.strassburger.tui4j.formatting.layout.flex;
 
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.console.Printer;
+import org.strassburger.tui4j.formatting.layout.Renderable;
 
 import java.util.ArrayList;
 import java.util.List;

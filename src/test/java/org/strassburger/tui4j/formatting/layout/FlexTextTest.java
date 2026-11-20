@@ -6,6 +6,8 @@ import org.strassburger.tui4j.formatting.Style;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.formatting.ansi.AnsiRenderer;
+import org.strassburger.tui4j.formatting.layout.flex.FlexJustify;
+import org.strassburger.tui4j.formatting.layout.flex.FlexText;
 import org.strassburger.tui4j.printer.TestPrinter;
 
 import java.util.ArrayList;

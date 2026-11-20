@@ -1,4 +1,4 @@
-package org.strassburger.tui4j.formatting.layout;
+package org.strassburger.tui4j.formatting.layout.progressbar;
 
 import org.jspecify.annotations.Nullable;
 import org.strassburger.tui4j.formatting.StyledText;

@@ -1,4 +1,4 @@
-package org.strassburger.tui4j.formatting.layout;
+package org.strassburger.tui4j.formatting.layout.spinner;
 
 import org.strassburger.tui4j.formatting.StyledText;
 

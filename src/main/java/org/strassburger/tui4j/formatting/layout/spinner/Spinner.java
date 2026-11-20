@@ -1,4 +1,4 @@
-package org.strassburger.tui4j.formatting.layout;
+package org.strassburger.tui4j.formatting.layout.spinner;
 
 import org.jspecify.annotations.Nullable;
 import org.strassburger.colorlab4j.color.Color;
@@ -6,6 +6,7 @@ import org.strassburger.tui4j.formatting.PlainTextRenderer;
 import org.strassburger.tui4j.formatting.StyledText;
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.console.Printer;
+import org.strassburger.tui4j.formatting.layout.Renderable;
 
 import java.util.List;
 

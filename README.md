@@ -95,10 +95,10 @@ package org.example;
 
 import org.strassburger.tui4j.formatting.ansi.AnsiColor;
 import org.strassburger.tui4j.formatting.StyledText;
-import org.strassburger.tui4j.formatting.layout.FlexJustify;
-import org.strassburger.tui4j.formatting.layout.FlexText;
-import org.strassburger.tui4j.formatting.layout.Spinner;
-import org.strassburger.tui4j.formatting.layout.SpinnerFrames;
+import org.strassburger.tui4j.formatting.layout.flex.FlexJustify;
+import org.strassburger.tui4j.formatting.layout.flex.FlexText;
+import org.strassburger.tui4j.formatting.layout.spinner.Spinner;
+import org.strassburger.tui4j.formatting.layout.spinner.SpinnerFrames;
 import org.strassburger.tui4j.input.*;
 import org.strassburger.tui4j.input.validationrules.NumberValidationRules;
 import org.strassburger.tui4j.input.validationrules.TextValidationRules;
